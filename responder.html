@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3. Rescue Team Panel — Respond & Save Lives</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Leaflet GIS Map CSS & JS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            rescue: {
+              50: '#fff7ed',
+              100: '#ffedd5',
+              500: '#f97316',
+              600: '#ea580c',
+              700: '#c2410c',
+              800: '#9a3412',
+              900: '#7c2d12',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #f8fafc;
+      color: #0f172a;
+      font-family: 'Inter', sans-serif;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+    .radio-static {
+      background: repeating-linear-gradient(0deg, rgba(0,0,0,0.03), rgba(0,0,0,0.03) 1px, transparent 1px, transparent 2px);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased">
+
+  <!-- TOP BANNER (Orange banner matching reference mockup) -->
+  <div class="bg-[#9a3412] text-white px-4 py-2.5 shadow-md flex flex-wrap items-center justify-between border-b border-orange-900 sticky top-0 z-50">
+    <div class="flex items-center gap-3">
+      <div class="w-7 h-7 rounded-lg bg-orange-500/30 flex items-center justify-center font-bold text-white border border-orange-400/40">
+        🚑
+      </div>
+      <div>
+        <h1 class="text-sm md:text-base font-extrabold tracking-wide uppercase">3. RESCUE TEAM PANEL – RESPOND & SAVE LIVES</h1>
+        <p class="text-[11px] text-orange-200 font-normal">Tools & real-time information for Field teams & responders</p>
+      </div>
+    </div>
+
+    <!-- Quick Switcher Bar -->
+    <div class="flex items-center gap-2 text-xs mt-1 sm:mt-0">
+      <span class="text-orange-200 hidden md:inline">Switch Panel:</span>
+      <select onchange="location.href=this.value" class="bg-orange-950/80 border border-orange-400/40 text-white rounded px-2 py-1 text-xs font-semibold focus:outline-none cursor-pointer hover:bg-orange-900 transition">
+        <option value="responder.html" selected>3. Rescue Team Panel</option>
+        <option value="government.html">1. Government Panel</option>
+        <option value="citizen.html">2. Citizen Panel</option>
+        <option value="admin.html">4. Admin Panel</option>
+        <option value="index.html">🌐 All Panels Hub</option>
+      </select>
+      <a href="index.html" class="px-2 py-1 bg-white/10 hover:bg-white/20 rounded text-[11px] font-medium transition text-orange-100 flex items-center gap-1">
+        <i data-lucide="grid" class="w-3 h-3"></i> Portal
+      </a>
+    </div>
+  </div>
+
+  <div class="flex-1 flex flex-col md:flex-row min-h-0">
+
+    <!-- LEFT SIDEBAR (Dark Rust / Warm Orange Sidebar) -->
+    <aside class="w-full md:w-56 bg-[#7c2d12] text-orange-100 flex flex-col flex-shrink-0 border-r border-orange-900">
+      
+      <!-- Panel Header -->
+      <div class="p-4 border-b border-orange-800/80 flex items-center gap-3">
+        <div class="w-9 h-9 rounded-xl bg-orange-500 flex items-center justify-center text-white font-bold shadow-md shadow-orange-600/30">
+          <i data-lucide="cross" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <div class="font-bold text-white text-sm leading-tight">Rescue Team</div>
+          <div class="text-[11px] text-orange-300 font-medium">Field Operations HQ</div>
+        </div>
+      </div>
+
+      <!-- Navigation Menu -->
+      <nav class="p-3 space-y-1 text-xs font-medium flex-1 overflow-y-auto custom-scrollbar">
+        <!-- Active Dashboard -->
+        <a href="responder.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-orange-600 text-white font-semibold shadow-md shadow-orange-600/30">
+          <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+          <span>Dashboard</span>
+        </a>
+        <a href="#missions" onclick="openMissionsModal()" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-orange-800/80 text-orange-200 hover:text-white transition">
+          <i data-lucide="target" class="w-4 h-4 text-orange-300"></i>
+          <span>Assigned Missions</span>
+          <span class="ml-auto px-1.5 py-0.2 text-[10px] bg-orange-500 text-white font-bold rounded">3</span>
+        </a>
+        <a href="#map" onclick="focusMissionMap()" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-orange-800/80 text-orange-200 hover:text-white transition">
+          <i data-lucide="map" class="w-4 h-4 text-cyan-300"></i>
+          <span>Live Tactical Map</span>
+        </a>
+        <a href="#tracking" onclick="openRescueModal('Team Tracking Status', 'Squad Alpha: In transit (Boat #4)\nSquad Bravo: Extracting survivors at Village X\nSquad Charlie: Medical triage active\nSquad Delta: Refueling at Base Camp.')" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-orange-800/80 text-orange-200 hover:text-white transition">
+          <i data-lucide="navigation" class="w-4 h-4 text-emerald-300"></i>
+          <span>Team Tracking</span>
+        </a>
+        <a href="#resources" onclick="openRescueModal('Resource Logistics', 'Rescue Equipment Staging:\n• Inflatable Zodiac Boats: 6 active, 4 reserve\n• Life Jackets: 45 distributed, 15 staged\n• Trauma Kits: 12 units on squad bags\n• High-energy Rations: 100 emergency packs.')" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-orange-800/80 text-orange-200 hover:text-white transition">
+          <i data-lucide="package" class="w-4 h-4 text-amber-300"></i>
+          <span>Resources</span>
+        </a>
+        <a href="#comms" onclick="focusCommsChat()" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-orange-800/80 text-orange-200 hover:text-white transition">
+          <i data-lucide="radio" class="w-4 h-4 text-teal-300"></i>
+          <span>Communication</span>
+        </a>
+        <a href="#updates" onclick="openRescueModal('Incident Updates', 'SitRep 10:20 AM: Water flow speed increased to 1.8 m/s at southern bend. Avoid motorized engine use in shallow paddy fields.')" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-orange-800/80 text-orange-200 hover:text-white transition">
+          <i data-lucide="bell" class="w-4 h-4 text-red-300"></i>
+          <span>Incident Updates</span>
+        </a>
+        <a href="#checklists" onclick="openRescueModal('Tactical Pre-Deployment Checklist', '✓ VHF Radio tuned to channel 16\n✓ Auxiliary fuel tank sealed\n✓ Thermal drone battery 100%\n✓ Rope rescue harness inspected.')" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-orange-800/80 text-orange-200 hover:text-white transition">
+          <i data-lucide="check-square" class="w-4 h-4 text-emerald-300"></i>
+          <span>Checklists</span>
+        </a>
+        <a href="#reports" onclick="openRescueModal('Field Mission Reports', 'Completed Missions: 18\nExtracted Citizens: 480+\nPending Triage Cases: 4\nCasualty Count: 0.')" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-orange-800/80 text-orange-200 hover:text-white transition">
+          <i data-lucide="file-text" class="w-4 h-4 text-slate-300"></i>
+          <span>Reports</span>
+        </a>
+        <a href="#settings" onclick="openRescueModal('Field Radio Settings', 'Frequency: 462.5625 MHz (Ch 1)\nGPS Refresh Interval: 5s\nMesh Encryption: AES-256.')" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-orange-800/80 text-orange-200 hover:text-white transition">
+          <i data-lucide="settings" class="w-4 h-4 text-slate-300"></i>
+          <span>Settings</span>
+        </a>
+      </nav>
+
+      <div class="p-3 bg-orange-950 border-t border-orange-900 flex items-center justify-between text-[11px]">
+        <div class="flex items-center gap-1.5 text-emerald-400 font-mono font-bold">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+          <span>SQUAD ALPHA ONLINE</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT AREA -->
+    <main class="flex-1 flex flex-col min-w-0 overflow-y-auto custom-scrollbar p-4 lg:p-6 space-y-5">
+      
+      <!-- TOP 5 STAT CARDS (Exact values & layout from mockup) -->
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3.5">
+        
+        <!-- 1. Active Missions -->
+        <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center text-lg font-bold flex-shrink-0 border border-purple-100">
+            <i data-lucide="target" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <div class="text-xl font-black text-slate-900 font-mono">5</div>
+            <div class="text-[11px] font-bold text-slate-700">Active Missions</div>
+          </div>
+        </div>
+
+        <!-- 2. Team Members Deployed -->
+        <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-lg font-bold flex-shrink-0 border border-blue-100">
+            <i data-lucide="users" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <div class="text-xl font-black text-slate-900 font-mono">12</div>
+            <div class="text-[11px] font-bold text-slate-700">Team Members Deployed</div>
+          </div>
+        </div>
+
+        <!-- 3. New Assignments -->
+        <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-lg font-bold flex-shrink-0 border border-indigo-100">
+            <i data-lucide="cpu" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <div class="text-xl font-black text-slate-900 font-mono">3</div>
+            <div class="text-[11px] font-bold text-slate-700">New Assignments</div>
+            <div class="text-[9px] text-indigo-600 font-semibold">AI optimized allocation</div>
+          </div>
+        </div>
+
+        <!-- 4. Critical Alerts -->
+        <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-red-50 text-red-600 flex items-center justify-center text-lg font-bold flex-shrink-0 border border-red-100">
+            <i data-lucide="alert-triangle" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <div class="text-xl font-black text-slate-900 font-mono">2</div>
+            <div class="text-[11px] font-bold text-slate-700">Critical Alerts</div>
+          </div>
+        </div>
+
+        <!-- 5. Resources Available -->
+        <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm flex items-center gap-3 col-span-2 sm:col-span-1">
+          <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-lg font-bold flex-shrink-0 border border-emerald-100">
+            <i data-lucide="check-circle" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <div class="text-xl font-black text-slate-900 font-mono">85%</div>
+            <div class="text-[11px] font-bold text-slate-700">Resources Available</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- MIDDLE ROW: MISSION QUEUE, MISSION MAP & TEAM/COMMS -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+        
+        <!-- LEFT COLUMN: MISSION QUEUE (col-span-3) -->
+        <div class="lg:col-span-3 bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between pb-2 border-b border-slate-100 mb-2.5">
+              <h2 class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                <i data-lucide="list-ordered" class="w-4 h-4 text-orange-600"></i> Mission Queue
+              </h2>
+              <button onclick="openMissionsModal()" class="text-[10px] text-orange-600 font-bold hover:underline">View All</button>
+            </div>
+
+            <div class="space-y-2.5">
+              
+              <!-- Mission 1 -->
+              <div onclick="selectMission('M-2025-045', 'Flood Rescue', 'Assam, India', 'High', 15, [26.21, 91.75])" class="p-2.5 rounded-lg border-2 border-orange-500 bg-orange-50/50 cursor-pointer transition">
+                <div class="flex items-center justify-between">
+                  <span class="font-mono text-[10px] font-bold text-orange-700">#M-2025-045</span>
+                  <span class="px-1.5 py-0.2 rounded text-[9px] font-bold bg-red-100 text-red-600">High Priority</span>
+                </div>
+                <div class="text-xs font-bold text-slate-900 mt-1">Flood Rescue</div>
+                <div class="text-[11px] text-slate-500">Assam, India</div>
+                <div class="text-[10px] font-mono text-orange-700 font-bold mt-1">ETA: 15 min</div>
+              </div>
+
+              <!-- Mission 2 -->
+              <div onclick="selectMission('M-2025-046', 'Medical Aid', 'Bihar, India', 'Medium', 30, [25.60, 85.12])" class="p-2.5 rounded-lg border border-slate-200 hover:border-orange-300 hover:bg-slate-50 cursor-pointer transition">
+                <div class="flex items-center justify-between">
+                  <span class="font-mono text-[10px] font-bold text-slate-500">#M-2025-046</span>
+                  <span class="px-1.5 py-0.2 rounded text-[9px] font-bold bg-amber-100 text-amber-700">Medium Priority</span>
+                </div>
+                <div class="text-xs font-bold text-slate-900 mt-1">Medical Aid</div>
+                <div class="text-[11px] text-slate-500">Bihar, India</div>
+                <div class="text-[10px] font-mono text-slate-600 font-bold mt-1">ETA: 30 min</div>
+              </div>
+
+              <!-- Mission 3 -->
+              <div onclick="selectMission('M-2025-047', 'Evacuation', 'Uttarakhand, India', 'High', 45, [30.06, 79.01])" class="p-2.5 rounded-lg border border-slate-200 hover:border-orange-300 hover:bg-slate-50 cursor-pointer transition">
+                <div class="flex items-center justify-between">
+                  <span class="font-mono text-[10px] font-bold text-slate-500">#M-2025-047</span>
+                  <span class="px-1.5 py-0.2 rounded text-[9px] font-bold bg-red-100 text-red-600">High Priority</span>
+                </div>
+                <div class="text-xs font-bold text-slate-900 mt-1">Evacuation</div>
+                <div class="text-[11px] text-slate-500">Uttarakhand, India</div>
+                <div class="text-[10px] font-mono text-slate-600 font-bold mt-1">ETA: 45 min</div>
+              </div>
+
+            </div>
+          </div>
+
+          <button onclick="openMissionsModal()" class="w-full py-2 text-center text-xs font-bold text-orange-600 hover:text-orange-700 mt-2">
+            View All Missions →
+          </button>
+        </div>
+
+        <!-- CENTER COLUMN: TACTICAL MISSION MAP (col-span-6) -->
+        <div class="lg:col-span-6 bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
+          <div class="flex items-center justify-between pb-2 border-b border-slate-100 mb-2">
+            <h2 class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+              <i data-lucide="map-pin" class="w-4 h-4 text-blue-600"></i> Mission Tactical Route Map
+            </h2>
+
+            <!-- Legend Overlay Chips -->
+            <div class="flex flex-wrap items-center gap-2 text-[10px] text-slate-600">
+              <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-red-500"></span> Mission Location</span>
+              <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-blue-600"></span> Team Location</span>
+              <span class="flex items-center gap-1"><span class="w-3 h-1 bg-blue-600"></span> Safe Route</span>
+              <span class="flex items-center gap-1"><span class="w-3 h-1 border-t border-dashed border-red-500"></span> Blocked Route</span>
+              <span class="flex items-center gap-1"><span class="w-2 h-2 rounded bg-emerald-600"></span> Shelter</span>
+            </div>
+          </div>
+
+          <!-- Leaflet Map Box -->
+          <div class="relative w-full h-[320px] rounded-lg overflow-hidden border border-slate-200 bg-slate-100">
+            <div id="rescue-map" class="w-full h-full z-10"></div>
+          </div>
+
+          <div class="flex items-center justify-between text-[10px] text-slate-500 mt-2">
+            <span>Live GPS Refresh: <strong>Every 5s</strong></span>
+            <span class="text-emerald-700 font-semibold">Satellite Signal: Strong (12 Sats)</span>
+          </div>
+        </div>
+
+        <!-- RIGHT COLUMN: TEAM STATUS & LIVE COMMS (col-span-3) -->
+        <div class="lg:col-span-3 space-y-4 flex flex-col justify-between">
+          
+          <!-- Team Status Card -->
+          <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm">
+            <h3 class="text-xs font-bold text-slate-800 pb-2 border-b border-slate-100 mb-2 flex items-center gap-1.5">
+              <i data-lucide="shield" class="w-4 h-4 text-emerald-600"></i> Team Status
+            </h3>
+
+            <div class="space-y-2 text-xs">
+              <div class="flex items-center justify-between p-1.5 rounded-lg bg-slate-50">
+                <span class="font-semibold text-slate-800">Team Alpha</span>
+                <span class="flex items-center gap-1 text-[11px] text-emerald-600 font-bold">
+                  <span class="w-2 h-2 rounded-full bg-emerald-500"></span> On Route
+                </span>
+              </div>
+              <div class="flex items-center justify-between p-1.5 rounded-lg bg-slate-50">
+                <span class="font-semibold text-slate-800">Team Bravo</span>
+                <span class="flex items-center gap-1 text-[11px] text-emerald-600 font-bold">
+                  <span class="w-2 h-2 rounded-full bg-emerald-500"></span> On Site
+                </span>
+              </div>
+              <div class="flex items-center justify-between p-1.5 rounded-lg bg-slate-50">
+                <span class="font-semibold text-slate-800">Team Charlie</span>
+                <span class="flex items-center gap-1 text-[11px] text-emerald-600 font-bold">
+                  <span class="w-2 h-2 rounded-full bg-emerald-500"></span> On Site
+                </span>
+              </div>
+              <div class="flex items-center justify-between p-1.5 rounded-lg bg-slate-50">
+                <span class="font-semibold text-slate-800">Team Delta</span>
+                <span class="flex items-center gap-1 text-[11px] text-orange-600 font-bold">
+                  <span class="w-2 h-2 rounded-full bg-orange-500"></span> Returning
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Live Communication (Two-Way Radio Chat) -->
+          <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm flex-1 flex flex-col justify-between" id="comms-chat-section">
+            <div class="flex items-center justify-between pb-2 border-b border-slate-100 mb-2">
+              <h3 class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                <i data-lucide="radio" class="w-4 h-4 text-teal-600"></i> Live Communication
+              </h3>
+              <span class="text-[10px] font-mono text-emerald-600 font-bold">Ch 16 / UHF</span>
+            </div>
+
+            <!-- Chat Stream -->
+            <div class="h-36 overflow-y-auto space-y-2 text-[11px] p-2 bg-slate-50 rounded-lg custom-scrollbar radio-static" id="radio-messages">
+              <div class="space-y-0.5">
+                <span class="font-bold text-blue-700">Control Room:</span>
+                <p class="text-slate-700 bg-white p-1.5 rounded border border-slate-200">All teams, please update status.</p>
+              </div>
+              <div class="space-y-0.5">
+                <span class="font-bold text-emerald-700">Team Alpha:</span>
+                <p class="text-slate-700 bg-white p-1.5 rounded border border-slate-200">Reached location, assessing situation.</p>
+              </div>
+              <div class="space-y-0.5">
+                <span class="font-bold text-orange-700">Team Bravo:</span>
+                <p class="text-slate-700 bg-white p-1.5 rounded border border-slate-200">Rescue in progress, need medical support.</p>
+              </div>
+            </div>
+
+            <!-- Chat Input -->
+            <div class="flex gap-1.5 mt-2">
+              <input type="text" id="radio-input" placeholder="Type a message..." class="flex-1 px-2.5 py-1.5 border border-slate-300 rounded-lg text-xs focus:outline-orange-600">
+              <button onclick="sendRadioMessage()" class="px-3 py-1.5 bg-orange-600 hover:bg-orange-700 text-white rounded-lg text-xs font-bold transition flex items-center gap-1">
+                <i data-lucide="send" class="w-3 h-3"></i>
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- LOWER ROW: MISSION DETAILS, RESOURCES INVENTORY & INNOVATIVE FEATURES -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-4">
+        
+        <!-- LOWER LEFT: MISSION DETAILS (col-span-4) -->
+        <div class="lg:col-span-4 bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between pb-2 border-b border-slate-100 mb-3">
+              <h3 class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                <i data-lucide="info" class="w-4 h-4 text-orange-600"></i> Mission Details
+              </h3>
+              <span class="px-2 py-0.5 text-[10px] font-bold bg-blue-100 text-blue-700 rounded-full">In Progress</span>
+            </div>
+
+            <div class="flex gap-3">
+              <div class="w-24 h-24 rounded-lg bg-slate-200 overflow-hidden flex-shrink-0 border border-slate-200 relative">
+                <img src="https://images.unsplash.com/photo-1547683905-f686c993aae5?w=300&auto=format&fit=crop&q=80" alt="Flood Zone" class="w-full h-full object-cover">
+                <span class="absolute bottom-1 right-1 bg-black/70 text-white text-[8px] font-mono px-1 rounded">GEO</span>
+              </div>
+
+              <div class="space-y-1 text-xs">
+                <div class="text-sm font-extrabold text-slate-900">Flood Rescue Operation</div>
+                <div class="text-[11px] text-slate-500"><strong>Location:</strong> Village X, Assam</div>
+                <div class="text-[11px] text-slate-500"><strong>Priority:</strong> <span class="text-red-600 font-bold">High</span></div>
+                <div class="text-[11px] text-slate-500"><strong>People Affected:</strong> <span class="font-bold text-slate-800">120</span></div>
+                <div class="text-[11px] text-slate-500"><strong>Status:</strong> <span class="text-blue-600 font-semibold">In Progress</span></div>
+              </div>
+            </div>
+          </div>
+
+          <button onclick="openRescueModal('Mission Dossier #M-2025-045', 'Village X Flood Rescue:\n• Population trapped: 120 (35 children, 18 elderly)\n• Floodwater level: 1.8m rising at 5cm/hr\n• Primary Hazard: Floating debris and power line down near school\n• Squad assigned: Alpha & Bravo with 4 boats.')" class="mt-3 w-fit py-1.5 px-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-bold transition">
+            View Details
+          </button>
+        </div>
+
+        <!-- LOWER CENTER: RESOURCES INVENTORY (col-span-4) -->
+        <div class="lg:col-span-4 bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between pb-2 border-b border-slate-100 mb-3">
+              <h3 class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                <i data-lucide="box" class="w-4 h-4 text-orange-600"></i> Resources Inventory
+              </h3>
+              <span class="text-[10px] text-slate-500 font-medium">Staged vs Total</span>
+            </div>
+
+            <div class="space-y-3 text-xs">
+              
+              <!-- Boats -->
+              <div>
+                <div class="flex justify-between text-[11px] font-semibold text-slate-700 mb-1">
+                  <span>Boats</span>
+                  <span class="font-mono text-slate-800 font-bold">6/10 (60%)</span>
+                </div>
+                <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
+                  <div class="bg-blue-600 h-2.5 rounded-full" style="width: 60%"></div>
+                </div>
+              </div>
+
+              <!-- Life Jackets -->
+              <div>
+                <div class="flex justify-between text-[11px] font-semibold text-slate-700 mb-1">
+                  <span>Life Jackets</span>
+                  <span class="font-mono text-slate-800 font-bold">45/60 (75%)</span>
+                </div>
+                <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
+                  <div class="bg-emerald-600 h-2.5 rounded-full" style="width: 75%"></div>
+                </div>
+              </div>
+
+              <!-- Medical Kits -->
+              <div>
+                <div class="flex justify-between text-[11px] font-semibold text-slate-700 mb-1">
+                  <span>Medical Kits</span>
+                  <span class="font-mono text-slate-800 font-bold">12/20 (60%)</span>
+                </div>
+                <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
+                  <div class="bg-amber-500 h-2.5 rounded-full" style="width: 60%"></div>
+                </div>
+              </div>
+
+              <!-- Food Packets -->
+              <div>
+                <div class="flex justify-between text-[11px] font-semibold text-slate-700 mb-1">
+                  <span>Food Packets</span>
+                  <span class="font-mono text-slate-800 font-bold">100/150 (67%)</span>
+                </div>
+                <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
+                  <div class="bg-purple-600 h-2.5 rounded-full" style="width: 67%"></div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="text-[10px] text-slate-400 mt-2">Logistics Resupply Hub: Guwahati Central Depot</div>
+        </div>
+
+        <!-- LOWER RIGHT: INNOVATIVE FEATURES (col-span-4) -->
+        <div class="lg:col-span-4 bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between pb-2 border-b border-slate-100 mb-2.5">
+              <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-orange-100 text-orange-800">INNOVATIVE FEATURES</span>
+              <span class="text-[10px] text-slate-400">Field Responder Tech</span>
+            </div>
+
+            <div class="space-y-1.5">
+              
+              <!-- F1 -->
+              <div onclick="openRescueModal('Real-time Team Tracking', 'Sub-meter accurate RTK GPS tracking of every field officer and inflatable boat across the flood perimeter.')" class="p-2 rounded-lg bg-slate-50 hover:bg-orange-50 border border-slate-100 hover:border-orange-200 cursor-pointer transition flex items-center gap-2">
+                <i data-lucide="navigation" class="w-4 h-4 text-orange-600"></i>
+                <span class="text-xs font-bold text-slate-800">Real-time Team Tracking</span>
+              </div>
+
+              <!-- F2 -->
+              <div onclick="openRescueModal('AR Navigation Support', 'Augmented reality heads-up display projecting submerged street curbs, open manholes, and clear boat draft channels.')" class="p-2 rounded-lg bg-slate-50 hover:bg-orange-50 border border-slate-100 hover:border-orange-200 cursor-pointer transition flex items-center gap-2">
+                <i data-lucide="glasses" class="w-4 h-4 text-indigo-600"></i>
+                <span class="text-xs font-bold text-slate-800">AR Navigation Support</span>
+              </div>
+
+              <!-- F3 -->
+              <div onclick="openRescueModal('AI Risk Alerts', 'Real-time hydrological AI alerts predicting sudden embankment failure or water surge within 30 minutes.')" class="p-2 rounded-lg bg-slate-50 hover:bg-orange-50 border border-slate-100 hover:border-orange-200 cursor-pointer transition flex items-center gap-2">
+                <i data-lucide="alert-octagon" class="w-4 h-4 text-red-600"></i>
+                <span class="text-xs font-bold text-slate-800">AI Risk Alerts</span>
+              </div>
+
+              <!-- F4 -->
+              <div onclick="openRescueModal('Wearable Integration', 'Tactical biometric smart-vests monitoring pulse rate, core body temperature, and oxygen levels of scuba divers.')" class="p-2 rounded-lg bg-slate-50 hover:bg-orange-50 border border-slate-100 hover:border-orange-200 cursor-pointer transition flex items-center gap-2">
+                <i data-lucide="watch" class="w-4 h-4 text-emerald-600"></i>
+                <span class="text-xs font-bold text-slate-800">Wearable Integration</span>
+              </div>
+
+              <!-- F5 -->
+              <div onclick="openRescueModal('Auto Incident Documentation', 'Body-worn cameras automatically log timestamped rescue extractions, generating legal dispatch manifests hands-free.')" class="p-2 rounded-lg bg-slate-50 hover:bg-orange-50 border border-slate-100 hover:border-orange-200 cursor-pointer transition flex items-center gap-2">
+                <i data-lucide="file-check" class="w-4 h-4 text-purple-600"></i>
+                <span class="text-xs font-bold text-slate-800">Auto Incident Documentation</span>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="text-[10px] text-slate-400 mt-2">Field Encrypted Mesh Online</div>
+        </div>
+
+      </div>
+
+    </main>
+  </div>
+
+  <!-- INTERACTIVE MODAL -->
+  <div id="rescue-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[1000] hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-lg w-full border border-slate-200 shadow-2xl p-6 space-y-4 transform transition-all scale-95 opacity-0 duration-200" id="rescue-modal-container">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+        <h3 id="rescue-modal-title" class="text-base font-bold text-slate-900 flex items-center gap-2"></h3>
+        <button onclick="closeRescueModal()" class="text-slate-400 hover:text-slate-600 p-1 rounded-lg">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <div id="rescue-modal-body" class="text-xs text-slate-600 space-y-3 leading-relaxed"></div>
+      <div class="flex justify-end gap-2 pt-2 border-t border-slate-100">
+        <button onclick="closeRescueModal()" class="px-4 py-2 rounded-lg bg-slate-100 text-slate-700 text-xs font-bold hover:bg-slate-200 transition">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Initialize Lucide Icons
+    lucide.createIcons();
+
+    // Leaflet Rescue Tactical Map
+    let rescueMap = L.map('rescue-map', {
+      zoomControl: true,
+      attributionControl: false
+    }).setView([26.20, 91.75], 12);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 18,
+    }).addTo(rescueMap);
+
+    // Mission Location Marker (Red Target)
+    const missionIcon = L.divIcon({
+      className: 'custom-mission-marker',
+      html: `<div style="background-color:#ef4444; width:22px; height:22px; border-radius:50%; border:3px solid white; box-shadow:0 0 10px rgba(239,68,68,0.8); display:flex; align-items:center; justify-content:center; color:white; font-size:10px; font-weight:bold;">🎯</div>`,
+      iconSize: [22, 22],
+      iconAnchor: [11, 11]
+    });
+    const targetMarker = L.marker([26.23, 91.79], { icon: missionIcon }).addTo(rescueMap);
+    targetMarker.bindPopup("<strong>Mission Location</strong><br>Village X, Assam<br>120 Persons Stranded • High Priority").openPopup();
+
+    // Team Location Marker (Blue Moving Responder)
+    const teamIcon = L.divIcon({
+      className: 'custom-team-marker',
+      html: `<div style="background-color:#2563eb; width:22px; height:22px; border-radius:50%; border:3px solid white; box-shadow:0 0 10px rgba(37,99,235,0.8); display:flex; align-items:center; justify-content:center; color:white; font-size:10px; font-weight:bold;">🚤</div>`,
+      iconSize: [22, 22],
+      iconAnchor: [11, 11]
+    });
+    const teamMarker = L.marker([26.16, 91.71], { icon: teamIcon }).addTo(rescueMap);
+    teamMarker.bindPopup("<strong>Team Alpha (Zodiac Boat #4)</strong><br>Speed: 18 km/h • ETA: 15 min");
+
+    // Safe Route (Solid Blue Polyline)
+    const safeRoutePoints = [
+      [26.16, 91.71],
+      [26.175, 91.73],
+      [26.19, 91.75],
+      [26.21, 91.77],
+      [26.23, 91.79]
+    ];
+    L.polyline(safeRoutePoints, {
+      color: '#2563eb',
+      weight: 4,
+      opacity: 0.85
+    }).addTo(rescueMap).bindPopup("<strong>Safe Route (Navigable Channel)</strong><br>Water depth 2.4m, no submerged high-tension wires.");
+
+    // Blocked Route (Dashed Red Polyline)
+    const blockedRoutePoints = [
+      [26.16, 91.71],
+      [26.18, 91.72],
+      [26.20, 91.74],
+      [26.23, 91.79]
+    ];
+    L.polyline(blockedRoutePoints, {
+      color: '#ef4444',
+      weight: 3,
+      dashArray: '6, 8',
+      opacity: 0.7
+    }).addTo(rescueMap).bindPopup("<strong>Blocked Route</strong><br>Collapsed bridge & heavy log jam. Unnavigable.");
+
+    // Shelter Marker
+    const shelterIcon = L.divIcon({
+      className: 'custom-shelter',
+      html: `<div style="background-color:#10b981; width:20px; height:20px; border-radius:4px; border:2px solid white; box-shadow:0 2px 6px rgba(0,0,0,0.3); display:flex; align-items:center; justify-content:center; color:white; font-size:10px;">🏠</div>`,
+      iconSize: [20, 20],
+      iconAnchor: [10, 10]
+    });
+    L.marker([26.15, 91.78], { icon: shelterIcon }).addTo(rescueMap).bindPopup("<strong>Dispur High School Shelter</strong><br>Medical Triage Active");
+
+    function selectMission(id, name, location, priority, eta, coords) {
+      rescueMap.flyTo(coords, 12, { duration: 1.5 });
+      alert(`Selected Mission #${id}: ${name} (${location}). Route recalculated. ETA: ${eta} min.`);
+    }
+
+    function focusMissionMap() {
+      rescueMap.flyTo([26.20, 91.75], 13);
+    }
+
+    function focusCommsChat() {
+      const el = document.getElementById('comms-chat-section');
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Live Radio Send
+    function sendRadioMessage() {
+      const input = document.getElementById('radio-input');
+      const messages = document.getElementById('radio-messages');
+      if (!input.value.trim()) return;
+
+      const userMsg = input.value;
+      messages.innerHTML += `
+        <div class="space-y-0.5">
+          <span class="font-bold text-orange-700">Team Alpha:</span>
+          <p class="text-slate-700 bg-orange-50 p-1.5 rounded border border-orange-200">${userMsg}</p>
+        </div>
+      `;
+      input.value = '';
+      messages.scrollTop = messages.scrollHeight;
+
+      // Simulated auto reply from Control Room
+      setTimeout(() => {
+        messages.innerHTML += `
+          <div class="space-y-0.5">
+            <span class="font-bold text-blue-700">Control Room:</span>
+            <p class="text-slate-700 bg-white p-1.5 rounded border border-slate-200">Roger Alpha. Med team dispatched to your GPS waypoint.</p>
+          </div>
+        `;
+        messages.scrollTop = messages.scrollHeight;
+      }, 1000);
+    }
+
+    // Modal
+    const modal = document.getElementById('rescue-modal');
+    const modalContainer = document.getElementById('rescue-modal-container');
+    const modalTitle = document.getElementById('rescue-modal-title');
+    const modalBody = document.getElementById('rescue-modal-body');
+
+    function openRescueModal(title, text) {
+      modalTitle.innerHTML = `<span class="text-orange-600 font-black">🚑</span> ${title}`;
+      modalBody.innerHTML = `<p class="whitespace-pre-line text-slate-700 font-medium">${text}</p>`;
+      modal.classList.remove('hidden');
+      setTimeout(() => {
+        modalContainer.classList.remove('scale-95', 'opacity-0');
+        modalContainer.classList.add('scale-100', 'opacity-100');
+      }, 10);
+    }
+
+    function closeRescueModal() {
+      modalContainer.classList.remove('scale-100', 'opacity-100');
+      modalContainer.classList.add('scale-95', 'opacity-0');
+      setTimeout(() => {
+        modal.classList.add('hidden');
+      }, 150);
+    }
+
+    function openMissionsModal() {
+      openRescueModal('All Assigned Missions', '1. #M-2025-045: Flood Rescue (Village X, Assam) - High Priority\n2. #M-2025-046: Medical Aid (Bihar Sector 4) - Medium Priority\n3. #M-2025-047: Evacuation (Uttarakhand NH-58) - High Priority\n4. #M-2025-048: Food Drop (Majuli Island) - Scheduled');
+    }
+  </script>
+</body>
+</html>

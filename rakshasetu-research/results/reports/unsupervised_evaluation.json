@@ -1,0 +1,444 @@
+{
+  "benchmark_classification": "Synthetic Anomaly Benchmark",
+  "caveat": "Evaluation conducted strictly on synthetic stand-in dataset; metrics reflect algorithmic stability and anomaly sensitivity under unsupervised settings.",
+  "test_windows_count": 14790,
+  "computational_cost": {
+    "zscore": {
+      "inference_time_sec": 0.0128,
+      "windows_per_sec": 1152183.2,
+      "parameter_count": 0,
+      "model_size_kb": 17.5
+    },
+    "edad_inspired": {
+      "inference_time_sec": 0.3972,
+      "windows_per_sec": 37237.2,
+      "parameter_count": 124936,
+      "model_size_kb": 1500.7
+    }
+  },
+  "score_distribution_statistics": {
+    "zscore_max_abs": {
+      "mean": 2.476623002547054,
+      "std": 0.3897420750105811,
+      "min": 1.6320395752677106,
+      "p50_median": 2.4074447978416265,
+      "p95": 3.230972372665983,
+      "p99": 3.7384675209417484,
+      "max": 4.023006944876589
+    },
+    "edad_score": {
+      "mean": 0.5568103194236755,
+      "std": 0.12067792564630508,
+      "min": 0.24350038170814514,
+      "p50_median": 0.5482325553894043,
+      "p95": 0.7711522579193115,
+      "p99": 0.8747823238372803,
+      "max": 1.0870946645736694
+    }
+  },
+  "flag_rates_percentage": {
+    "zscore": {
+      "th_2.0": 93.51,
+      "th_2.5": 41.09,
+      "th_3.0": 10.32
+    },
+    "edad_inspired": {
+      "th_2.0_sigma": 4.75,
+      "th_2.5_sigma": 2.04,
+      "th_3.0_sigma": 0.78
+    }
+  },
+  "model_agreement": {
+    "threshold_compared": "2.5 standard deviations / threshold",
+    "both_flagged": 236,
+    "zscore_only": 5841,
+    "edad_only": 65,
+    "neither_flagged": 8648,
+    "jaccard_similarity": 0.0384,
+    "overall_agreement_rate": 0.6007
+  },
+  "temporal_clustering": {
+    "zscore": {
+      "num_bursts": 383,
+      "mean_burst_length": 15.866840731070496,
+      "max_burst_length": 45
+    },
+    "edad_inspired": {
+      "num_bursts": 175,
+      "mean_burst_length": 1.72,
+      "max_burst_length": 11
+    }
+  },
+  "controlled_synthetic_sanity_benchmark": {
+    "injection_description": "Controlled 5-sigma sensor spike injection on 4% isolated test windows (Verification Only)",
+    "n_injected": 591,
+    "zscore_detection_rate": 100.0,
+    "edad_detection_rate": 83.42
+  },
+  "top_20_anomalous_windows": {
+    "zscore": [
+      {
+        "rank": 1,
+        "window_index": 12237,
+        "node_id": "SB-017",
+        "start_time": "2011-10-08 09:00:00",
+        "end_time": "2011-10-10 05:00:00",
+        "zscore_max": 4.023006944876589,
+        "edad_score": 0.7573007345199585
+      },
+      {
+        "rank": 2,
+        "window_index": 12236,
+        "node_id": "SB-017",
+        "start_time": "2011-10-07 20:40:00",
+        "end_time": "2011-10-09 21:00:00",
+        "zscore_max": 4.023006944876589,
+        "edad_score": 0.8436055779457092
+      },
+      {
+        "rank": 3,
+        "window_index": 12235,
+        "node_id": "SB-017",
+        "start_time": "2011-10-07 19:20:00",
+        "end_time": "2011-10-09 18:20:00",
+        "zscore_max": 4.023006944876589,
+        "edad_score": 0.839320182800293
+      },
+      {
+        "rank": 4,
+        "window_index": 12234,
+        "node_id": "SB-017",
+        "start_time": "2011-10-07 17:50:00",
+        "end_time": "2011-10-09 16:30:00",
+        "zscore_max": 4.023006944876589,
+        "edad_score": 0.8453376889228821
+      },
+      {
+        "rank": 5,
+        "window_index": 12230,
+        "node_id": "SB-017",
+        "start_time": "2011-10-07 02:50:00",
+        "end_time": "2011-10-08 19:20:00",
+        "zscore_max": 4.023006944876589,
+        "edad_score": 0.8265348672866821
+      },
+      {
+        "rank": 6,
+        "window_index": 12231,
+        "node_id": "SB-017",
+        "start_time": "2011-10-07 04:40:00",
+        "end_time": "2011-10-09 04:10:00",
+        "zscore_max": 4.023006944876589,
+        "edad_score": 0.7077789306640625
+      },
+      {
+        "rank": 7,
+        "window_index": 12232,
+        "node_id": "SB-017",
+        "start_time": "2011-10-07 15:00:00",
+        "end_time": "2011-10-09 12:20:00",
+        "zscore_max": 4.023006944876589,
+        "edad_score": 0.7298142313957214
+      },
+      {
+        "rank": 8,
+        "window_index": 12233,
+        "node_id": "SB-017",
+        "start_time": "2011-10-07 16:50:00",
+        "end_time": "2011-10-09 12:50:00",
+        "zscore_max": 4.023006944876589,
+        "edad_score": 0.7070944905281067
+      },
+      {
+        "rank": 9,
+        "window_index": 12238,
+        "node_id": "SB-017",
+        "start_time": "2011-10-08 13:40:00",
+        "end_time": "2011-10-10 05:10:00",
+        "zscore_max": 4.023006944876589,
+        "edad_score": 0.8211554884910583
+      },
+      {
+        "rank": 10,
+        "window_index": 12239,
+        "node_id": "SB-017",
+        "start_time": "2011-10-08 14:40:00",
+        "end_time": "2011-10-10 05:50:00",
+        "zscore_max": 4.023006944876589,
+        "edad_score": 0.8571435213088989
+      },
+      {
+        "rank": 11,
+        "window_index": 12240,
+        "node_id": "SB-017",
+        "start_time": "2011-10-08 18:00:00",
+        "end_time": "2011-10-10 10:20:00",
+        "zscore_max": 4.023006944876589,
+        "edad_score": 0.784183144569397
+      },
+      {
+        "rank": 12,
+        "window_index": 12241,
+        "node_id": "SB-017",
+        "start_time": "2011-10-08 19:20:00",
+        "end_time": "2011-10-10 10:40:00",
+        "zscore_max": 4.023006944876589,
+        "edad_score": 0.8254839777946472
+      },
+      {
+        "rank": 13,
+        "window_index": 12589,
+        "node_id": "SB-018",
+        "start_time": "2011-08-14 00:10:00",
+        "end_time": "2011-08-15 07:50:00",
+        "zscore_max": 3.907017210016301,
+        "edad_score": 0.8113935589790344
+      },
+      {
+        "rank": 14,
+        "window_index": 12588,
+        "node_id": "SB-018",
+        "start_time": "2011-08-13 23:30:00",
+        "end_time": "2011-08-14 23:50:00",
+        "zscore_max": 3.907017210016301,
+        "edad_score": 0.6523552536964417
+      },
+      {
+        "rank": 15,
+        "window_index": 12587,
+        "node_id": "SB-018",
+        "start_time": "2011-08-13 20:40:00",
+        "end_time": "2011-08-14 22:50:00",
+        "zscore_max": 3.907017210016301,
+        "edad_score": 0.571431577205658
+      },
+      {
+        "rank": 16,
+        "window_index": 12586,
+        "node_id": "SB-018",
+        "start_time": "2011-08-13 20:20:00",
+        "end_time": "2011-08-14 21:00:00",
+        "zscore_max": 3.907017210016301,
+        "edad_score": 0.6109756827354431
+      },
+      {
+        "rank": 17,
+        "window_index": 12578,
+        "node_id": "SB-018",
+        "start_time": "2011-08-12 23:10:00",
+        "end_time": "2011-08-14 00:10:00",
+        "zscore_max": 3.907017210016301,
+        "edad_score": 0.5033847093582153
+      },
+      {
+        "rank": 18,
+        "window_index": 12579,
+        "node_id": "SB-018",
+        "start_time": "2011-08-13 01:50:00",
+        "end_time": "2011-08-14 00:30:00",
+        "zscore_max": 3.907017210016301,
+        "edad_score": 0.5045619010925293
+      },
+      {
+        "rank": 19,
+        "window_index": 12580,
+        "node_id": "SB-018",
+        "start_time": "2011-08-13 03:30:00",
+        "end_time": "2011-08-14 02:30:00",
+        "zscore_max": 3.907017210016301,
+        "edad_score": 0.4824216961860657
+      },
+      {
+        "rank": 20,
+        "window_index": 12581,
+        "node_id": "SB-018",
+        "start_time": "2011-08-13 04:30:00",
+        "end_time": "2011-08-14 03:20:00",
+        "zscore_max": 3.907017210016301,
+        "edad_score": 0.5002889633178711
+      }
+    ],
+    "edad_inspired": [
+      {
+        "rank": 1,
+        "window_index": 1895,
+        "node_id": "SB-003",
+        "start_time": "2011-10-08 11:00:00",
+        "end_time": "2011-10-09 16:50:00",
+        "edad_score": 1.0870946645736694,
+        "zscore_max": 3.220523510221974
+      },
+      {
+        "rank": 2,
+        "window_index": 2598,
+        "node_id": "SB-004",
+        "start_time": "2011-10-05 17:50:00",
+        "end_time": "2011-10-08 00:30:00",
+        "edad_score": 1.0711506605148315,
+        "zscore_max": 2.2525806010907248
+      },
+      {
+        "rank": 3,
+        "window_index": 3802,
+        "node_id": "SB-006",
+        "start_time": "2011-08-25 11:50:00",
+        "end_time": "2011-08-28 07:20:00",
+        "edad_score": 1.0645532608032227,
+        "zscore_max": 2.8355775198036373
+      },
+      {
+        "rank": 4,
+        "window_index": 11319,
+        "node_id": "SB-016",
+        "start_time": "2011-09-12 21:40:00",
+        "end_time": "2011-09-15 06:30:00",
+        "edad_score": 1.0615988969802856,
+        "zscore_max": 3.0911521957371506
+      },
+      {
+        "rank": 5,
+        "window_index": 12031,
+        "node_id": "SB-017",
+        "start_time": "2011-09-10 03:50:00",
+        "end_time": "2011-09-12 10:50:00",
+        "edad_score": 1.0519850254058838,
+        "zscore_max": 3.2476706632976606
+      },
+      {
+        "rank": 6,
+        "window_index": 12029,
+        "node_id": "SB-017",
+        "start_time": "2011-09-10 00:00:00",
+        "end_time": "2011-09-12 09:30:00",
+        "edad_score": 1.0446089506149292,
+        "zscore_max": 3.2476706632976606
+      },
+      {
+        "rank": 7,
+        "window_index": 3803,
+        "node_id": "SB-006",
+        "start_time": "2011-08-25 20:50:00",
+        "end_time": "2011-08-28 11:10:00",
+        "edad_score": 1.0420241355895996,
+        "zscore_max": 2.8355775198036373
+      },
+      {
+        "rank": 8,
+        "window_index": 11318,
+        "node_id": "SB-016",
+        "start_time": "2011-09-12 21:20:00",
+        "end_time": "2011-09-15 06:20:00",
+        "edad_score": 1.0385966300964355,
+        "zscore_max": 3.0911521957371506
+      },
+      {
+        "rank": 9,
+        "window_index": 10073,
+        "node_id": "SB-014",
+        "start_time": "2011-10-20 16:00:00",
+        "end_time": "2011-10-22 01:00:00",
+        "edad_score": 1.0319430828094482,
+        "zscore_max": 2.328138715312881
+      },
+      {
+        "rank": 10,
+        "window_index": 7672,
+        "node_id": "SB-011",
+        "start_time": "2011-09-26 18:00:00",
+        "end_time": "2011-09-27 14:50:00",
+        "edad_score": 1.0299255847930908,
+        "zscore_max": 3.012451840285592
+      },
+      {
+        "rank": 11,
+        "window_index": 1893,
+        "node_id": "SB-003",
+        "start_time": "2011-10-08 00:50:00",
+        "end_time": "2011-10-09 11:10:00",
+        "edad_score": 1.0259602069854736,
+        "zscore_max": 3.220523510221974
+      },
+      {
+        "rank": 12,
+        "window_index": 1065,
+        "node_id": "SB-002",
+        "start_time": "2011-09-30 03:50:00",
+        "end_time": "2011-10-01 15:40:00",
+        "edad_score": 1.0231934785842896,
+        "zscore_max": 2.9355059746746273
+      },
+      {
+        "rank": 13,
+        "window_index": 3801,
+        "node_id": "SB-006",
+        "start_time": "2011-08-25 10:50:00",
+        "end_time": "2011-08-28 05:50:00",
+        "edad_score": 1.0228509902954102,
+        "zscore_max": 2.8355775198036373
+      },
+      {
+        "rank": 14,
+        "window_index": 1066,
+        "node_id": "SB-002",
+        "start_time": "2011-09-30 04:00:00",
+        "end_time": "2011-10-02 05:20:00",
+        "edad_score": 1.0225732326507568,
+        "zscore_max": 2.9355059746746273
+      },
+      {
+        "rank": 15,
+        "window_index": 1897,
+        "node_id": "SB-003",
+        "start_time": "2011-10-08 14:50:00",
+        "end_time": "2011-10-10 06:50:00",
+        "edad_score": 1.0221281051635742,
+        "zscore_max": 3.220523510221974
+      },
+      {
+        "rank": 16,
+        "window_index": 4602,
+        "node_id": "SB-007",
+        "start_time": "2011-09-06 20:20:00",
+        "end_time": "2011-09-08 23:10:00",
+        "edad_score": 1.0220906734466553,
+        "zscore_max": 2.1877463676679256
+      },
+      {
+        "rank": 17,
+        "window_index": 27,
+        "node_id": "SB-001",
+        "start_time": "2011-08-25 05:40:00",
+        "end_time": "2011-08-26 19:20:00",
+        "edad_score": 1.009116768836975,
+        "zscore_max": 3.0721599840017504
+      },
+      {
+        "rank": 18,
+        "window_index": 14180,
+        "node_id": "SB-020",
+        "start_time": "2011-08-29 00:40:00",
+        "end_time": "2011-08-30 20:40:00",
+        "edad_score": 1.0052621364593506,
+        "zscore_max": 3.390372711066795
+      },
+      {
+        "rank": 19,
+        "window_index": 11317,
+        "node_id": "SB-016",
+        "start_time": "2011-09-12 19:30:00",
+        "end_time": "2011-09-15 03:30:00",
+        "edad_score": 1.0045580863952637,
+        "zscore_max": 3.0911521957371506
+      },
+      {
+        "rank": 20,
+        "window_index": 14574,
+        "node_id": "SB-020",
+        "start_time": "2011-10-24 10:10:00",
+        "end_time": "2011-10-26 02:20:00",
+        "edad_score": 1.0004714727401733,
+        "zscore_max": 2.6481857128497155
+      }
+    ]
+  }
+}

@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>4. Admin Panel — Manage & Optimize System</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Lucide Icons & Chart.js -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            adminpurple: {
+              50: '#faf5ff',
+              100: '#f3e8ff',
+              500: '#a855f7',
+              600: '#9333ea',
+              700: '#7e22ce',
+              800: '#6b21a8',
+              900: '#581c87',
+              950: '#3b0764',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #f8fafc;
+      color: #0f172a;
+      font-family: 'Inter', sans-serif;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased">
+
+  <!-- TOP BANNER (Deep Purple matching reference mockup) -->
+  <div class="bg-[#581c87] text-white px-4 py-2.5 shadow-md flex flex-wrap items-center justify-between border-b border-purple-900 sticky top-0 z-50">
+    <div class="flex items-center gap-3">
+      <div class="w-7 h-7 rounded-lg bg-purple-500/30 flex items-center justify-center font-bold text-white border border-purple-400/40">
+        ⚙️
+      </div>
+      <div>
+        <h1 class="text-sm md:text-base font-extrabold tracking-wide uppercase">4. ADMIN PANEL – MANAGE & OPTIMIZE SYSTEM</h1>
+        <p class="text-[11px] text-purple-200 font-normal">System management, user control & platform analytics</p>
+      </div>
+    </div>
+
+    <!-- Quick Switcher Bar -->
+    <div class="flex items-center gap-2 text-xs mt-1 sm:mt-0">
+      <span class="text-purple-200 hidden md:inline">Switch Panel:</span>
+      <select onchange="location.href=this.value" class="bg-purple-950/80 border border-purple-400/40 text-white rounded px-2 py-1 text-xs font-semibold focus:outline-none cursor-pointer hover:bg-purple-900 transition">
+        <option value="admin.html" selected>4. Admin Panel</option>
+        <option value="government.html">1. Government Panel</option>
+        <option value="citizen.html">2. Citizen Panel</option>
+        <option value="responder.html">3. Rescue Team Panel</option>
+        <option value="index.html">🌐 All Panels Hub</option>
+      </select>
+      <a href="index.html" class="px-2 py-1 bg-white/10 hover:bg-white/20 rounded text-[11px] font-medium transition text-purple-100 flex items-center gap-1">
+        <i data-lucide="grid" class="w-3 h-3"></i> Portal
+      </a>
+    </div>
+  </div>
+
+  <div class="flex-1 flex flex-col md:flex-row min-h-0">
+
+    <!-- LEFT SIDEBAR (Deep Indigo / Purple Sidebar) -->
+    <aside class="w-full md:w-56 bg-[#3b0764] text-purple-100 flex flex-col flex-shrink-0 border-r border-purple-900">
+      
+      <!-- Panel Header -->
+      <div class="p-4 border-b border-purple-800/80 flex items-center gap-3">
+        <div class="w-9 h-9 rounded-xl bg-purple-600 flex items-center justify-center text-white font-bold shadow-md shadow-purple-600/30">
+          <i data-lucide="sliders" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <div class="font-bold text-white text-sm leading-tight">Admin Panel</div>
+          <div class="text-[11px] text-purple-300 font-medium">Root Infrastructure</div>
+        </div>
+      </div>
+
+      <!-- Navigation Menu -->
+      <nav class="p-3 space-y-1 text-xs font-medium flex-1 overflow-y-auto custom-scrollbar">
+        <!-- Active Dashboard -->
+        <a href="admin.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-purple-600 text-white font-semibold shadow-md shadow-purple-600/30">
+          <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+          <span>Dashboard</span>
+        </a>
+        <a href="#users" onclick="openAdminModal('User Management', 'Registered Users: 1,245\n• Citizens: 810\n• Govt Officers: 224\n• Rescue Personnel: 149\n• Super Admins: 62\n\nAll accounts authenticated via SSO and OTP.')" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-purple-800/80 text-purple-200 hover:text-white transition">
+          <i data-lucide="users" class="w-4 h-4 text-purple-300"></i>
+          <span>User Management</span>
+        </a>
+        <a href="#roles" onclick="openAdminModal('Role Management', 'Access Matrix:\n• State Administrator: Full Access\n• District Magistrate: Regional Read/Write\n• NDRF Commandant: Field Ops\n• Citizen: Read/Report Only.')" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-purple-800/80 text-purple-200 hover:text-white transition">
+          <i data-lucide="shield-check" class="w-4 h-4 text-pink-300"></i>
+          <span>Role Management</span>
+        </a>
+        <a href="#logs" onclick="openAdminModal('System Logs Audit', 'Last 100 System Events:\n[10:15:02] API POST /incidents/create - 200 OK\n[10:08:44] FCM Broadcast sent to 45,210 tokens\n[10:00:12] Database write replica sync healthy (0 lag).')" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-purple-800/80 text-purple-200 hover:text-white transition">
+          <i data-lucide="file-text" class="w-4 h-4 text-cyan-300"></i>
+          <span>System Logs</span>
+        </a>
+        <a href="#incidents" onclick="openAdminModal('Incident Lifecycle Management', '156 Total Incidents Recorded:\n• Active: 12\n• Under Verification: 24\n• Mitigated / Closed: 120.')" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-purple-800/80 text-purple-200 hover:text-white transition">
+          <i data-lucide="alert-triangle" class="w-4 h-4 text-amber-300"></i>
+          <span>Incident Management</span>
+        </a>
+        <a href="#content" onclick="openAdminModal('Content & Safety Bulletins', 'Publishing Console: Draft emergency advisory for cyclonic circulation over northern Bay of Bengal pending approval.')" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-purple-800/80 text-purple-200 hover:text-white transition">
+          <i data-lucide="edit-3" class="w-4 h-4 text-emerald-300"></i>
+          <span>Content Management</span>
+        </a>
+        <a href="#analytics" onclick="openAdminModal('Platform Deep Analytics', 'Weekly Throughput:\n• API Requests: 4.8M\n• Peak concurrent socket sessions: 14,200\n• Mean TTFB: 24ms.')" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-purple-800/80 text-purple-200 hover:text-white transition">
+          <i data-lucide="bar-chart-2" class="w-4 h-4 text-blue-300"></i>
+          <span>Analytics</span>
+        </a>
+        <a href="#settings" onclick="openAdminModal('Global System Settings', 'Configuration:\n• Multi-Region Failover: Enabled (AWS ap-south-1 & Azure Central India)\n• Disaster Recovery Mode: Standby Warm.')" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-purple-800/80 text-purple-200 hover:text-white transition">
+          <i data-lucide="settings" class="w-4 h-4 text-slate-300"></i>
+          <span>System Settings</span>
+        </a>
+        <a href="#notifications" onclick="openAdminModal('Notification Gateway', 'SMS Gateway: 99.94% delivery\nPush Notification APNs/FCM: Healthy\nIVRS Voice Blast: Active.')" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-purple-800/80 text-purple-200 hover:text-white transition">
+          <i data-lucide="bell" class="w-4 h-4 text-amber-300"></i>
+          <span>Notifications</span>
+        </a>
+        <a href="#integrations" onclick="openAdminModal('API Integrations', 'Connected Webhooks:\n• IMD Weather API: Connected\n• CWC River Gauge API: Connected\n• ISRO Bhuvan Spatial: Connected\n• National Disaster Helpline 112: Connected.')" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-purple-800/80 text-purple-200 hover:text-white transition">
+          <i data-lucide="network" class="w-4 h-4 text-teal-300"></i>
+          <span>Integrations</span>
+        </a>
+        <a href="#backup" onclick="openAdminModal('Backup & Disaster Recovery', 'Last Automated Snapshot: 09:00 AM (18 May 2025)\nTarget: Georedundant Vault\nChecksum: SHA-256 Verified.')" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-purple-800/80 text-purple-200 hover:text-white transition">
+          <i data-lucide="database" class="w-4 h-4 text-indigo-300"></i>
+          <span>Backup & Recovery</span>
+        </a>
+      </nav>
+
+      <div class="p-3 bg-purple-950 border-t border-purple-900 flex items-center justify-between text-[11px]">
+        <div class="flex items-center gap-1.5 text-emerald-400 font-mono font-bold">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+          <span>CLUSTER ONLINE</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT AREA -->
+    <main class="flex-1 flex flex-col min-w-0 overflow-y-auto custom-scrollbar p-4 lg:p-6 space-y-5">
+      
+      <!-- SUB-HEADER: Date & Admin Profile -->
+      <div class="flex flex-wrap items-center justify-between gap-3 bg-white p-3 rounded-xl border border-slate-200 shadow-sm">
+        <div class="flex items-center gap-3 text-xs font-mono font-bold text-slate-700">
+          <i data-lucide="clock" class="w-4 h-4 text-purple-600"></i>
+          <span>18 May 2025 | 10:30 AM</span>
+        </div>
+
+        <div class="flex items-center gap-4 text-xs">
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-700 flex items-center gap-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> API Status: Optimal
+            </span>
+          </div>
+
+          <!-- Admin Avatar -->
+          <div class="flex items-center gap-2 border-l border-slate-200 pl-3">
+            <div class="w-8 h-8 rounded-full bg-purple-600 text-white flex items-center justify-center font-bold text-xs shadow-sm">
+              AD
+            </div>
+            <div class="hidden sm:block text-left">
+              <div class="text-xs font-bold text-slate-800 leading-tight">Admin Console</div>
+              <div class="text-[10px] text-purple-600 font-medium">Super Administrator</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TOP 5 STAT CARDS (Exact match with reference image) -->
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3.5">
+        
+        <!-- 1. Total Users -->
+        <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center text-lg font-bold flex-shrink-0 border border-purple-100">
+            <i data-lucide="users" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <div class="text-xl font-black text-slate-900 font-mono">1,245</div>
+            <div class="text-[11px] font-bold text-slate-700">Total Users</div>
+          </div>
+        </div>
+
+        <!-- 2. Active Incidents -->
+        <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center text-lg font-bold flex-shrink-0 border border-orange-100">
+            <i data-lucide="alert-triangle" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <div class="text-xl font-black text-slate-900 font-mono">156</div>
+            <div class="text-[11px] font-bold text-slate-700">Active Incidents</div>
+          </div>
+        </div>
+
+        <!-- 3. Departments -->
+        <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-lg font-bold flex-shrink-0 border border-blue-100">
+            <i data-lucide="building" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <div class="text-xl font-black text-slate-900 font-mono">85</div>
+            <div class="text-[11px] font-bold text-slate-700">Departments</div>
+          </div>
+        </div>
+
+        <!-- 4. Rescue Teams -->
+        <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-700 flex items-center justify-center text-lg font-bold flex-shrink-0 border border-indigo-100">
+            <i data-lucide="cross" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <div class="text-xl font-black text-slate-900 font-mono">4</div>
+            <div class="text-[11px] font-bold text-slate-700">Rescue Teams</div>
+          </div>
+        </div>
+
+        <!-- 5. System Uptime -->
+        <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm flex items-center gap-3 col-span-2 sm:col-span-1">
+          <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-lg font-bold flex-shrink-0 border border-emerald-100">
+            <i data-lucide="activity" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <div class="text-xl font-black text-slate-900 font-mono">98%</div>
+            <div class="text-[11px] font-bold text-slate-700">System Uptime</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- MIDDLE ROW: PLATFORM OVERVIEW, USER DISTRIBUTION, SYSTEM HEALTH -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+        
+        <!-- Platform Overview Chart (col-span-6) -->
+        <div class="lg:col-span-6 bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
+          <div class="flex items-center justify-between pb-2 border-b border-slate-100 mb-2">
+            <h2 class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+              <i data-lucide="trending-up" class="w-4 h-4 text-purple-600"></i> Platform Overview
+            </h2>
+
+            <!-- Multi-line chart legend -->
+            <div class="flex items-center gap-3 text-[10px] font-semibold text-slate-600">
+              <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-blue-600"></span> Users</span>
+              <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-orange-500"></span> Incidents</span>
+              <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-emerald-500"></span> Reports</span>
+            </div>
+          </div>
+
+          <div class="h-52 relative">
+            <canvas id="admin-platform-chart"></canvas>
+          </div>
+
+          <div class="flex justify-between text-[10px] text-slate-400 mt-2">
+            <span>Aggregated Data Stream</span>
+            <span>12 May – 18 May</span>
+          </div>
+        </div>
+
+        <!-- User Distribution Donut (col-span-3) -->
+        <div class="lg:col-span-3 bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
+          <div class="flex items-center justify-between pb-2 border-b border-slate-100 mb-2">
+            <h2 class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+              <i data-lucide="pie-chart" class="w-4 h-4 text-purple-600"></i> User Distribution
+            </h2>
+          </div>
+
+          <div class="h-36 relative flex items-center justify-center">
+            <canvas id="admin-user-dist-chart"></canvas>
+          </div>
+
+          <!-- Legend list matching image -->
+          <div class="space-y-1 text-[10px] text-slate-600 mt-2 font-medium">
+            <div class="flex items-center justify-between">
+              <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-blue-600"></span> Citizens</span>
+              <span class="font-bold text-slate-800">65%</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-orange-500"></span> Government</span>
+              <span class="font-bold text-slate-800">18%</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-purple-600"></span> Rescue Teams</span>
+              <span class="font-bold text-slate-800">12%</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-pink-500"></span> Admin</span>
+              <span class="font-bold text-slate-800">5%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- System Health (col-span-3) -->
+        <div class="lg:col-span-3 bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between pb-2 border-b border-slate-100 mb-3">
+              <h2 class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                <i data-lucide="shield-check" class="w-4 h-4 text-emerald-600"></i> System Health
+              </h2>
+              <span class="text-[10px] text-emerald-600 font-bold bg-emerald-50 px-2 py-0.5 rounded">All Green</span>
+            </div>
+
+            <div class="space-y-2.5 text-xs">
+              
+              <div class="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-100">
+                <span class="font-semibold text-slate-800">Server Status</span>
+                <span class="flex items-center gap-1.5 text-[11px] text-emerald-600 font-bold">
+                  <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Operational
+                </span>
+              </div>
+
+              <div class="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-100">
+                <span class="font-semibold text-slate-800">Database</span>
+                <span class="flex items-center gap-1.5 text-[11px] text-emerald-600 font-bold">
+                  <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Operational
+                </span>
+              </div>
+
+              <div class="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-100">
+                <span class="font-semibold text-slate-800">API Services</span>
+                <span class="flex items-center gap-1.5 text-[11px] text-emerald-600 font-bold">
+                  <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Operational
+                </span>
+              </div>
+
+              <div class="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-100">
+                <span class="font-semibold text-slate-800">Storage</span>
+                <span class="flex items-center gap-1.5 text-[11px] text-emerald-600 font-bold">
+                  <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Operational
+                </span>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="text-[10px] text-slate-400 mt-2">Latency: 18ms • AWS ap-south-1</div>
+        </div>
+
+      </div>
+
+      <!-- LOWER ROW: RECENT ACTIVITY & SYSTEM ANALYTICS -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+        
+        <!-- Recent Activity Table (col-span-8) -->
+        <div class="lg:col-span-8 bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between pb-2 border-b border-slate-100 mb-3">
+              <h2 class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                <i data-lucide="history" class="w-4 h-4 text-purple-600"></i> Recent Activity
+              </h2>
+              <button onclick="openAdminModal('Full Audit Trail', 'Event Log:\n10:15 AM - New Incident Reported by Rohit K. (Completed)\n10:08 AM - Alert Sent to Kamrup District (Completed)\n10:00 AM - Resource Updated by Relief Officer (Completed)\n09:45 AM - User Registered: citizen_482 (Completed)')" class="text-xs text-purple-600 font-bold hover:underline">View All</button>
+            </div>
+
+            <!-- Table matching mockup columns -->
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs">
+                <thead>
+                  <tr class="text-[10px] text-slate-400 uppercase border-b border-slate-100 pb-2">
+                    <th class="py-1.5 font-semibold">Activity</th>
+                    <th class="py-1.5 font-semibold">User</th>
+                    <th class="py-1.5 font-semibold">Time</th>
+                    <th class="py-1.5 font-semibold text-right">Status</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100 text-slate-700">
+                  <tr>
+                    <td class="py-2.5 font-semibold text-slate-900">New Incident Reported</td>
+                    <td class="py-2.5 text-slate-500">Citizen User</td>
+                    <td class="py-2.5 font-mono text-[11px]">10:15 AM</td>
+                    <td class="py-2.5 text-right"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-700">Completed</span></td>
+                  </tr>
+                  <tr>
+                    <td class="py-2.5 font-semibold text-slate-900">Alert Sent</td>
+                    <td class="py-2.5 text-slate-500">System</td>
+                    <td class="py-2.5 font-mono text-[11px]">10:08 AM</td>
+                    <td class="py-2.5 text-right"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-700">Completed</span></td>
+                  </tr>
+                  <tr>
+                    <td class="py-2.5 font-semibold text-slate-900">Resource Updated</td>
+                    <td class="py-2.5 text-slate-500">Admin User</td>
+                    <td class="py-2.5 font-mono text-[11px]">10:00 AM</td>
+                    <td class="py-2.5 text-right"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-700">Completed</span></td>
+                  </tr>
+                  <tr>
+                    <td class="py-2.5 font-semibold text-slate-900">User Registered</td>
+                    <td class="py-2.5 text-slate-500">Citizen User</td>
+                    <td class="py-2.5 font-mono text-[11px]">09:45 AM</td>
+                    <td class="py-2.5 text-right"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-700">Completed</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="text-[10px] text-slate-400 mt-2">Tamper-Proof Blockchain Audit Ledger Active</div>
+        </div>
+
+        <!-- System Analytics 4 Tiles (col-span-4) -->
+        <div class="lg:col-span-4 bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="pb-2 border-b border-slate-100 mb-3">
+              <h2 class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                <i data-lucide="bar-chart" class="w-4 h-4 text-purple-600"></i> System Analytics
+              </h2>
+            </div>
+
+            <!-- 4 Metric Cards Grid -->
+            <div class="grid grid-cols-2 gap-3">
+              
+              <!-- Reports -->
+              <div class="p-2.5 rounded-lg bg-slate-50 border border-slate-100">
+                <div class="text-[10px] font-bold text-slate-500">Reports</div>
+                <div class="text-lg font-black text-slate-900 font-mono mt-0.5">2,450</div>
+                <div class="text-[10px] font-bold text-emerald-600 mt-0.5">↑ 12%</div>
+              </div>
+
+              <!-- Alerts Sent -->
+              <div class="p-2.5 rounded-lg bg-slate-50 border border-slate-100">
+                <div class="text-[10px] font-bold text-slate-500">Alerts Sent</div>
+                <div class="text-lg font-black text-slate-900 font-mono mt-0.5">1,320</div>
+                <div class="text-[10px] font-bold text-emerald-600 mt-0.5">↑ 8%</div>
+              </div>
+
+              <!-- Active Sessions -->
+              <div class="p-2.5 rounded-lg bg-slate-50 border border-slate-100">
+                <div class="text-[10px] font-bold text-slate-500">Active Sessions</div>
+                <div class="text-lg font-black text-slate-900 font-mono mt-0.5">3,210</div>
+                <div class="text-[10px] font-bold text-emerald-600 mt-0.5">↑ 15%</div>
+              </div>
+
+              <!-- Data Usage -->
+              <div class="p-2.5 rounded-lg bg-slate-50 border border-slate-100">
+                <div class="text-[10px] font-bold text-slate-500">Data Usage</div>
+                <div class="text-lg font-black text-slate-900 font-mono mt-0.5">120 GB</div>
+                <div class="text-[10px] font-bold text-emerald-600 mt-0.5">↑ 10%</div>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="text-[10px] text-slate-400 mt-2">Metrics rolling 24-hour cycle</div>
+        </div>
+
+      </div>
+
+      <!-- BOTTOM ROW: INNOVATIVE FEATURES (5 cards matching mockup) -->
+      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm space-y-3">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-purple-100 text-purple-800">INNOVATIVE FEATURES</span>
+            <span class="text-xs text-slate-500 font-medium">Enterprise Management & Security</span>
+          </div>
+          <span class="text-[11px] text-slate-400 hidden sm:inline">Click to inspect subsystem</span>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+          
+          <!-- F1 -->
+          <div onclick="openAdminModal('AI Anomaly Detection', 'Zero-day cyber attack and spam report prevention. Machine learning model scans incoming citizen media for synthetic duplicates and GPS spoofing.')" class="p-3 rounded-lg border border-slate-100 bg-slate-50/70 hover:bg-purple-50/50 hover:border-purple-200 cursor-pointer transition group">
+            <div class="w-8 h-8 rounded-lg bg-purple-100 text-purple-600 flex items-center justify-center mb-2 group-hover:scale-110 transition">
+              <i data-lucide="shield-alert" class="w-4 h-4"></i>
+            </div>
+            <div class="text-xs font-bold text-slate-800">AI Anomaly Detection</div>
+            <div class="text-[11px] text-slate-500 mt-0.5 leading-snug">Detect unusual patterns & threats</div>
+          </div>
+
+          <!-- F2 -->
+          <div onclick="openAdminModal('Auto Backup & Replication', 'Continuous streaming replication across multi-region geographic availability zones with zero data loss recovery guarantee.')" class="p-3 rounded-lg border border-slate-100 bg-slate-50/70 hover:bg-purple-50/50 hover:border-purple-200 cursor-pointer transition group">
+            <div class="w-8 h-8 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center mb-2 group-hover:scale-110 transition">
+              <i data-lucide="hard-drive" class="w-4 h-4"></i>
+            </div>
+            <div class="text-xs font-bold text-slate-800">Auto Backup</div>
+            <div class="text-[11px] text-slate-500 mt-0.5 leading-snug">Automatic data backup & recovery</div>
+          </div>
+
+          <!-- F3 -->
+          <div onclick="openAdminModal('Smart Notifications Engine', 'Adaptive cellular broadcast throttle. Automatically routes high-urgency evacuation alerts via SMS, Sirens, and push without congestion.')" class="p-3 rounded-lg border border-slate-100 bg-slate-50/70 hover:bg-purple-50/50 hover:border-purple-200 cursor-pointer transition group">
+            <div class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center mb-2 group-hover:scale-110 transition">
+              <i data-lucide="bell" class="w-4 h-4"></i>
+            </div>
+            <div class="text-xs font-bold text-slate-800">Smart Notifications</div>
+            <div class="text-[11px] text-slate-500 mt-0.5 leading-snug">Intelligent notification management</div>
+          </div>
+
+          <!-- F4 -->
+          <div onclick="openAdminModal('Performance Monitoring', 'Real-time telemetry measuring database IOPS, websocket socket leaks, server memory headroom, and network packet drop.')" class="p-3 rounded-lg border border-slate-100 bg-slate-50/70 hover:bg-purple-50/50 hover:border-purple-200 cursor-pointer transition group">
+            <div class="w-8 h-8 rounded-lg bg-indigo-100 text-indigo-600 flex items-center justify-center mb-2 group-hover:scale-110 transition">
+              <i data-lucide="activity" class="w-4 h-4"></i>
+            </div>
+            <div class="text-xs font-bold text-slate-800">Performance Monitoring</div>
+            <div class="text-[11px] text-slate-500 mt-0.5 leading-snug">Real-time system's monitoring</div>
+          </div>
+
+          <!-- F5 -->
+          <div onclick="openAdminModal('Role-Based Access Control (RBAC)', 'Cryptographically signed JWT role authorization with granular permissions per state, district, and emergency function.')" class="p-3 rounded-lg border border-slate-100 bg-slate-50/70 hover:bg-purple-50/50 hover:border-purple-200 cursor-pointer transition group">
+            <div class="w-8 h-8 rounded-lg bg-pink-100 text-pink-600 flex items-center justify-center mb-2 group-hover:scale-110 transition">
+              <i data-lucide="lock" class="w-4 h-4"></i>
+            </div>
+            <div class="text-xs font-bold text-slate-800">Role-Based Access</div>
+            <div class="text-[11px] text-slate-500 mt-0.5 leading-snug">Granular access control</div>
+          </div>
+
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- INTERACTIVE MODAL -->
+  <div id="admin-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[1000] hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-lg w-full border border-slate-200 shadow-2xl p-6 space-y-4 transform transition-all scale-95 opacity-0 duration-200" id="admin-modal-container">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+        <h3 id="admin-modal-title" class="text-base font-bold text-slate-900 flex items-center gap-2"></h3>
+        <button onclick="closeAdminModal()" class="text-slate-400 hover:text-slate-600 p-1 rounded-lg">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <div id="admin-modal-body" class="text-xs text-slate-600 space-y-3 leading-relaxed"></div>
+      <div class="flex justify-end gap-2 pt-2 border-t border-slate-100">
+        <button onclick="closeAdminModal()" class="px-4 py-2 rounded-lg bg-purple-600 text-white text-xs font-bold hover:bg-purple-700 transition">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Initialize Lucide Icons
+    lucide.createIcons();
+
+    // Chart 1: Platform Overview (3 Lines: Users, Incidents, Reports)
+    const platformCtx = document.getElementById('admin-platform-chart').getContext('2d');
+    new Chart(platformCtx, {
+      type: 'line',
+      data: {
+        labels: ['12 May', '13 May', '14 May', '15 May', '16 May', '17 May', '18 May'],
+        datasets: [
+          {
+            label: 'Users',
+            data: [600, 850, 750, 1100, 1050, 1200, 1245],
+            borderColor: '#2563eb',
+            backgroundColor: 'transparent',
+            borderWidth: 2.5,
+            tension: 0.4,
+            pointRadius: 3
+          },
+          {
+            label: 'Incidents',
+            data: [40, 65, 50, 95, 80, 140, 156],
+            borderColor: '#f97316',
+            backgroundColor: 'transparent',
+            borderWidth: 2.5,
+            tension: 0.4,
+            pointRadius: 3
+          },
+          {
+            label: 'Reports',
+            data: [120, 210, 180, 320, 290, 410, 480],
+            borderColor: '#10b981',
+            backgroundColor: 'transparent',
+            borderWidth: 2.5,
+            tension: 0.4,
+            pointRadius: 3
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false }
+        },
+        scales: {
+          x: { grid: { display: false }, ticks: { font: { size: 10 } } },
+          y: { grid: { color: '#f1f5f9' }, ticks: { font: { size: 10 } } }
+        }
+      }
+    });
+
+    // Chart 2: User Distribution Donut Chart
+    const userDistCtx = document.getElementById('admin-user-dist-chart').getContext('2d');
+    new Chart(userDistCtx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Citizens', 'Government', 'Rescue Teams', 'Admin'],
+        datasets: [{
+          data: [65, 18, 12, 5],
+          backgroundColor: ['#2563eb', '#f97316', '#a855f7', '#ec4899'],
+          borderWidth: 2,
+          borderColor: '#ffffff',
+          hoverOffset: 4
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false }
+        },
+        cutout: '68%'
+      }
+    });
+
+    // Modal Handlers
+    const modal = document.getElementById('admin-modal');
+    const modalContainer = document.getElementById('admin-modal-container');
+    const modalTitle = document.getElementById('admin-modal-title');
+    const modalBody = document.getElementById('admin-modal-body');
+
+    function openAdminModal(title, text) {
+      modalTitle.innerHTML = `<span class="text-purple-600 font-black">⚙️</span> ${title}`;
+      modalBody.innerHTML = `<p class="whitespace-pre-line text-slate-700 font-medium">${text}</p>`;
+      modal.classList.remove('hidden');
+      setTimeout(() => {
+        modalContainer.classList.remove('scale-95', 'opacity-0');
+        modalContainer.classList.add('scale-100', 'opacity-100');
+      }, 10);
+    }
+
+    function closeAdminModal() {
+      modalContainer.classList.remove('scale-100', 'opacity-100');
+      modalContainer.classList.add('scale-95', 'opacity-0');
+      setTimeout(() => {
+        modal.classList.add('hidden');
+      }, 150);
+    }
+  </script>
+</body>
+</html>

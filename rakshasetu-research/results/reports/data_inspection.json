@@ -1,0 +1,83 @@
+{
+  "dataset_name": "springbrook_wsn_synthetic_100k.csv",
+  "benchmark_classification": "Synthetic Anomaly Benchmark",
+  "caveat": "Synthetic stand-in dataset; six of nine sensor columns have 0% missing values, three exhibit generator decimal artifacts, no rainfall column exists. Benchmark must be treated as synthetic sanity check and pipeline verification.",
+  "total_rows": 100000,
+  "duplicate_rows": 0,
+  "num_nodes": 20,
+  "node_ids": [
+    "SB-001",
+    "SB-002",
+    "SB-003",
+    "SB-004",
+    "SB-005",
+    "SB-006",
+    "SB-007",
+    "SB-008",
+    "SB-009",
+    "SB-010",
+    "SB-011",
+    "SB-012",
+    "SB-013",
+    "SB-014",
+    "SB-015",
+    "SB-016",
+    "SB-017",
+    "SB-018",
+    "SB-019",
+    "SB-020"
+  ],
+  "rows_per_node_min": 4852,
+  "rows_per_node_max": 5152,
+  "time_range": {
+    "start": "2010-01-01 00:00:00",
+    "end": "2011-11-26 10:30:00",
+    "inferred_cadence_minutes": 140.0
+  },
+  "columns": [
+    "node_id",
+    "timestamp",
+    "air_temperature_C",
+    "relative_humidity_pct",
+    "air_pressure_hPa",
+    "wind_speed_ms",
+    "wind_direction_deg",
+    "leaf_wetness_pct",
+    "soil_moisture_pct",
+    "solar_radiation_Wm2",
+    "battery_voltage_V"
+  ],
+  "missing_percentages": {
+    "node_id": 0.0,
+    "timestamp": 0.0,
+    "air_temperature_C": 1.014,
+    "relative_humidity_pct": 0.987,
+    "air_pressure_hPa": 0.477,
+    "wind_speed_ms": 0.0,
+    "wind_direction_deg": 0.0,
+    "leaf_wetness_pct": 0.0,
+    "soil_moisture_pct": 0.0,
+    "solar_radiation_Wm2": 0.0,
+    "battery_voltage_V": 0.0
+  },
+  "has_anomaly_label_column": false,
+  "label_search_result": "No anomaly labels found. Proceeding with Case B: Unsupervised anomaly detection evaluation.",
+  "device_health_column": "battery_voltage_V",
+  "excluded_features": [
+    "battery_voltage_V"
+  ],
+  "generator_precision_artifacts": {
+    "wind_speed_ms": {
+      "dominant_decimal_length": 2,
+      "pct_with_dominant_length": 90.1
+    },
+    "wind_direction_deg": {
+      "dominant_decimal_length": 1,
+      "pct_with_dominant_length": 100.0
+    },
+    "solar_radiation_Wm2": {
+      "dominant_decimal_length": 1,
+      "pct_with_dominant_length": 100.0
+    }
+  }
+}

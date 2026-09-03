@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>1. Government Panel — Command & Control Dashboard</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Leaflet GIS Map CSS & JS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <!-- Lucide Icons & Chart.js -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            govblue: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              200: '#bfdbfe',
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
+              800: '#1e40af',
+              900: '#1e3a8a',
+              950: '#0f172a',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #f1f5f9;
+      color: #0f172a;
+      font-family: 'Inter', sans-serif;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+    .leaflet-popup-content-wrapper {
+      border-radius: 12px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15);
+      padding: 2px;
+    }
+    .leaflet-popup-content {
+      margin: 8px 12px;
+      line-height: 1.4;
+    }
+    .map-legend-badge {
+      backdrop-filter: blur(8px);
+      background: rgba(255, 255, 255, 0.92);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased">
+
+  <!-- TOP ROLE TITLE BANNER (Identical to reference mockup) -->
+  <div class="bg-[#1e3a8a] text-white px-4 py-2.5 shadow-md flex flex-wrap items-center justify-between border-b border-blue-900 sticky top-0 z-50">
+    <div class="flex items-center gap-3">
+      <div class="w-7 h-7 rounded-lg bg-blue-500/30 flex items-center justify-center font-bold text-white border border-blue-400/40">
+        🏛️
+      </div>
+      <div>
+        <h1 class="text-sm md:text-base font-extrabold tracking-wide uppercase">1. GOVERNMENT PANEL – COMMAND & CONTROL DASHBOARD</h1>
+        <p class="text-[11px] text-blue-200 font-normal">Real-time overview for decision making, monitoring & coordination</p>
+      </div>
+    </div>
+
+    <!-- Quick Switcher Bar -->
+    <div class="flex items-center gap-2 text-xs mt-1 sm:mt-0">
+      <span class="text-blue-200 hidden md:inline">Switch Panel:</span>
+      <select onchange="location.href=this.value" class="bg-blue-950/80 border border-blue-400/40 text-white rounded px-2 py-1 text-xs font-semibold focus:outline-none cursor-pointer hover:bg-blue-900 transition">
+        <option value="government.html" selected>1. Government Panel</option>
+        <option value="citizen.html">2. Citizen Panel</option>
+        <option value="responder.html">3. Rescue Team Panel</option>
+        <option value="admin.html">4. Admin Panel</option>
+        <option value="index.html">🌐 All Panels Hub</option>
+      </select>
+      <a href="index.html" class="px-2 py-1 bg-white/10 hover:bg-white/20 rounded text-[11px] font-medium transition text-blue-100 flex items-center gap-1">
+        <i data-lucide="grid" class="w-3 h-3"></i> Portal
+      </a>
+    </div>
+  </div>
+
+  <div class="flex-1 flex flex-col md:flex-row min-h-0">
+
+    <!-- LEFT SIDEBAR (Dark Navy Sidebar exactly matching mockup) -->
+    <aside class="w-full md:w-60 bg-[#0f172a] text-slate-300 flex flex-col flex-shrink-0 border-r border-slate-800">
+      
+      <!-- Brand Logo / System Title -->
+      <div class="p-4 border-b border-slate-800/80 flex items-center gap-3">
+        <div class="w-9 h-9 rounded-xl bg-blue-600 flex items-center justify-center text-white font-black shadow-lg shadow-blue-500/30">
+          <i data-lucide="shield-alert" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <div class="font-bold text-white text-sm leading-tight">Disaster</div>
+          <div class="text-[11px] text-slate-400 font-medium">Management System</div>
+        </div>
+      </div>
+
+      <!-- Navigation Menu -->
+      <nav class="p-3 space-y-1 text-xs font-medium flex-1 overflow-y-auto custom-scrollbar">
+        <!-- Active Dashboard item -->
+        <a href="government.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-blue-600 text-white font-semibold shadow-md shadow-blue-600/20">
+          <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+          <span>Dashboard</span>
+        </a>
+        <a href="#incidents" onclick="showModal('Incidents Register', 'Active Incident Catalog: 12 incidents currently under continuous state monitoring across Assam, Himachal, Bihar and Odisha.')" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+          <i data-lucide="alert-triangle" class="w-4 h-4 text-red-400"></i>
+          <span>Incidents</span>
+          <span class="ml-auto px-1.5 py-0.5 text-[10px] bg-red-500/20 text-red-400 font-bold rounded">12</span>
+        </a>
+        <a href="#alerts" onclick="showModal('Alerts & Notifications', 'System Broadcast Log: Level-3 Red warning active for Brahmaputra Basin. Flash flood warning active for Himachal Sector 2.')" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+          <i data-lucide="bell" class="w-4 h-4 text-amber-400"></i>
+          <span>Alerts & Notifications</span>
+        </a>
+        <a href="#resources" onclick="showModal('Resource Management', 'NDRF Reserves: 120 inflatable boats, 850 tents, 14,000 food kits staged across 4 zonal hubs.')" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+          <i data-lucide="boxes" class="w-4 h-4 text-emerald-400"></i>
+          <span>Resource Management</span>
+        </a>
+        <a href="#departments" onclick="showModal('Department Directory', 'Coordinating Agencies: NDRF, State Police, Dept of Health, Fire & Emergency, Civil Aviation, PWD.')" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+          <i data-lucide="building" class="w-4 h-4 text-blue-400"></i>
+          <span>Departments</span>
+        </a>
+        <a href="#analytics" onclick="showModal('Analytics & Reports', 'Weekly Executive Report generated. Incident severity down 14% compared to historical 2024 monsoon baseline.')" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+          <i data-lucide="bar-chart-2" class="w-4 h-4 text-purple-400"></i>
+          <span>Analytics & Reports</span>
+        </a>
+        <a href="#map" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+          <i data-lucide="map" class="w-4 h-4 text-cyan-400"></i>
+          <span>GIS Map</span>
+        </a>
+        <a href="#comms" onclick="showModal('Emergency Communication', 'Secure Comms Hub: Direct mesh radio link established with Field Teams Bravo and Alpha.')" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+          <i data-lucide="radio" class="w-4 h-4 text-teal-400"></i>
+          <span>Communication</span>
+        </a>
+        <a href="#evacuation" onclick="showModal('Evacuation Plans', '4 primary corridors cleared for Brahmaputra lower plains. Police escort assigned to Sector 7.')" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+          <i data-lucide="navigation" class="w-4 h-4 text-orange-400"></i>
+          <span>Evacuation Management</span>
+        </a>
+        <a href="#shelters" onclick="showModal('Relief Shelters', '45 active shelters with 8,450 verified occupants. High priority medical kit delivered to Dispur High School.')" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+          <i data-lucide="home" class="w-4 h-4 text-indigo-400"></i>
+          <span>Shelters</span>
+        </a>
+        <a href="#citizen-reports" onclick="showModal('Citizen Incident Feed', '86 citizen verified reports received in last 6 hours. 92% geotagged accurately.')" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+          <i data-lucide="file-text" class="w-4 h-4 text-slate-400"></i>
+          <span>Citizen Reports</span>
+        </a>
+        <a href="#ai-predictions" onclick="openAiFeatureModal('AI Risk Prediction', 'Predicts potential disasters using ML models and historical meteorological datasets.')" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+          <i data-lucide="cpu" class="w-4 h-4 text-pink-400"></i>
+          <span>AI Predictions</span>
+        </a>
+        
+        <div class="pt-2 pb-1 border-t border-slate-800/80"></div>
+        
+        <a href="#settings" onclick="showModal('System Settings', 'Command Center Configuration: Satellite uplink primary, 4G cellular backup active.')" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+          <i data-lucide="settings" class="w-4 h-4 text-slate-400"></i>
+          <span>Settings</span>
+        </a>
+        <a href="#users" onclick="showModal('User Management', '85 government officers, 12 regional commissioners and 4 field leads authorized.')" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+          <i data-lucide="users" class="w-4 h-4 text-slate-400"></i>
+          <span>User Management</span>
+        </a>
+      </nav>
+
+      <!-- Status badge at bottom of sidebar -->
+      <div class="p-3 bg-slate-900 border-t border-slate-800 flex items-center justify-between text-[11px]">
+        <div class="flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span class="text-slate-300 font-medium">State Server Link OK</span>
+        </div>
+        <span class="font-mono text-slate-400">v2.4</span>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT AREA -->
+    <main class="flex-1 flex flex-col min-w-0 overflow-y-auto custom-scrollbar p-4 lg:p-6 space-y-5">
+      
+      <!-- SUB-HEADER: Filters & Real-Time Clock -->
+      <div class="flex flex-wrap items-center justify-between gap-3 bg-white p-3 rounded-xl border border-slate-200 shadow-sm">
+        <div class="flex flex-wrap items-center gap-2">
+          <div class="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-700">
+            <i data-lucide="layers" class="w-3.5 h-3.5 text-blue-600"></i>
+            <select class="bg-transparent font-semibold focus:outline-none cursor-pointer">
+              <option>State Level View</option>
+              <option>National Grid Overview</option>
+              <option>Zonal Emergency View</option>
+            </select>
+          </div>
+
+          <div class="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-700">
+            <i data-lucide="map-pin" class="w-3.5 h-3.5 text-blue-600"></i>
+            <select class="bg-transparent font-semibold focus:outline-none cursor-pointer">
+              <option>All Districts</option>
+              <option>Kamrup Metropolitan (Guwahati)</option>
+              <option>Dibrugarh Basin</option>
+              <option>Cachar / Silchar</option>
+              <option>Sonitpur / Tezpur</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-4 text-xs">
+          <!-- Real-time dynamic date & clock -->
+          <div class="flex items-center gap-2 text-slate-600 font-mono font-medium">
+            <i data-lucide="clock" class="w-3.5 h-3.5 text-slate-400"></i>
+            <span id="gov-live-clock">18 May 2025 | 10:30 AM</span>
+          </div>
+
+          <!-- Notification Bell -->
+          <button onclick="showModal('Live Notifications', '• Brahmaputra River gauge level passed 49.2m (Danger Mark: 48.5m)\n• 2 NDRF teams deployed to Sector 4\n• Landslide cleared at NH-29')" class="relative p-1.5 text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 rounded-lg transition" title="Notifications">
+            <i data-lucide="bell" class="w-4 h-4"></i>
+            <span class="absolute top-0 right-0 w-2 h-2 rounded-full bg-red-500"></span>
+          </button>
+
+          <!-- User Profile -->
+          <div class="flex items-center gap-2 border-l border-slate-200 pl-3">
+            <div class="w-7 h-7 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-xs">
+              JD
+            </div>
+            <div class="hidden sm:block text-left">
+              <div class="text-xs font-bold text-slate-800 leading-tight">J. Das, IAS</div>
+              <div class="text-[10px] text-slate-500">State Relief Commissioner</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4 TOP STAT CARDS (Exact match with values from image) -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        
+        <!-- Card 1: Active Incidents -->
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center gap-4 hover:shadow transition">
+          <div class="w-12 h-12 rounded-xl bg-red-50 text-red-600 flex items-center justify-center text-xl font-bold flex-shrink-0 border border-red-100">
+            <i data-lucide="alert-triangle" class="w-6 h-6"></i>
+          </div>
+          <div>
+            <div class="text-2xl font-black text-slate-900 font-mono">12</div>
+            <div class="text-xs font-bold text-slate-700">Active Incidents</div>
+            <div class="text-[11px] text-red-600 font-semibold flex items-center gap-1 mt-0.5">
+              <span>↑ 2 from yesterday</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2: Affected Areas -->
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center gap-4 hover:shadow transition">
+          <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl font-bold flex-shrink-0 border border-blue-100">
+            <i data-lucide="map-pin" class="w-6 h-6"></i>
+          </div>
+          <div>
+            <div class="text-2xl font-black text-slate-900 font-mono">256</div>
+            <div class="text-xs font-bold text-slate-700">Affected Areas</div>
+            <div class="text-[11px] text-blue-600 font-semibold flex items-center gap-1 mt-0.5">
+              <span>↑ 18 from yesterday</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3: People Affected -->
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center gap-4 hover:shadow transition">
+          <div class="w-12 h-12 rounded-xl bg-cyan-50 text-cyan-700 flex items-center justify-center text-xl font-bold flex-shrink-0 border border-cyan-100">
+            <i data-lucide="users" class="w-6 h-6"></i>
+          </div>
+          <div>
+            <div class="text-2xl font-black text-slate-900 font-mono">8,450</div>
+            <div class="text-xs font-bold text-slate-700">People Affected</div>
+            <div class="text-[11px] text-cyan-700 font-semibold flex items-center gap-1 mt-0.5">
+              <span>↑ 1,250 from yesterday</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 4: Relief Camps -->
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center gap-4 hover:shadow transition">
+          <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl font-bold flex-shrink-0 border border-amber-100">
+            <i data-lucide="tent" class="w-6 h-6"></i>
+          </div>
+          <div>
+            <div class="text-2xl font-black text-slate-900 font-mono">45</div>
+            <div class="text-xs font-bold text-slate-700">Relief Camps</div>
+            <div class="text-[11px] text-amber-600 font-semibold flex items-center gap-1 mt-0.5">
+              <span>3 new opened</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- MIDDLE ROW: GIS MAP & RECENT ALERTS -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+        
+        <!-- Live Incident Map (col-span-8) -->
+        <div class="lg:col-span-8 bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col">
+          <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-100">
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-red-500 animate-ping"></span>
+              <h2 class="text-sm font-bold text-slate-800">Live Incident Map</h2>
+            </div>
+
+            <!-- Legend pills directly atop map matching screenshot -->
+            <div class="flex flex-wrap items-center gap-2 text-[11px] text-slate-600">
+              <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-red-500"></span> High Risk</span>
+              <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-orange-500"></span> Medium Risk</span>
+              <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-amber-400"></span> Low Risk</span>
+              <span class="flex items-center gap-1"><span class="w-2 h-2 rotate-45 bg-blue-600"></span> Shelter</span>
+              <span class="flex items-center gap-1"><span class="w-2 h-2 rounded bg-emerald-600"></span> Resource Location</span>
+            </div>
+          </div>
+
+          <!-- The Leaflet Map Container -->
+          <div class="relative w-full h-[320px] rounded-lg overflow-hidden border border-slate-200 bg-slate-100">
+            <div id="gov-map" class="w-full h-full z-10"></div>
+
+            <!-- Overlaid Map Filter Checklist on top-left (visible like mockup) -->
+            <div class="absolute top-3 left-3 z-[400] map-legend-badge p-2.5 rounded-lg border border-slate-200/80 shadow-md text-[11px] space-y-1.5">
+              <div class="font-bold text-slate-800 flex items-center gap-1">
+                <i data-lucide="filter" class="w-3 h-3 text-blue-600"></i> Map Layers
+              </div>
+              <label class="flex items-center gap-1.5 text-slate-700 cursor-pointer">
+                <input type="checkbox" checked id="layer-flood" class="rounded text-red-600"> Flood Inundation
+              </label>
+              <label class="flex items-center gap-1.5 text-slate-700 cursor-pointer">
+                <input type="checkbox" checked id="layer-shelters" class="rounded text-blue-600"> Shelters & Camps
+              </label>
+              <label class="flex items-center gap-1.5 text-slate-700 cursor-pointer">
+                <input type="checkbox" checked id="layer-teams" class="rounded text-emerald-600"> Active Teams
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Alerts (col-span-4) -->
+        <div class="lg:col-span-4 bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-100">
+              <h2 class="text-sm font-bold text-slate-800 flex items-center gap-2">
+                <i data-lucide="bell-ring" class="w-4 h-4 text-red-500"></i>
+                Recent Alerts
+              </h2>
+              <button onclick="showModal('All Emergency Alerts', '1. Flood Warning: Brahmaputra River Basin (High)\n2. Cyclone Alert: Bay of Bengal (High)\n3. Landslide Risk: Himachal Pradesh (Moderate)\n4. Heavy Rainfall: Kerala & Karnataka (Advisory)')" class="text-xs text-blue-600 font-semibold hover:underline">View All</button>
+            </div>
+
+            <!-- List matching image -->
+            <div class="space-y-3">
+              <!-- Alert 1 -->
+              <div class="p-2.5 rounded-lg bg-red-50 border border-red-200/80 flex items-start gap-3">
+                <span class="w-2.5 h-2.5 rounded-full bg-red-600 mt-1 flex-shrink-0"></span>
+                <div class="flex-1 min-w-0">
+                  <div class="text-xs font-bold text-red-900">Flood Warning</div>
+                  <div class="text-[11px] text-red-700 font-medium truncate">Brahmaputra River Basin</div>
+                  <div class="text-[10px] text-red-600/80 mt-0.5">Severity: High • 18 Nov, 09:15 AM</div>
+                </div>
+                <button onclick="focusMapAlert(26.1445, 91.7362, 'Flood Warning: Brahmaputra River Basin')" class="text-[10px] bg-red-600 text-white px-2 py-1 rounded font-semibold hover:bg-red-700 transition">Inspect</button>
+              </div>
+
+              <!-- Alert 2 -->
+              <div class="p-2.5 rounded-lg bg-orange-50 border border-orange-200/80 flex items-start gap-3">
+                <span class="w-2.5 h-2.5 rounded-full bg-orange-500 mt-1 flex-shrink-0"></span>
+                <div class="flex-1 min-w-0">
+                  <div class="text-xs font-bold text-orange-900">Cyclone Alert</div>
+                  <div class="text-[11px] text-orange-700 font-medium truncate">Bay of Bengal Coastal Belt</div>
+                  <div class="text-[10px] text-orange-600/80 mt-0.5">Severity: Medium • 18 Nov, 08:30 AM</div>
+                </div>
+                <button onclick="focusMapAlert(20.5, 87.2, 'Cyclone Alert: Bay of Bengal')" class="text-[10px] bg-orange-600 text-white px-2 py-1 rounded font-semibold hover:bg-orange-700 transition">Inspect</button>
+              </div>
+
+              <!-- Alert 3 -->
+              <div class="p-2.5 rounded-lg bg-amber-50 border border-amber-200/80 flex items-start gap-3">
+                <span class="w-2.5 h-2.5 rounded-full bg-amber-500 mt-1 flex-shrink-0"></span>
+                <div class="flex-1 min-w-0">
+                  <div class="text-xs font-bold text-amber-900">Landslide Risk</div>
+                  <div class="text-[11px] text-amber-700 font-medium truncate">Himachal Pradesh - Shimla NH</div>
+                  <div class="text-[10px] text-amber-600/80 mt-0.5">Severity: Moderate • 18 Nov, 07:45 AM</div>
+                </div>
+                <button onclick="focusMapAlert(31.1048, 77.1734, 'Landslide Risk: Himachal Pradesh')" class="text-[10px] bg-amber-600 text-white px-2 py-1 rounded font-semibold hover:bg-amber-700 transition">Inspect</button>
+              </div>
+
+              <!-- Alert 4 -->
+              <div class="p-2.5 rounded-lg bg-blue-50 border border-blue-200/80 flex items-start gap-3">
+                <span class="w-2.5 h-2.5 rounded-full bg-blue-500 mt-1 flex-shrink-0"></span>
+                <div class="flex-1 min-w-0">
+                  <div class="text-xs font-bold text-blue-900">Heavy Rainfall</div>
+                  <div class="text-[11px] text-blue-700 font-medium truncate">Kerala & Coastal Karnataka</div>
+                  <div class="text-[10px] text-blue-600/80 mt-0.5">Advisory: Orange Alert • 18 Nov, 06:10 AM</div>
+                </div>
+                <button onclick="focusMapAlert(10.8505, 76.2711, 'Heavy Rainfall: Kerala & Karnataka')" class="text-[10px] bg-blue-600 text-white px-2 py-1 rounded font-semibold hover:bg-blue-700 transition">Inspect</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-3 pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
+            <span>Automated Meteorological Feed</span>
+            <span class="text-emerald-600 font-semibold">Live Synced</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ROW: CHARTS, DEPARTMENTS & QUICK ACTIONS -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-5">
+        
+        <!-- Incident Trend (Last 7 Days) (col-span-4) -->
+        <div class="lg:col-span-4 bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
+          <div class="flex items-center justify-between pb-2 border-b border-slate-100 mb-2">
+            <h3 class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+              <i data-lucide="trending-up" class="w-4 h-4 text-blue-600"></i>
+              Incident Trend (Last 7 Days)
+            </h3>
+            <span class="text-[10px] text-blue-600 font-bold bg-blue-50 px-2 py-0.5 rounded">Past Week</span>
+          </div>
+          <div class="h-44 relative">
+            <canvas id="gov-trend-chart"></canvas>
+          </div>
+          <div class="text-[10px] text-slate-400 text-right mt-1">12 May – 18 May 2025</div>
+        </div>
+
+        <!-- Resource Availability Donut (col-span-3) -->
+        <div class="lg:col-span-3 bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
+          <div class="flex items-center justify-between pb-2 border-b border-slate-100 mb-2">
+            <h3 class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+              <i data-lucide="pie-chart" class="w-4 h-4 text-blue-600"></i>
+              Resource Availability
+            </h3>
+          </div>
+          <div class="h-36 relative flex items-center justify-center">
+            <canvas id="gov-resource-chart"></canvas>
+          </div>
+          <!-- Legend list matching image -->
+          <div class="grid grid-cols-2 gap-1 text-[10px] text-slate-600 mt-2 font-medium">
+            <div class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-blue-600"></span> Rescue Teams 65%</div>
+            <div class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-red-500"></span> Medical Teams 40%</div>
+            <div class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-amber-500"></span> Vehicles 70%</div>
+            <div class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-emerald-500"></span> Shelters 85%</div>
+            <div class="flex items-center gap-1 col-span-2"><span class="w-2 h-2 rounded-full bg-purple-500"></span> Drones 50%</div>
+          </div>
+        </div>
+
+        <!-- Department Coordination (col-span-3) -->
+        <div class="lg:col-span-3 bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between pb-2 border-b border-slate-100 mb-2">
+              <h3 class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                <i data-lucide="users-2" class="w-4 h-4 text-blue-600"></i>
+                Department Coordination
+              </h3>
+            </div>
+
+            <div class="space-y-2 text-xs">
+              <div class="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-100">
+                <div class="font-semibold text-slate-800 flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-emerald-500"></span> NDRF
+                </div>
+                <div class="text-slate-500 text-[11px]">12 Teams</div>
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-700">Active</span>
+              </div>
+
+              <div class="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-100">
+                <div class="font-semibold text-slate-800 flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Police
+                </div>
+                <div class="text-slate-500 text-[11px]">20 Teams</div>
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-700">Active</span>
+              </div>
+
+              <div class="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-100">
+                <div class="font-semibold text-slate-800 flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Health Dept.
+                </div>
+                <div class="text-slate-500 text-[11px]">15 Teams</div>
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-700">Active</span>
+              </div>
+
+              <div class="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-100">
+                <div class="font-semibold text-slate-800 flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Fire Services
+                </div>
+                <div class="text-slate-500 text-[11px]">18 Teams</div>
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-700">Active</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="text-[10px] text-slate-400 mt-2">Combined Field Responders: 650+ personnel</div>
+        </div>
+
+        <!-- Quick Actions (col-span-2) -->
+        <div class="lg:col-span-2 bg-gradient-to-b from-blue-600 to-blue-700 p-4 rounded-xl text-white shadow-sm flex flex-col justify-between">
+          <div>
+            <h3 class="text-xs font-bold uppercase tracking-wider text-blue-100 pb-2 border-b border-blue-500/50 mb-3 flex items-center gap-1.5">
+              <i data-lucide="zap" class="w-4 h-4"></i>
+              Quick Actions
+            </h3>
+
+            <div class="space-y-2">
+              <button onclick="openActionModal('Send Emergency Alert', 'Broadcast emergency message to all citizens and field teams across selected district.')" class="w-full py-2 px-3 rounded-lg bg-white text-blue-700 hover:bg-blue-50 text-xs font-bold transition shadow-sm flex items-center justify-center gap-1.5">
+                <i data-lucide="radio" class="w-3.5 h-3.5"></i> Send Alert
+              </button>
+
+              <button onclick="openActionModal('Activate Response Teams', 'Mobilize NDRF and SDRF battalions on emergency standby.')" class="w-full py-2 px-3 rounded-lg bg-blue-800/80 hover:bg-blue-900 text-white text-xs font-semibold transition border border-blue-400/30 flex items-center justify-center gap-1.5">
+                <i data-lucide="users" class="w-3.5 h-3.5"></i> Activate Teams
+              </button>
+
+              <button onclick="openActionModal('Open Emergency Shelter', 'Authorize opening of designated community centers and high schools as shelters.')" class="w-full py-2 px-3 rounded-lg bg-blue-800/80 hover:bg-blue-900 text-white text-xs font-semibold transition border border-blue-400/30 flex items-center justify-center gap-1.5">
+                <i data-lucide="home" class="w-3.5 h-3.5"></i> Open Shelter
+              </button>
+
+              <button onclick="openActionModal('Request Central Resources', 'Send immediate requisition to National Disaster Management Authority (NDMA).')" class="w-full py-2 px-3 rounded-lg bg-blue-800/80 hover:bg-blue-900 text-white text-xs font-semibold transition border border-blue-400/30 flex items-center justify-center gap-1.5">
+                <i data-lucide="truck" class="w-3.5 h-3.5"></i> Request Resources
+              </button>
+            </div>
+          </div>
+
+          <div class="text-[10px] text-blue-200 mt-3 text-center">Protocol: Code Alpha-1</div>
+        </div>
+
+      </div>
+
+      <!-- BOTTOM ROW: INNOVATIVE FEATURES (6 cards matching the reference mockup) -->
+      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm space-y-3">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-blue-100 text-blue-700">INNOVATIVE FEATURES</span>
+            <span class="text-xs text-slate-500 font-medium">State-of-the-art Next-Gen ResQNet Technologies</span>
+          </div>
+          <span class="text-[11px] text-slate-400 hidden sm:inline">Click any capability to test</span>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+          
+          <!-- Feature 1 -->
+          <div onclick="openAiFeatureModal('AI Risk Prediction', 'Predicts potential disasters using machine learning models trained on 40 years of rainfall, soil saturation, and hydrological patterns. Early warning lead time: 48 hours.')" class="p-3 rounded-lg border border-slate-100 bg-slate-50/70 hover:bg-blue-50/50 hover:border-blue-200 cursor-pointer transition group">
+            <div class="w-8 h-8 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center mb-2 group-hover:scale-110 transition">
+              <i data-lucide="brain" class="w-4 h-4"></i>
+            </div>
+            <div class="text-xs font-bold text-slate-800">AI Risk Prediction</div>
+            <div class="text-[11px] text-slate-500 mt-0.5 leading-snug">Predicts potential disasters using ML models</div>
+          </div>
+
+          <!-- Feature 2 -->
+          <div onclick="openAiFeatureModal('Digital Twin Map', 'Simulate multi-variable dam breach scenarios and analyze flood inundation depth on 3D terrain before executing field evacuations.')" class="p-3 rounded-lg border border-slate-100 bg-slate-50/70 hover:bg-blue-50/50 hover:border-blue-200 cursor-pointer transition group">
+            <div class="w-8 h-8 rounded-lg bg-indigo-100 text-indigo-600 flex items-center justify-center mb-2 group-hover:scale-110 transition">
+              <i data-lucide="box" class="w-4 h-4"></i>
+            </div>
+            <div class="text-xs font-bold text-slate-800">Digital Twin Map</div>
+            <div class="text-[11px] text-slate-500 mt-0.5 leading-snug">Simulate scenarios & impact analysis</div>
+          </div>
+
+          <!-- Feature 3 -->
+          <div onclick="openAiFeatureModal('IoT Sensor Network', 'Connected river water-level ultrasonic sensors, seismic accelerometers, and meteorological stations streaming telemetric readings every 15 seconds.')" class="p-3 rounded-lg border border-slate-100 bg-slate-50/70 hover:bg-blue-50/50 hover:border-blue-200 cursor-pointer transition group">
+            <div class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center mb-2 group-hover:scale-110 transition">
+              <i data-lucide="wifi" class="w-4 h-4"></i>
+            </div>
+            <div class="text-xs font-bold text-slate-800">IoT Sensor Network</div>
+            <div class="text-[11px] text-slate-500 mt-0.5 leading-snug">Real-time data from sensors & devices</div>
+          </div>
+
+          <!-- Feature 4 -->
+          <div onclick="openAiFeatureModal('Smart Evacuation', 'Real-time dynamic rerouting that avoids submerged roads, landslides, and collapsed bridges, routing citizens to highest ground safely.')" class="p-3 rounded-lg border border-slate-100 bg-slate-50/70 hover:bg-blue-50/50 hover:border-blue-200 cursor-pointer transition group">
+            <div class="w-8 h-8 rounded-lg bg-amber-100 text-amber-600 flex items-center justify-center mb-2 group-hover:scale-110 transition">
+              <i data-lucide="route" class="w-4 h-4"></i>
+            </div>
+            <div class="text-xs font-bold text-slate-800">Smart Evacuation</div>
+            <div class="text-[11px] text-slate-500 mt-0.5 leading-snug">AI optimized evacuation routes</div>
+          </div>
+
+          <!-- Feature 5 -->
+          <div onclick="openAiFeatureModal('Drone Surveillance', 'Autonomous tactical UAV swarms live-streaming thermal video, identifying marooned survivors on rooftops, and delivering emergency radio transponders.')" class="p-3 rounded-lg border border-slate-100 bg-slate-50/70 hover:bg-blue-50/50 hover:border-blue-200 cursor-pointer transition group">
+            <div class="w-8 h-8 rounded-lg bg-cyan-100 text-cyan-600 flex items-center justify-center mb-2 group-hover:scale-110 transition">
+              <i data-lucide="camera" class="w-4 h-4"></i>
+            </div>
+            <div class="text-xs font-bold text-slate-800">Drone Surveillance</div>
+            <div class="text-[11px] text-slate-500 mt-0.5 leading-snug">Live drone feeds & area scanning</div>
+          </div>
+
+          <!-- Feature 6 -->
+          <div onclick="openAiFeatureModal('Voice Command', 'Natural language command console allowing incident commanders to dispatch helicopters, broadcast siren alerts, and query resources hands-free.')" class="p-3 rounded-lg border border-slate-100 bg-slate-50/70 hover:bg-blue-50/50 hover:border-blue-200 cursor-pointer transition group">
+            <div class="w-8 h-8 rounded-lg bg-pink-100 text-pink-600 flex items-center justify-center mb-2 group-hover:scale-110 transition">
+              <i data-lucide="mic" class="w-4 h-4"></i>
+            </div>
+            <div class="text-xs font-bold text-slate-800">Voice Command</div>
+            <div class="text-[11px] text-slate-500 mt-0.5 leading-snug">Voice-enabled control & reporting</div>
+          </div>
+
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- INTERACTIVE MODAL COMPONENT -->
+  <div id="general-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[1000] hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-lg w-full border border-slate-200 shadow-2xl p-6 space-y-4 transform transition-all scale-95 opacity-0 duration-200" id="modal-container">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+        <h3 id="modal-title" class="text-base font-bold text-slate-900 flex items-center gap-2"></h3>
+        <button onclick="closeModal()" class="text-slate-400 hover:text-slate-600 p-1 rounded-lg">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <div id="modal-body" class="text-xs text-slate-600 space-y-3 leading-relaxed"></div>
+      <div class="flex justify-end gap-2 pt-2 border-t border-slate-100">
+        <button onclick="closeModal()" class="px-4 py-2 rounded-lg bg-slate-100 text-slate-700 text-xs font-bold hover:bg-slate-200 transition">Close</button>
+        <button onclick="executeModalAction()" id="modal-action-btn" class="px-4 py-2 rounded-lg bg-blue-600 text-white text-xs font-bold hover:bg-blue-700 transition">Confirm Action</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Initialize Lucide Icons
+    lucide.createIcons();
+
+    // Real-Time Clock
+    function updateClock() {
+      const now = new Date();
+      const options = { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true };
+      const str = now.toLocaleDateString('en-GB', options).replace(',', ' |');
+      const el = document.getElementById('gov-live-clock');
+      if (el) el.textContent = str;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // LEAFLET GIS MAP INITIALIZATION (Matching Brahmaputra River Basin Flood Warning)
+    let map = L.map('gov-map', {
+      zoomControl: true,
+      attributionControl: false
+    }).setView([26.18, 91.75], 11);
+
+    // Modern OpenStreetMap tiles
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 18,
+    }).addTo(map);
+
+    // Hazard Zones Polygons (High Risk Red, Medium Risk Orange, Low Risk Yellow)
+    const highRiskZone = L.polygon([
+      [26.22, 91.68],
+      [26.25, 91.78],
+      [26.21, 91.86],
+      [26.17, 91.82],
+      [26.18, 91.70]
+    ], {
+      color: '#ef4444',
+      fillColor: '#ef4444',
+      fillOpacity: 0.35,
+      weight: 2
+    }).addTo(map).bindPopup("<strong>High Risk Flood Inundation</strong><br>Brahmaputra Main Basin. Water level: +2.1m above danger limit.");
+
+    const mediumRiskZone = L.polygon([
+      [26.16, 91.62],
+      [26.22, 91.68],
+      [26.18, 91.70],
+      [26.14, 91.65]
+    ], {
+      color: '#f97316',
+      fillColor: '#f97316',
+      fillOpacity: 0.3,
+      weight: 1.5
+    }).addTo(map).bindPopup("<strong>Medium Risk Zone</strong><br>Secondary tributaries overflowing. Water seepage in low lying roads.");
+
+    const lowRiskZone = L.polygon([
+      [26.11, 91.68],
+      [26.15, 91.74],
+      [26.13, 91.82],
+      [26.09, 91.76]
+    ], {
+      color: '#eab308',
+      fillColor: '#eab308',
+      fillOpacity: 0.25,
+      weight: 1.5
+    }).addTo(map).bindPopup("<strong>Low Risk Zone</strong><br>Watch and alert stage. Evacuation routes open.");
+
+    // Critical Incident Popup Marker (Flood Warning Brahmaputra River - High Severity)
+    const customIcon = L.divIcon({
+      className: 'custom-div-icon',
+      html: `<div style="background-color:#ef4444; width:22px; height:22px; border-radius:50%; border:3px solid white; box-shadow:0 0 12px rgba(239,68,68,0.8); display:flex; align-items:center; justify-content:center; color:white; font-size:10px; font-weight:bold;">⚠️</div>`,
+      iconSize: [22, 22],
+      iconAnchor: [11, 11]
+    });
+
+    const floodMarker = L.marker([26.20, 91.77], { icon: customIcon }).addTo(map);
+    floodMarker.bindPopup(`
+      <div style="font-family: Inter, sans-serif;">
+        <div style="font-size:12px; font-weight:800; color:#991b1b; display:flex; align-items:center; gap:4px;">
+          🚨 Flood Warning
+        </div>
+        <div style="font-size:11px; font-weight:700; color:#1e293b; margin-top:2px;">Brahmaputra River</div>
+        <div style="font-size:10px; color:#475569; margin:4px 0;">
+          <strong>Severity:</strong> <span style="color:#dc2626; font-weight:bold;">High</span><br>
+          <strong>Reported:</strong> 18 Nov, 09:15 AM
+        </div>
+        <button onclick="showModal('Incident Details #INC-BR-01', 'River gauge breached warning watermark by 1.8 meters. 4 villages inundated. Evacuation ordered.')" style="margin-top:4px; padding:4px 8px; background:#2563eb; color:white; font-size:10px; font-weight:bold; border-radius:6px; border:none; cursor:pointer;">
+          View Details
+        </button>
+      </div>
+    `).openPopup();
+
+    // Shelter Markers (Dispur, Jalukbari, Beltola)
+    const shelterIcon = L.divIcon({
+      className: 'custom-shelter-icon',
+      html: `<div style="background-color:#2563eb; width:18px; height:18px; border-radius:4px; border:2px solid white; box-shadow:0 2px 6px rgba(0,0,0,0.3); display:flex; align-items:center; justify-content:center; color:white; font-size:9px;">🏠</div>`,
+      iconSize: [18, 18],
+      iconAnchor: [9, 9]
+    });
+    L.marker([26.138, 91.790], { icon: shelterIcon }).addTo(map).bindPopup("<strong>Relief Camp #12</strong><br>Dispur High School<br>Capacity: 600 / Current: 412");
+    L.marker([26.155, 91.665], { icon: shelterIcon }).addTo(map).bindPopup("<strong>Relief Camp #14</strong><br>Jalukbari Community Hall<br>Capacity: 450 / Current: 310");
+
+    // Resource Marker
+    const resourceIcon = L.divIcon({
+      className: 'custom-resource-icon',
+      html: `<div style="background-color:#10b981; width:18px; height:18px; border-radius:50%; border:2px solid white; box-shadow:0 2px 6px rgba(0,0,0,0.3); display:flex; align-items:center; justify-content:center; color:white; font-size:9px;">📦</div>`,
+      iconSize: [18, 18],
+      iconAnchor: [9, 9]
+    });
+    L.marker([26.115, 91.730], { icon: resourceIcon }).addTo(map).bindPopup("<strong>SDRF Zonal Warehouse</strong><br>Stock: 25 Inflatable Boats, 800 Kits");
+
+    function focusMapAlert(lat, lng, title) {
+      map.setView([lat, lng], 13);
+      L.popup().setLatLng([lat, lng]).setContent(`<strong>${title}</strong><br>Active state monitoring in progress.`).openOn(map);
+    }
+
+    // CHART 1: Incident Trend (Last 7 Days)
+    const trendCtx = document.getElementById('gov-trend-chart').getContext('2d');
+    new Chart(trendCtx, {
+      type: 'line',
+      data: {
+        labels: ['12 May', '13 May', '14 May', '15 May', '16 May', '17 May', '18 May'],
+        datasets: [{
+          label: 'Incidents Reported',
+          data: [4, 6, 5, 9, 8, 10, 12],
+          borderColor: '#2563eb',
+          backgroundColor: 'rgba(37, 99, 235, 0.08)',
+          borderWidth: 2.5,
+          pointBackgroundColor: '#2563eb',
+          pointRadius: 4,
+          pointHoverRadius: 6,
+          fill: true,
+          tension: 0.4
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false }
+        },
+        scales: {
+          x: { grid: { display: false }, ticks: { font: { size: 10 } } },
+          y: { min: 0, max: 15, ticks: { stepSize: 3, font: { size: 10 } }, grid: { color: '#f1f5f9' } }
+        }
+      }
+    });
+
+    // CHART 2: Resource Availability Donut Chart
+    const resourceCtx = document.getElementById('gov-resource-chart').getContext('2d');
+    new Chart(resourceCtx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Rescue Teams', 'Medical Teams', 'Vehicles', 'Shelters', 'Drones'],
+        datasets: [{
+          data: [65, 40, 70, 85, 50],
+          backgroundColor: ['#2563eb', '#ef4444', '#f59e0b', '#10b981', '#a855f7'],
+          borderWidth: 2,
+          borderColor: '#ffffff',
+          hoverOffset: 4
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: function(context) { return `${context.label}: ${context.raw}% deployed`; }
+            }
+          }
+        },
+        cutout: '65%'
+      }
+    });
+
+    // MODAL HANDLERS
+    const modal = document.getElementById('general-modal');
+    const modalContainer = document.getElementById('modal-container');
+    const modalTitle = document.getElementById('modal-title');
+    const modalBody = document.getElementById('modal-body');
+
+    function showModal(title, text) {
+      modalTitle.innerHTML = `<span class="text-blue-600 font-black">🏛️</span> ${title}`;
+      modalBody.innerHTML = `<p class="whitespace-pre-line text-slate-700 font-medium">${text}</p>`;
+      document.getElementById('modal-action-btn').style.display = 'none';
+      openModalView();
+    }
+
+    function openActionModal(actionTitle, actionDesc) {
+      modalTitle.innerHTML = `<span class="text-blue-600 font-black">⚡ Quick Action:</span> ${actionTitle}`;
+      modalBody.innerHTML = `
+        <div class="space-y-3">
+          <p class="text-slate-600 font-medium">${actionDesc}</p>
+          <div class="p-3 bg-blue-50 border border-blue-200 rounded-lg text-blue-900 text-xs">
+            <strong>Target District:</strong> All Zones (Kamrup Metro, Sonitpur, Dibrugarh)<br>
+            <strong>Authorization:</strong> State Relief Commissioner
+          </div>
+          <div>
+            <label class="block text-slate-700 font-semibold mb-1 text-[11px]">Dispatch Note / Broadcast Text:</label>
+            <input type="text" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs focus:outline-blue-600" value="Emergency Alert: Level-3 Inundation Advisory in effect. Evacuate low lands.">
+          </div>
+        </div>
+      `;
+      document.getElementById('modal-action-btn').style.display = 'inline-block';
+      document.getElementById('modal-action-btn').textContent = 'Confirm & Dispatch';
+      openModalView();
+    }
+
+    function openAiFeatureModal(title, desc) {
+      modalTitle.innerHTML = `<span class="text-indigo-600 font-black">💡 Innovative Tech:</span> ${title}`;
+      modalBody.innerHTML = `
+        <div class="space-y-3">
+          <p class="text-slate-700 font-medium">${desc}</p>
+          <div class="p-3 bg-slate-50 border border-slate-200 rounded-lg space-y-1 font-mono text-[11px]">
+            <div class="text-emerald-700 font-bold">✓ Model: ResQ-GeoSpatial-v4.1 [ONLINE]</div>
+            <div class="text-slate-600">• Latency: 18ms • Confidence Score: 94.8%</div>
+            <div class="text-slate-600">• Sensor Telemetry: 142 river nodes active</div>
+          </div>
+          <div class="p-2.5 bg-indigo-50 border border-indigo-200 rounded-lg text-indigo-900 text-[11px]">
+            <strong>Live Simulation:</strong> Running hydrodynamic runoff simulation on Brahmaputra tributary 4B. Projected safe clearance window: 14.5 hours.
+          </div>
+        </div>
+      `;
+      document.getElementById('modal-action-btn').style.display = 'inline-block';
+      document.getElementById('modal-action-btn').textContent = 'Run AI Diagnosis';
+      openModalView();
+    }
+
+    function openModalView() {
+      modal.classList.remove('hidden');
+      setTimeout(() => {
+        modalContainer.classList.remove('scale-95', 'opacity-0');
+        modalContainer.classList.add('scale-100', 'opacity-100');
+      }, 10);
+    }
+
+    function closeModal() {
+      modalContainer.classList.remove('scale-100', 'opacity-100');
+      modalContainer.classList.add('scale-95', 'opacity-0');
+      setTimeout(() => {
+        modal.classList.add('hidden');
+      }, 150);
+    }
+
+    function executeModalAction() {
+      alert("✅ Action broadcasted successfully to all state nodes and field units.");
+      closeModal();
+    }
+  </script>
+</body>
+</html>

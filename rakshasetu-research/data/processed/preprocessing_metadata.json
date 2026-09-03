@@ -1,0 +1,1062 @@
+{
+  "benchmark_classification": "Synthetic Anomaly Benchmark",
+  "description": "Per-node preprocessed and standard-scaled Springbrook WSN synthetic dataset",
+  "total_rows": 100000,
+  "split_counts": {
+    "train": 69991,
+    "val": 14999,
+    "test": 15010
+  },
+  "environmental_features": [
+    "air_temperature_C",
+    "relative_humidity_pct",
+    "air_pressure_hPa",
+    "wind_speed_ms",
+    "wind_direction_deg",
+    "leaf_wetness_pct",
+    "soil_moisture_pct",
+    "solar_radiation_Wm2"
+  ],
+  "device_health_features": [
+    "battery_voltage_V"
+  ],
+  "imputation_strategy": "ffill_then_bfill",
+  "imputation_documented_rates": {
+    "air_temperature_C": {
+      "missing_count": 1014,
+      "missing_percentage": 1.014
+    },
+    "relative_humidity_pct": {
+      "missing_count": 987,
+      "missing_percentage": 0.987
+    },
+    "air_pressure_hPa": {
+      "missing_count": 477,
+      "missing_percentage": 0.477
+    },
+    "wind_speed_ms": {
+      "missing_count": 0,
+      "missing_percentage": 0.0
+    },
+    "wind_direction_deg": {
+      "missing_count": 0,
+      "missing_percentage": 0.0
+    },
+    "leaf_wetness_pct": {
+      "missing_count": 0,
+      "missing_percentage": 0.0
+    },
+    "soil_moisture_pct": {
+      "missing_count": 0,
+      "missing_percentage": 0.0
+    },
+    "solar_radiation_Wm2": {
+      "missing_count": 0,
+      "missing_percentage": 0.0
+    }
+  },
+  "node_split_info": {
+    "SB-001": {
+      "total_rows": 4967,
+      "train_rows": 3476,
+      "val_rows": 745,
+      "test_rows": 746,
+      "train_time_range": [
+        "2010-01-01 02:40:00",
+        "2011-05-14 07:30:00"
+      ],
+      "val_time_range": [
+        "2011-05-14 08:10:00",
+        "2011-08-21 10:00:00"
+      ],
+      "test_time_range": [
+        "2011-08-21 10:50:00",
+        "2011-11-25 23:40:00"
+      ]
+    },
+    "SB-002": {
+      "total_rows": 5007,
+      "train_rows": 3504,
+      "val_rows": 751,
+      "test_rows": 752,
+      "train_time_range": [
+        "2010-01-01 02:00:00",
+        "2011-05-05 06:10:00"
+      ],
+      "val_time_range": [
+        "2011-05-05 11:50:00",
+        "2011-08-18 00:40:00"
+      ],
+      "test_time_range": [
+        "2011-08-18 06:20:00",
+        "2011-11-26 04:30:00"
+      ]
+    },
+    "SB-003": {
+      "total_rows": 4902,
+      "train_rows": 3431,
+      "val_rows": 735,
+      "test_rows": 736,
+      "train_time_range": [
+        "2010-01-01 01:50:00",
+        "2011-04-27 14:10:00"
+      ],
+      "val_time_range": [
+        "2011-04-27 16:00:00",
+        "2011-08-12 17:00:00"
+      ],
+      "test_time_range": [
+        "2011-08-12 21:00:00",
+        "2011-11-26 07:00:00"
+      ]
+    },
+    "SB-004": {
+      "total_rows": 5039,
+      "train_rows": 3527,
+      "val_rows": 756,
+      "test_rows": 756,
+      "train_time_range": [
+        "2010-01-01 01:30:00",
+        "2011-04-22 10:00:00"
+      ],
+      "val_time_range": [
+        "2011-04-22 12:30:00",
+        "2011-08-08 11:50:00"
+      ],
+      "test_time_range": [
+        "2011-08-08 13:10:00",
+        "2011-11-26 04:00:00"
+      ]
+    },
+    "SB-005": {
+      "total_rows": 5055,
+      "train_rows": 3538,
+      "val_rows": 758,
+      "test_rows": 759,
+      "train_time_range": [
+        "2010-01-01 04:40:00",
+        "2011-05-09 00:20:00"
+      ],
+      "val_time_range": [
+        "2011-05-09 01:10:00",
+        "2011-08-14 10:00:00"
+      ],
+      "test_time_range": [
+        "2011-08-14 12:40:00",
+        "2011-11-26 05:10:00"
+      ]
+    },
+    "SB-006": {
+      "total_rows": 4997,
+      "train_rows": 3497,
+      "val_rows": 750,
+      "test_rows": 750,
+      "train_time_range": [
+        "2010-01-01 02:20:00",
+        "2011-04-30 22:10:00"
+      ],
+      "val_time_range": [
+        "2011-04-30 23:10:00",
+        "2011-08-11 08:20:00"
+      ],
+      "test_time_range": [
+        "2011-08-11 08:40:00",
+        "2011-11-26 08:50:00"
+      ]
+    },
+    "SB-007": {
+      "total_rows": 4986,
+      "train_rows": 3490,
+      "val_rows": 748,
+      "test_rows": 748,
+      "train_time_range": [
+        "2010-01-01 00:00:00",
+        "2011-05-01 00:10:00"
+      ],
+      "val_time_range": [
+        "2011-05-01 00:50:00",
+        "2011-08-17 14:10:00"
+      ],
+      "test_time_range": [
+        "2011-08-17 19:40:00",
+        "2011-11-26 09:10:00"
+      ]
+    },
+    "SB-008": {
+      "total_rows": 4952,
+      "train_rows": 3466,
+      "val_rows": 743,
+      "test_rows": 743,
+      "train_time_range": [
+        "2010-01-01 00:40:00",
+        "2011-05-03 05:20:00"
+      ],
+      "val_time_range": [
+        "2011-05-03 07:30:00",
+        "2011-08-13 09:50:00"
+      ],
+      "test_time_range": [
+        "2011-08-13 15:30:00",
+        "2011-11-26 07:30:00"
+      ]
+    },
+    "SB-009": {
+      "total_rows": 5039,
+      "train_rows": 3527,
+      "val_rows": 756,
+      "test_rows": 756,
+      "train_time_range": [
+        "2010-01-01 05:10:00",
+        "2011-05-07 02:40:00"
+      ],
+      "val_time_range": [
+        "2011-05-07 06:20:00",
+        "2011-08-16 15:10:00"
+      ],
+      "test_time_range": [
+        "2011-08-17 01:00:00",
+        "2011-11-26 09:20:00"
+      ]
+    },
+    "SB-010": {
+      "total_rows": 5023,
+      "train_rows": 3516,
+      "val_rows": 753,
+      "test_rows": 754,
+      "train_time_range": [
+        "2010-01-01 03:20:00",
+        "2011-04-30 07:50:00"
+      ],
+      "val_time_range": [
+        "2011-04-30 10:00:00",
+        "2011-08-07 11:30:00"
+      ],
+      "test_time_range": [
+        "2011-08-07 12:30:00",
+        "2011-11-26 09:30:00"
+      ]
+    },
+    "SB-011": {
+      "total_rows": 4889,
+      "train_rows": 3422,
+      "val_rows": 733,
+      "test_rows": 734,
+      "train_time_range": [
+        "2010-01-01 00:30:00",
+        "2011-05-09 16:00:00"
+      ],
+      "val_time_range": [
+        "2011-05-09 17:10:00",
+        "2011-08-19 10:10:00"
+      ],
+      "test_time_range": [
+        "2011-08-19 11:30:00",
+        "2011-11-26 08:40:00"
+      ]
+    },
+    "SB-012": {
+      "total_rows": 5033,
+      "train_rows": 3523,
+      "val_rows": 755,
+      "test_rows": 755,
+      "train_time_range": [
+        "2010-01-01 02:10:00",
+        "2011-05-02 04:00:00"
+      ],
+      "val_time_range": [
+        "2011-05-02 10:40:00",
+        "2011-08-15 06:30:00"
+      ],
+      "test_time_range": [
+        "2011-08-15 11:50:00",
+        "2011-11-26 10:00:00"
+      ]
+    },
+    "SB-013": {
+      "total_rows": 5152,
+      "train_rows": 3606,
+      "val_rows": 773,
+      "test_rows": 773,
+      "train_time_range": [
+        "2010-01-01 11:20:00",
+        "2011-04-29 15:40:00"
+      ],
+      "val_time_range": [
+        "2011-04-29 18:50:00",
+        "2011-08-14 22:20:00"
+      ],
+      "test_time_range": [
+        "2011-08-15 02:20:00",
+        "2011-11-26 07:50:00"
+      ]
+    },
+    "SB-014": {
+      "total_rows": 4852,
+      "train_rows": 3396,
+      "val_rows": 728,
+      "test_rows": 728,
+      "train_time_range": [
+        "2010-01-01 05:50:00",
+        "2011-04-30 23:40:00"
+      ],
+      "val_time_range": [
+        "2011-05-01 01:00:00",
+        "2011-08-19 15:00:00"
+      ],
+      "test_time_range": [
+        "2011-08-20 01:40:00",
+        "2011-11-26 08:20:00"
+      ]
+    },
+    "SB-015": {
+      "total_rows": 5014,
+      "train_rows": 3509,
+      "val_rows": 752,
+      "test_rows": 753,
+      "train_time_range": [
+        "2010-01-01 00:20:00",
+        "2011-04-27 16:30:00"
+      ],
+      "val_time_range": [
+        "2011-04-27 17:30:00",
+        "2011-08-11 21:30:00"
+      ],
+      "test_time_range": [
+        "2011-08-12 04:00:00",
+        "2011-11-26 10:20:00"
+      ]
+    },
+    "SB-016": {
+      "total_rows": 5104,
+      "train_rows": 3572,
+      "val_rows": 766,
+      "test_rows": 766,
+      "train_time_range": [
+        "2010-01-01 03:30:00",
+        "2011-05-01 02:50:00"
+      ],
+      "val_time_range": [
+        "2011-05-01 04:00:00",
+        "2011-08-12 08:30:00"
+      ],
+      "test_time_range": [
+        "2011-08-12 09:00:00",
+        "2011-11-26 08:30:00"
+      ]
+    },
+    "SB-017": {
+      "total_rows": 5036,
+      "train_rows": 3525,
+      "val_rows": 755,
+      "test_rows": 756,
+      "train_time_range": [
+        "2010-01-01 03:10:00",
+        "2011-04-24 10:10:00"
+      ],
+      "val_time_range": [
+        "2011-04-24 17:40:00",
+        "2011-08-11 18:20:00"
+      ],
+      "test_time_range": [
+        "2011-08-12 05:50:00",
+        "2011-11-26 08:10:00"
+      ]
+    },
+    "SB-018": {
+      "total_rows": 4942,
+      "train_rows": 3459,
+      "val_rows": 741,
+      "test_rows": 742,
+      "train_time_range": [
+        "2010-01-01 05:30:00",
+        "2011-05-01 22:40:00"
+      ],
+      "val_time_range": [
+        "2011-05-01 23:10:00",
+        "2011-08-12 03:30:00"
+      ],
+      "test_time_range": [
+        "2011-08-12 23:10:00",
+        "2011-11-25 23:10:00"
+      ]
+    },
+    "SB-019": {
+      "total_rows": 5023,
+      "train_rows": 3516,
+      "val_rows": 753,
+      "test_rows": 754,
+      "train_time_range": [
+        "2010-01-01 01:00:00",
+        "2011-05-01 19:10:00"
+      ],
+      "val_time_range": [
+        "2011-05-01 23:00:00",
+        "2011-08-13 04:10:00"
+      ],
+      "test_time_range": [
+        "2011-08-13 06:40:00",
+        "2011-11-26 10:10:00"
+      ]
+    },
+    "SB-020": {
+      "total_rows": 4988,
+      "train_rows": 3491,
+      "val_rows": 748,
+      "test_rows": 749,
+      "train_time_range": [
+        "2010-01-01 00:10:00",
+        "2011-04-27 21:20:00"
+      ],
+      "val_time_range": [
+        "2011-04-27 23:50:00",
+        "2011-08-09 19:50:00"
+      ],
+      "test_time_range": [
+        "2011-08-09 20:00:00",
+        "2011-11-26 10:30:00"
+      ]
+    }
+  },
+  "node_scalers": {
+    "SB-001": {
+      "mean": {
+        "air_temperature_C": 18.38409666283084,
+        "relative_humidity_pct": 75.38008630609896,
+        "air_pressure_hPa": 1013.0337140391256,
+        "wind_speed_ms": 2.5683544303797468,
+        "wind_direction_deg": 179.8296317606444,
+        "leaf_wetness_pct": 15.195684695051783,
+        "soil_moisture_pct": 35.19295166858458,
+        "solar_radiation_Wm2": 245.29053509781357
+      },
+      "scale": {
+        "air_temperature_C": 5.156496859028378,
+        "relative_humidity_pct": 11.933286560220512,
+        "air_pressure_hPa": 4.0472807842754035,
+        "wind_speed_ms": 1.39043721416359,
+        "wind_direction_deg": 104.5313259712156,
+        "leaf_wetness_pct": 14.103966209938983,
+        "soil_moisture_pct": 6.020144274635154,
+        "solar_radiation_Wm2": 304.9630722511872
+      },
+      "var": {
+        "air_temperature_C": 26.58945985716953,
+        "relative_humidity_pct": 142.40332812833952,
+        "air_pressure_hPa": 16.38048174676493,
+        "wind_speed_ms": 1.9333156465310046,
+        "wind_direction_deg": 10926.798109300533,
+        "leaf_wetness_pct": 198.92186285110063,
+        "soil_moisture_pct": 36.24213708742242,
+        "solar_radiation_Wm2": 93002.47543688283
+      }
+    },
+    "SB-002": {
+      "mean": {
+        "air_temperature_C": 18.320850456621002,
+        "relative_humidity_pct": 75.06615011415526,
+        "air_pressure_hPa": 1013.2104765981735,
+        "wind_speed_ms": 2.5687585616438358,
+        "wind_direction_deg": 179.38638698630137,
+        "leaf_wetness_pct": 14.887899543378994,
+        "soil_moisture_pct": 35.09817066210046,
+        "solar_radiation_Wm2": 251.26940639269407
+      },
+      "scale": {
+        "air_temperature_C": 5.088400607058248,
+        "relative_humidity_pct": 11.79397275114976,
+        "air_pressure_hPa": 3.9824400628138035,
+        "wind_speed_ms": 1.3927297261526899,
+        "wind_direction_deg": 103.53858332278605,
+        "leaf_wetness_pct": 13.842438621991686,
+        "soil_moisture_pct": 6.075895230041843,
+        "solar_radiation_Wm2": 308.6403316220309
+      },
+      "var": {
+        "air_temperature_C": 25.89182073791075,
+        "relative_humidity_pct": 139.097793254863,
+        "air_pressure_hPa": 15.859828853904412,
+        "wind_speed_ms": 1.9396960901093465,
+        "wind_direction_deg": 10720.23823648951,
+        "leaf_wetness_pct": 191.6131070036071,
+        "soil_moisture_pct": 36.916502846445226,
+        "solar_radiation_Wm2": 95258.85430375721
+      }
+    },
+    "SB-003": {
+      "mean": {
+        "air_temperature_C": 18.26842028563101,
+        "relative_humidity_pct": 74.65439522005246,
+        "air_pressure_hPa": 1013.0140600408043,
+        "wind_speed_ms": 2.554147478869134,
+        "wind_direction_deg": 180.0893325561061,
+        "leaf_wetness_pct": 14.5860390556689,
+        "soil_moisture_pct": 35.16853395511513,
+        "solar_radiation_Wm2": 249.81725444476828
+      },
+      "scale": {
+        "air_temperature_C": 5.042921586563425,
+        "relative_humidity_pct": 11.809188481479373,
+        "air_pressure_hPa": 3.9819799483222487,
+        "wind_speed_ms": 1.4069923522429302,
+        "wind_direction_deg": 102.78686239872995,
+        "leaf_wetness_pct": 13.63544873976723,
+        "soil_moisture_pct": 6.048631697914793,
+        "solar_radiation_Wm2": 306.6810462746888
+      },
+      "var": {
+        "air_temperature_C": 25.431058128227374,
+        "relative_humidity_pct": 139.4569325911051,
+        "air_pressure_hPa": 15.856164308840459,
+        "wind_speed_ms": 1.9796274792700939,
+        "wind_direction_deg": 10565.139081775445,
+        "leaf_wetness_pct": 185.92546233481977,
+        "soil_moisture_pct": 36.585945417019595,
+        "solar_radiation_Wm2": 94053.26414413782
+      }
+    },
+    "SB-004": {
+      "mean": {
+        "air_temperature_C": 18.26091579245818,
+        "relative_humidity_pct": 75.2098922597108,
+        "air_pressure_hPa": 1013.0666543804933,
+        "wind_speed_ms": 2.5797533314431527,
+        "wind_direction_deg": 182.4884320952651,
+        "leaf_wetness_pct": 14.780521689821377,
+        "soil_moisture_pct": 34.979926282960015,
+        "solar_radiation_Wm2": 259.6058690104905
+      },
+      "scale": {
+        "air_temperature_C": 5.1370247727940805,
+        "relative_humidity_pct": 11.780472801505397,
+        "air_pressure_hPa": 3.9516360366957595,
+        "wind_speed_ms": 1.388207379804828,
+        "wind_direction_deg": 103.7384424243976,
+        "leaf_wetness_pct": 13.85942784691558,
+        "soil_moisture_pct": 5.944584304865276,
+        "solar_radiation_Wm2": 310.0951500117663
+      },
+      "var": {
+        "air_temperature_C": 26.389023516300078,
+        "relative_humidity_pct": 138.77953942700842,
+        "air_pressure_hPa": 15.615427366512568,
+        "wind_speed_ms": 1.927119729344586,
+        "wind_direction_deg": 10761.664436640058,
+        "leaf_wetness_pct": 192.083740243859,
+        "soil_moisture_pct": 35.33808255765057,
+        "solar_radiation_Wm2": 96159.00206081982
+      }
+    },
+    "SB-005": {
+      "mean": {
+        "air_temperature_C": 18.384152063312605,
+        "relative_humidity_pct": 74.88895986433013,
+        "air_pressure_hPa": 1013.0949462973431,
+        "wind_speed_ms": 2.530245901639345,
+        "wind_direction_deg": 177.45678349349916,
+        "leaf_wetness_pct": 14.343470887507065,
+        "soil_moisture_pct": 35.30469474279254,
+        "solar_radiation_Wm2": 253.828321085359
+      },
+      "scale": {
+        "air_temperature_C": 5.0749649422551375,
+        "relative_humidity_pct": 11.738258773876211,
+        "air_pressure_hPa": 4.024595441532419,
+        "wind_speed_ms": 1.3896414703342737,
+        "wind_direction_deg": 104.53690056106291,
+        "leaf_wetness_pct": 13.61059834373899,
+        "soil_moisture_pct": 6.075976453111737,
+        "solar_radiation_Wm2": 308.35320951015575
+      },
+      "var": {
+        "air_temperature_C": 25.755269165118694,
+        "relative_humidity_pct": 137.78671904248185,
+        "air_pressure_hPa": 16.197368468003532,
+        "wind_speed_ms": 1.931103416072802,
+        "wind_direction_deg": 10927.963578913555,
+        "leaf_wetness_pct": 185.24838727459056,
+        "soil_moisture_pct": 36.91748985876829,
+        "solar_radiation_Wm2": 95081.70181521402
+      }
+    },
+    "SB-006": {
+      "mean": {
+        "air_temperature_C": 18.257217615098657,
+        "relative_humidity_pct": 74.88929653989133,
+        "air_pressure_hPa": 1013.0615813554474,
+        "wind_speed_ms": 2.552688018301401,
+        "wind_direction_deg": 178.7956248212754,
+        "leaf_wetness_pct": 15.062339147841007,
+        "soil_moisture_pct": 35.11064626822991,
+        "solar_radiation_Wm2": 255.72773806119528
+      },
+      "scale": {
+        "air_temperature_C": 4.95515384441176,
+        "relative_humidity_pct": 11.582416678468508,
+        "air_pressure_hPa": 4.042062428341261,
+        "wind_speed_ms": 1.377135125239295,
+        "wind_direction_deg": 102.67062388891824,
+        "leaf_wetness_pct": 13.902540486870302,
+        "soil_moisture_pct": 6.1067104700538595,
+        "solar_radiation_Wm2": 309.22626173460156
+      },
+      "var": {
+        "air_temperature_C": 24.553549621788648,
+        "relative_humidity_pct": 134.15237611366547,
+        "air_pressure_hPa": 16.338268674608052,
+        "wind_speed_ms": 1.8965011531678486,
+        "wind_direction_deg": 10541.25700973971,
+        "leaf_wetness_pct": 193.28063198906793,
+        "soil_moisture_pct": 37.291912765065426,
+        "solar_radiation_Wm2": 95620.88094635631
+      }
+    },
+    "SB-007": {
+      "mean": {
+        "air_temperature_C": 18.229432664756448,
+        "relative_humidity_pct": 75.20643839541546,
+        "air_pressure_hPa": 1013.0467851002865,
+        "wind_speed_ms": 2.5618223495702006,
+        "wind_direction_deg": 177.61994269340977,
+        "leaf_wetness_pct": 14.85593123209169,
+        "soil_moisture_pct": 35.166848137535816,
+        "solar_radiation_Wm2": 253.110229226361
+      },
+      "scale": {
+        "air_temperature_C": 5.134891340273086,
+        "relative_humidity_pct": 11.436604381509232,
+        "air_pressure_hPa": 4.0278769542993365,
+        "wind_speed_ms": 1.4185835796497104,
+        "wind_direction_deg": 103.72704061489709,
+        "leaf_wetness_pct": 13.937196651186289,
+        "soil_moisture_pct": 6.067043263617884,
+        "solar_radiation_Wm2": 309.9219941715885
+      },
+      "var": {
+        "air_temperature_C": 26.367109076411523,
+        "relative_humidity_pct": 130.79591977915618,
+        "air_pressure_hPa": 16.223792758975698,
+        "wind_speed_ms": 2.0123793724517864,
+        "wind_direction_deg": 10759.29895472451,
+        "leaf_wetness_pct": 194.24545049383832,
+        "soil_moisture_pct": 36.80901396261114,
+        "solar_radiation_Wm2": 96051.64247129414
+      }
+    },
+    "SB-008": {
+      "mean": {
+        "air_temperature_C": 18.240764570109636,
+        "relative_humidity_pct": 74.87384304673976,
+        "air_pressure_hPa": 1013.0965464512406,
+        "wind_speed_ms": 2.542564916330063,
+        "wind_direction_deg": 181.3045585689556,
+        "leaf_wetness_pct": 14.748124639353723,
+        "soil_moisture_pct": 35.20543277553376,
+        "solar_radiation_Wm2": 255.35072129255624
+      },
+      "scale": {
+        "air_temperature_C": 5.106832543259658,
+        "relative_humidity_pct": 11.467492890517159,
+        "air_pressure_hPa": 3.966089139010256,
+        "wind_speed_ms": 1.404914576639968,
+        "wind_direction_deg": 104.90596829298846,
+        "leaf_wetness_pct": 13.784251498920922,
+        "soil_moisture_pct": 5.922169572132785,
+        "solar_radiation_Wm2": 310.496565663555
+      },
+      "var": {
+        "air_temperature_C": 26.07973862489591,
+        "relative_humidity_pct": 131.50339319406157,
+        "air_pressure_hPa": 15.729863058575114,
+        "wind_speed_ms": 1.9737849676554606,
+        "wind_direction_deg": 11005.2621834895,
+        "leaf_wetness_pct": 190.0055893855037,
+        "soil_moisture_pct": 35.072092441095414,
+        "solar_radiation_Wm2": 96408.1172888623
+      }
+    },
+    "SB-009": {
+      "mean": {
+        "air_temperature_C": 18.403288914091295,
+        "relative_humidity_pct": 74.618763821945,
+        "air_pressure_hPa": 1012.9713439183441,
+        "wind_speed_ms": 2.5607485114828465,
+        "wind_direction_deg": 177.9445137510632,
+        "leaf_wetness_pct": 14.89398922597108,
+        "soil_moisture_pct": 35.07514885171534,
+        "solar_radiation_Wm2": 258.8793592288064
+      },
+      "scale": {
+        "air_temperature_C": 5.084265204014893,
+        "relative_humidity_pct": 11.629425282878554,
+        "air_pressure_hPa": 4.053262129438763,
+        "wind_speed_ms": 1.3886947673158914,
+        "wind_direction_deg": 104.08016913888427,
+        "leaf_wetness_pct": 13.78752916472965,
+        "soil_moisture_pct": 6.150371713437665,
+        "solar_radiation_Wm2": 314.08600094588155
+      },
+      "var": {
+        "air_temperature_C": 25.849752664756604,
+        "relative_humidity_pct": 135.2435324100549,
+        "air_pressure_hPa": 16.428933889942456,
+        "wind_speed_ms": 1.9284731567705375,
+        "wind_direction_deg": 10832.681607978759,
+        "leaf_wetness_pct": 190.09596046827068,
+        "soil_moisture_pct": 37.827072213454166,
+        "solar_radiation_Wm2": 98650.01599017631
+      }
+    },
+    "SB-010": {
+      "mean": {
+        "air_temperature_C": 18.297215585893063,
+        "relative_humidity_pct": 75.14081911262798,
+        "air_pressure_hPa": 1013.063478384528,
+        "wind_speed_ms": 2.5896643913538107,
+        "wind_direction_deg": 179.77241183162687,
+        "leaf_wetness_pct": 14.577332195676904,
+        "soil_moisture_pct": 35.08663253697384,
+        "solar_radiation_Wm2": 255.74829351535837
+      },
+      "scale": {
+        "air_temperature_C": 5.070968936022952,
+        "relative_humidity_pct": 11.807462041115206,
+        "air_pressure_hPa": 3.9855819058667414,
+        "wind_speed_ms": 1.3862466619367877,
+        "wind_direction_deg": 104.41089162576625,
+        "leaf_wetness_pct": 13.905861616897516,
+        "soil_moisture_pct": 5.928374538355239,
+        "solar_radiation_Wm2": 311.4100802070151
+      },
+      "var": {
+        "air_temperature_C": 25.714725950109752,
+        "relative_humidity_pct": 139.41615985237647,
+        "air_pressure_hPa": 15.884863128372366,
+        "wind_speed_ms": 1.9216798077308868,
+        "wind_direction_deg": 10901.634290087506,
+        "leaf_wetness_pct": 193.3729873083036,
+        "soil_moisture_pct": 35.1456246670187,
+        "solar_radiation_Wm2": 96976.23805453956
+      }
+    },
+    "SB-011": {
+      "mean": {
+        "air_temperature_C": 18.39926358854471,
+        "relative_humidity_pct": 74.94384862653419,
+        "air_pressure_hPa": 1013.0421274108709,
+        "wind_speed_ms": 2.5210023378141444,
+        "wind_direction_deg": 179.2511689070719,
+        "leaf_wetness_pct": 14.66718293395675,
+        "soil_moisture_pct": 35.27110169491525,
+        "solar_radiation_Wm2": 260.8902396259498
+      },
+      "scale": {
+        "air_temperature_C": 5.064469913701953,
+        "relative_humidity_pct": 11.786531340657362,
+        "air_pressure_hPa": 3.997973102491233,
+        "wind_speed_ms": 1.3872413182843348,
+        "wind_direction_deg": 103.7173762447911,
+        "leaf_wetness_pct": 13.49035528635331,
+        "soil_moisture_pct": 6.055215635784853,
+        "solar_radiation_Wm2": 311.9665707984343
+      },
+      "var": {
+        "air_temperature_C": 25.648855506792266,
+        "relative_humidity_pct": 138.92232104429823,
+        "air_pressure_hPa": 15.983788928243374,
+        "wind_speed_ms": 1.9244384751552592,
+        "wind_direction_deg": 10757.294135103557,
+        "leaf_wetness_pct": 181.98968575204069,
+        "soil_moisture_pct": 36.665636395853355,
+        "solar_radiation_Wm2": 97323.14129573452
+      }
+    },
+    "SB-012": {
+      "mean": {
+        "air_temperature_C": 18.35254044848141,
+        "relative_humidity_pct": 75.0864745955152,
+        "air_pressure_hPa": 1013.1271416406472,
+        "wind_speed_ms": 2.510022707919387,
+        "wind_direction_deg": 178.693556627874,
+        "leaf_wetness_pct": 14.783565143343742,
+        "soil_moisture_pct": 35.139622480840195,
+        "solar_radiation_Wm2": 251.9078342321885
+      },
+      "scale": {
+        "air_temperature_C": 5.09991048556981,
+        "relative_humidity_pct": 11.65658356448495,
+        "air_pressure_hPa": 4.007022940533433,
+        "wind_speed_ms": 1.3755740523033442,
+        "wind_direction_deg": 104.60794449012957,
+        "leaf_wetness_pct": 13.562610129854457,
+        "soil_moisture_pct": 5.949643873300561,
+        "solar_radiation_Wm2": 308.4747947871172
+      },
+      "var": {
+        "air_temperature_C": 26.00908696082489,
+        "relative_humidity_pct": 135.8759403958207,
+        "air_pressure_hPa": 16.0562328459612,
+        "wind_speed_ms": 1.8922039733702432,
+        "wind_direction_deg": 10942.82205045003,
+        "leaf_wetness_pct": 183.94439353443073,
+        "soil_moisture_pct": 35.398262219102904,
+        "solar_radiation_Wm2": 95156.69901895407
+      }
+    },
+    "SB-013": {
+      "mean": {
+        "air_temperature_C": 18.316589018302828,
+        "relative_humidity_pct": 75.02596505823628,
+        "air_pressure_hPa": 1013.020987243483,
+        "wind_speed_ms": 2.5695507487520794,
+        "wind_direction_deg": 182.53460898502496,
+        "leaf_wetness_pct": 14.8551026067665,
+        "soil_moisture_pct": 35.25759290072102,
+        "solar_radiation_Wm2": 252.7616472545757
+      },
+      "scale": {
+        "air_temperature_C": 5.070993896945975,
+        "relative_humidity_pct": 11.710382674946045,
+        "air_pressure_hPa": 4.023366287758589,
+        "wind_speed_ms": 1.4044565263046789,
+        "wind_direction_deg": 103.79922907156386,
+        "leaf_wetness_pct": 13.754071056804134,
+        "soil_moisture_pct": 6.085076024473421,
+        "solar_radiation_Wm2": 311.8139675367836
+      },
+      "var": {
+        "air_temperature_C": 25.71497910286332,
+        "relative_humidity_pct": 137.13306239367648,
+        "air_pressure_hPa": 16.187476285472325,
+        "wind_speed_ms": 1.9724981342798054,
+        "wind_direction_deg": 10774.279955850989,
+        "leaf_wetness_pct": 189.17447063561718,
+        "soil_moisture_pct": 37.02815022362126,
+        "solar_radiation_Wm2": 97227.95035103032
+      }
+    },
+    "SB-014": {
+      "mean": {
+        "air_temperature_C": 18.40676972909305,
+        "relative_humidity_pct": 74.6833156654888,
+        "air_pressure_hPa": 1012.9788339222615,
+        "wind_speed_ms": 2.535270906949352,
+        "wind_direction_deg": 178.3526207302709,
+        "leaf_wetness_pct": 14.971967020023557,
+        "soil_moisture_pct": 35.20468197879859,
+        "solar_radiation_Wm2": 248.4886336866902
+      },
+      "scale": {
+        "air_temperature_C": 5.01985270901826,
+        "relative_humidity_pct": 11.75215890831818,
+        "air_pressure_hPa": 3.969668034704101,
+        "wind_speed_ms": 1.4163962103193686,
+        "wind_direction_deg": 103.25924911826283,
+        "leaf_wetness_pct": 13.842831944678728,
+        "soil_moisture_pct": 6.030981837054898,
+        "solar_radiation_Wm2": 311.78231571309396
+      },
+      "var": {
+        "air_temperature_C": 25.19892122023797,
+        "relative_humidity_pct": 138.11323900636236,
+        "air_pressure_hPa": 15.758264305751519,
+        "wind_speed_ms": 2.006178224607069,
+        "wind_direction_deg": 10662.472528467462,
+        "leaf_wetness_pct": 191.62399624861789,
+        "soil_moisture_pct": 36.37274191888607,
+        "solar_radiation_Wm2": 97208.21239141941
+      }
+    },
+    "SB-015": {
+      "mean": {
+        "air_temperature_C": 18.382476489028214,
+        "relative_humidity_pct": 74.95963237389569,
+        "air_pressure_hPa": 1012.9538415502993,
+        "wind_speed_ms": 2.544881732687376,
+        "wind_direction_deg": 177.60504417212877,
+        "leaf_wetness_pct": 14.705528640638358,
+        "soil_moisture_pct": 35.13834995725278,
+        "solar_radiation_Wm2": 255.77192932459388
+      },
+      "scale": {
+        "air_temperature_C": 5.040418356345532,
+        "relative_humidity_pct": 11.754796041930847,
+        "air_pressure_hPa": 3.9150867997695564,
+        "wind_speed_ms": 1.3992528922872578,
+        "wind_direction_deg": 102.2166072717273,
+        "leaf_wetness_pct": 13.635439391294485,
+        "soil_moisture_pct": 6.12900988244781,
+        "solar_radiation_Wm2": 311.0895615309872
+      },
+      "var": {
+        "air_temperature_C": 25.40581720698499,
+        "relative_humidity_pct": 138.1752299873931,
+        "air_pressure_hPa": 15.327904649729826,
+        "wind_speed_ms": 1.9579086565742563,
+        "wind_direction_deg": 10448.234802142533,
+        "leaf_wetness_pct": 185.92520739366532,
+        "soil_moisture_pct": 37.564762139142914,
+        "solar_radiation_Wm2": 96776.71529354187
+      }
+    },
+    "SB-016": {
+      "mean": {
+        "air_temperature_C": 18.582108062709963,
+        "relative_humidity_pct": 75.09874300111981,
+        "air_pressure_hPa": 1012.935235162374,
+        "wind_speed_ms": 2.567743561030235,
+        "wind_direction_deg": 178.9365901455767,
+        "leaf_wetness_pct": 14.383146696528556,
+        "soil_moisture_pct": 35.02078947368421,
+        "solar_radiation_Wm2": 264.34336506159013
+      },
+      "scale": {
+        "air_temperature_C": 5.045279401607223,
+        "relative_humidity_pct": 11.66681427052241,
+        "air_pressure_hPa": 3.970935127216796,
+        "wind_speed_ms": 1.4147727642814605,
+        "wind_direction_deg": 104.03965456589849,
+        "leaf_wetness_pct": 13.364058045112172,
+        "soil_moisture_pct": 5.914060067973064,
+        "solar_radiation_Wm2": 310.0762031799377
+      },
+      "var": {
+        "air_temperature_C": 25.45484424028214,
+        "relative_humidity_pct": 136.11455522286536,
+        "air_pressure_hPa": 15.768325784564272,
+        "wind_speed_ms": 2.0015819745526047,
+        "wind_direction_deg": 10824.249722191482,
+        "leaf_wetness_pct": 178.59804743312736,
+        "soil_moisture_pct": 34.97610648759356,
+        "solar_radiation_Wm2": 96147.251778486
+      }
+    },
+    "SB-017": {
+      "mean": {
+        "air_temperature_C": 18.25581843971631,
+        "relative_humidity_pct": 74.85860992907801,
+        "air_pressure_hPa": 1013.0796283687945,
+        "wind_speed_ms": 2.542232624113475,
+        "wind_direction_deg": 178.08039716312058,
+        "leaf_wetness_pct": 14.613163120567378,
+        "soil_moisture_pct": 35.07186382978723,
+        "solar_radiation_Wm2": 258.2900992907802
+      },
+      "scale": {
+        "air_temperature_C": 5.127543704702243,
+        "relative_humidity_pct": 11.569339273736569,
+        "air_pressure_hPa": 4.095360343627865,
+        "wind_speed_ms": 1.4018355878595634,
+        "wind_direction_deg": 103.93697514140186,
+        "leaf_wetness_pct": 13.94565205106667,
+        "soil_moisture_pct": 5.932909512027937,
+        "solar_radiation_Wm2": 312.2587335652785
+      },
+      "var": {
+        "air_temperature_C": 26.29170444363161,
+        "relative_humidity_pct": 133.8496112308234,
+        "air_pressure_hPa": 16.771976344159743,
+        "wind_speed_ms": 1.9651430153895677,
+        "wind_direction_deg": 10802.89480154439,
+        "leaf_wetness_pct": 194.48121112942002,
+        "soil_moisture_pct": 35.19941527791158,
+        "solar_radiation_Wm2": 97505.51668779156
+      }
+    },
+    "SB-018": {
+      "mean": {
+        "air_temperature_C": 18.363986701358773,
+        "relative_humidity_pct": 75.14358196010407,
+        "air_pressure_hPa": 1013.0598959236775,
+        "wind_speed_ms": 2.5371089910378726,
+        "wind_direction_deg": 178.64943625325236,
+        "leaf_wetness_pct": 15.183925990170568,
+        "soil_moisture_pct": 35.10650187915583,
+        "solar_radiation_Wm2": 254.34995663486558
+      },
+      "scale": {
+        "air_temperature_C": 4.921875658242245,
+        "relative_humidity_pct": 11.673805017914027,
+        "air_pressure_hPa": 3.9456431837811388,
+        "wind_speed_ms": 1.3912356368554328,
+        "wind_direction_deg": 104.7951470013723,
+        "leaf_wetness_pct": 13.902184477350387,
+        "soil_moisture_pct": 6.094116596320214,
+        "solar_radiation_Wm2": 311.17570663714355
+      },
+      "var": {
+        "air_temperature_C": 24.22485999519753,
+        "relative_humidity_pct": 136.27772359627474,
+        "air_pressure_hPa": 15.568100133718561,
+        "wind_speed_ms": 1.935536597256542,
+        "wind_direction_deg": 10982.02283503923,
+        "leaf_wetness_pct": 193.27073324228203,
+        "soil_moisture_pct": 37.13825708954547,
+        "solar_radiation_Wm2": 96830.32040112562
+      }
+    },
+    "SB-019": {
+      "mean": {
+        "air_temperature_C": 18.326757679180886,
+        "relative_humidity_pct": 75.19702218430034,
+        "air_pressure_hPa": 1013.0510437997724,
+        "wind_speed_ms": 2.5482821387940837,
+        "wind_direction_deg": 180.87127417519906,
+        "leaf_wetness_pct": 15.073720136518771,
+        "soil_moisture_pct": 35.277098976109215,
+        "solar_radiation_Wm2": 259.8501706484642
+      },
+      "scale": {
+        "air_temperature_C": 5.044532748210211,
+        "relative_humidity_pct": 11.770973720675839,
+        "air_pressure_hPa": 4.005095690151965,
+        "wind_speed_ms": 1.3898083882752013,
+        "wind_direction_deg": 103.06403605835617,
+        "leaf_wetness_pct": 14.034674998563577,
+        "soil_moisture_pct": 6.008791142357923,
+        "solar_radiation_Wm2": 310.69172484437695
+      },
+      "var": {
+        "air_temperature_C": 25.447310647765264,
+        "relative_humidity_pct": 138.5558223328412,
+        "air_pressure_hPa": 16.04079148727384,
+        "wind_speed_ms": 1.9315673561201128,
+        "wind_direction_deg": 10622.19552863814,
+        "leaf_wetness_pct": 196.97210231530556,
+        "soil_moisture_pct": 36.10557099247904,
+        "solar_radiation_Wm2": 96529.34788677405
+      }
+    },
+    "SB-020": {
+      "mean": {
+        "air_temperature_C": 18.368940131767403,
+        "relative_humidity_pct": 75.05439988541966,
+        "air_pressure_hPa": 1013.0849871097107,
+        "wind_speed_ms": 2.554778000572902,
+        "wind_direction_deg": 185.50323689487254,
+        "leaf_wetness_pct": 14.599226582641078,
+        "soil_moisture_pct": 35.194050415353765,
+        "solar_radiation_Wm2": 259.1203953022057
+      },
+      "scale": {
+        "air_temperature_C": 5.123319898534879,
+        "relative_humidity_pct": 11.609254961015354,
+        "air_pressure_hPa": 3.9967526016809245,
+        "wind_speed_ms": 1.420263319047294,
+        "wind_direction_deg": 103.89842699429379,
+        "leaf_wetness_pct": 13.632266514462401,
+        "soil_moisture_pct": 6.10280885706714,
+        "solar_radiation_Wm2": 311.08776754197874
+      },
+      "var": {
+        "air_temperature_C": 26.248406782723443,
+        "relative_humidity_pct": 134.77480074985962,
+        "air_pressure_hPa": 15.97403135904324,
+        "wind_speed_ms": 2.0171478954312354,
+        "wind_direction_deg": 10794.883131888595,
+        "leaf_wetness_pct": 185.83869032133288,
+        "soil_moisture_pct": 37.24427594589714,
+        "solar_radiation_Wm2": 96775.59911425221
+      }
+    }
+  }
+}

@@ -1,0 +1,93 @@
+# ==============================================================================
+# RakshaSetu Anomaly Detection Research Pipeline Configuration
+# SCOPED TO: springbrook_wsn_synthetic_100k.csv (Synthetic Anomaly Benchmark)
+# ==============================================================================
+
+pipeline:
+  name: "RakshaSetu Anomaly Detection Research Pipeline"
+  benchmark_type: "Synthetic Anomaly Benchmark"
+  dataset_caveat: "This dataset is a synthetic stand-in; results establish pipeline mechanics and benchmark baselines, not real-world sensor validation."
+  random_seed: 42
+
+paths:
+  raw_data: "data/raw/springbrook_wsn_synthetic_100k.csv"
+  processed_dir: "data/processed"
+  train_data: "data/processed/train.csv"
+  val_data: "data/processed/validation.csv"
+  test_data: "data/processed/test.csv"
+  metadata_file: "data/processed/preprocessing_metadata.json"
+  zscore_model_file: "models/zscore_baseline.json"
+  edad_checkpoint: "models/edad_best.pt"
+  figures_dir: "results/figures"
+  reports_dir: "results/reports"
+  inspection_report: "results/reports/data_inspection.json"
+  final_report: "results/reports/final_model_comparison.md"
+
+schema:
+  entity_column: "node_id"
+  timestamp_column: "timestamp"
+  expected_cadence_minutes: 10
+  expected_nodes: 20
+  
+  # 8 environmental features for anomaly detection
+  environmental_features:
+    - "air_temperature_C"
+    - "relative_humidity_pct"
+    - "air_pressure_hPa"
+    - "wind_speed_ms"
+    - "wind_direction_deg"
+    - "leaf_wetness_pct"
+    - "soil_moisture_pct"
+    - "solar_radiation_Wm2"
+
+  # Device health feature (excluded from environmental anomaly detection)
+  device_health_features:
+    - "battery_voltage_V"
+
+preprocessing:
+  imputation:
+    strategy: "ffill_then_bfill"
+    features_with_missing:
+      - "air_temperature_C"
+      - "relative_humidity_pct"
+      - "air_pressure_hPa"
+  split:
+    type: "per_node_chronological"
+    train_ratio: 0.70
+    val_ratio: 0.15
+    test_ratio: 0.15
+  scaler: "StandardScaler"
+
+zscore_baseline:
+  thresholds: [2.0, 2.5, 3.0]
+  default_threshold: 2.5
+  aggregation_methods:
+    - "max_abs_z"
+    - "mean_abs_z"
+    - "count_exceeding"
+
+edad_model:
+  model_name: "EDAD-inspired Encode-then-Decompose model"
+  window_size: 12            # eta = 12 steps (2 hours at 10-minute cadence)
+  stride: 1
+  input_dim: 8               # 8 environmental features
+  latent_dim: 32
+  hidden_dim: 64
+  batch_size: 64
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  epochs: 15
+  early_stopping_patience: 4
+  gradient_clip_val: 5.0
+  contrastive_temperature: 0.1
+  lambda_recon: 1.0
+  lambda_contrastive: 0.5
+  lambda_mi_penalty: 0.1     # squared-magnitude penalty: (mi**2).mean()
+
+evaluation:
+  top_k_anomalies: 20
+  synthetic_injection:
+    enabled: true
+    spike_magnitude_std: 4.5
+    drift_magnitude_std: 3.0
+    injection_ratio: 0.03

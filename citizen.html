@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2. Citizen Panel — Stay Informed, Stay Safe</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Leaflet GIS Map CSS & JS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            citz: {
+              50: '#f0fdf4',
+              100: '#dcfce7',
+              500: '#22c55e',
+              600: '#16a34a',
+              700: '#15803d',
+              800: '#166534',
+              900: '#14532d',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #f8fafc;
+      color: #0f172a;
+      font-family: 'Inter', sans-serif;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+    .pulse-beacon {
+      box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.7);
+      animation: pulse 1.6s infinite;
+    }
+    @keyframes pulse {
+      0% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.7);
+      }
+      70% {
+        transform: scale(1);
+        box-shadow: 0 0 0 14px rgba(37, 99, 235, 0);
+      }
+      100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(37, 99, 235, 0);
+      }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased">
+
+  <!-- TOP BANNER (Green header banner matching reference mockup) -->
+  <div class="bg-[#166534] text-white px-4 py-2.5 shadow-md flex flex-wrap items-center justify-between border-b border-green-800 sticky top-0 z-50">
+    <div class="flex items-center gap-3">
+      <div class="w-7 h-7 rounded-lg bg-emerald-500/30 flex items-center justify-center font-bold text-white border border-emerald-400/40">
+        🛡️
+      </div>
+      <div>
+        <h1 class="text-sm md:text-base font-extrabold tracking-wide uppercase">2. CITIZEN PANEL – STAY INFORMED, STAY SAFE</h1>
+        <p class="text-[11px] text-emerald-200 font-normal">Empowering citizens with real-time alerts, reporting & safety information</p>
+      </div>
+    </div>
+
+    <!-- Quick Switcher Bar -->
+    <div class="flex items-center gap-2 text-xs mt-1 sm:mt-0">
+      <span class="text-emerald-200 hidden md:inline">Switch Panel:</span>
+      <select onchange="location.href=this.value" class="bg-green-950/80 border border-green-400/40 text-white rounded px-2 py-1 text-xs font-semibold focus:outline-none cursor-pointer hover:bg-green-900 transition">
+        <option value="citizen.html" selected>2. Citizen Panel</option>
+        <option value="government.html">1. Government Panel</option>
+        <option value="responder.html">3. Rescue Team Panel</option>
+        <option value="admin.html">4. Admin Panel</option>
+        <option value="index.html">🌐 All Panels Hub</option>
+      </select>
+      <a href="index.html" class="px-2 py-1 bg-white/10 hover:bg-white/20 rounded text-[11px] font-medium transition text-emerald-100 flex items-center gap-1">
+        <i data-lucide="grid" class="w-3 h-3"></i> Portal
+      </a>
+    </div>
+  </div>
+
+  <div class="flex-1 flex flex-col md:flex-row min-h-0">
+
+    <!-- LEFT SIDEBAR (Clean White Sidebar with green active states) -->
+    <aside class="w-full md:w-56 bg-white border-r border-slate-200 flex flex-col flex-shrink-0">
+      
+      <!-- Brand Header -->
+      <div class="p-4 border-b border-slate-100 flex items-center gap-3">
+        <div class="w-9 h-9 rounded-xl bg-emerald-600 flex items-center justify-center text-white font-bold shadow-md shadow-emerald-600/20">
+          <i data-lucide="shield-check" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <div class="font-bold text-slate-800 text-sm leading-tight">Disaster</div>
+          <div class="text-[11px] text-slate-500 font-medium">Management System</div>
+        </div>
+      </div>
+
+      <!-- Navigation Menu -->
+      <nav class="p-3 space-y-1 text-xs font-medium flex-1 overflow-y-auto custom-scrollbar">
+        <!-- Active Dashboard -->
+        <a href="citizen.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-emerald-600 text-white font-semibold shadow-sm shadow-emerald-600/20">
+          <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+          <span>Dashboard</span>
+        </a>
+        <a href="#alerts" onclick="openAlertDetails()" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-50 text-slate-600 hover:text-slate-900 transition">
+          <i data-lucide="bell" class="w-4 h-4 text-red-500"></i>
+          <span>Alerts</span>
+          <span class="ml-auto px-1.5 py-0.2 text-[10px] bg-red-100 text-red-600 font-bold rounded">1 High</span>
+        </a>
+        <a href="#report" onclick="openReportIncidentModal()" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-50 text-slate-600 hover:text-slate-900 transition">
+          <i data-lucide="alert-circle" class="w-4 h-4 text-amber-500"></i>
+          <span>Report Incident</span>
+        </a>
+        <a href="#safety-info" onclick="openSafetyModal()" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-50 text-slate-600 hover:text-slate-900 transition">
+          <i data-lucide="book-open" class="w-4 h-4 text-emerald-600"></i>
+          <span>Safety Info</span>
+        </a>
+        <a href="#contacts" onclick="scrollToSection('emergency-contacts-section')" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-50 text-slate-600 hover:text-slate-900 transition">
+          <i data-lucide="phone" class="w-4 h-4 text-blue-500"></i>
+          <span>Emergency Contacts</span>
+        </a>
+        <a href="#shelters" onclick="locateNearestShelter()" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-50 text-slate-600 hover:text-slate-900 transition">
+          <i data-lucide="home" class="w-4 h-4 text-indigo-500"></i>
+          <span>Shelters</span>
+        </a>
+        <a href="#map" onclick="scrollToSection('safety-map-container')" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-50 text-slate-600 hover:text-slate-900 transition">
+          <i data-lucide="map" class="w-4 h-4 text-cyan-500"></i>
+          <span>Live Map</span>
+        </a>
+        <a href="#resources" onclick="openCitizenModal('Emergency Resources', 'Community Water Points: Dispur Park, Sector 4\nMobile Medical Van: 10:00 AM daily at Field Ground\nFood Packets distribution starting 12:00 PM.')" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-50 text-slate-600 hover:text-slate-900 transition">
+          <i data-lucide="package" class="w-4 h-4 text-slate-500"></i>
+          <span>Resources</span>
+        </a>
+        <a href="#checklist" onclick="scrollToSection('checklist-section')" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-50 text-slate-600 hover:text-slate-900 transition">
+          <i data-lucide="check-square" class="w-4 h-4 text-emerald-600"></i>
+          <span>Checklist</span>
+        </a>
+        <a href="#feedback" onclick="openCitizenModal('Feedback & Support', 'Help us improve disaster response in your neighborhood. Share suggestions or report issues with volunteer teams.')" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-50 text-slate-600 hover:text-slate-900 transition">
+          <i data-lucide="message-square" class="w-4 h-4 text-slate-500"></i>
+          <span>Feedback & Support</span>
+        </a>
+        <a href="#settings" onclick="openCitizenModal('Citizen Preferences', 'Notification Channels: SMS Alerts ON, WhatsApp Alerts ON, Siren Warning Audible ON.')" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-50 text-slate-600 hover:text-slate-900 transition">
+          <i data-lucide="settings" class="w-4 h-4 text-slate-500"></i>
+          <span>Settings</span>
+        </a>
+      </nav>
+
+      <div class="p-3 bg-emerald-50 border-t border-emerald-100 flex items-center justify-between text-[11px]">
+        <div class="flex items-center gap-1.5 text-emerald-800 font-semibold">
+          <i data-lucide="radio" class="w-3.5 h-3.5 text-emerald-600"></i>
+          <span>Broadcast Active</span>
+        </div>
+        <span class="text-[10px] bg-emerald-200/80 text-emerald-800 px-1.5 py-0.5 rounded font-mono">24x7</span>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT AREA -->
+    <main class="flex-1 flex flex-col min-w-0 overflow-y-auto custom-scrollbar p-4 lg:p-6 space-y-5">
+      
+      <!-- SUB-HEADER: Location, Language, Profile -->
+      <div class="flex flex-wrap items-center justify-between gap-3 bg-white p-3 rounded-xl border border-slate-200 shadow-sm">
+        <div class="flex items-center gap-2">
+          <div class="flex items-center gap-1.5 bg-slate-50 border border-slate-200 px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-800 cursor-pointer hover:bg-slate-100 transition" onclick="changeLocationPrompt()">
+            <i data-lucide="map-pin" class="w-4 h-4 text-red-500"></i>
+            <span>Your Location:</span>
+            <span id="citizen-current-loc" class="text-emerald-700">Guwahati, Assam</span>
+            <i data-lucide="chevron-down" class="w-3 h-3 text-slate-400"></i>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3 text-xs">
+          <!-- Language Selector -->
+          <div class="flex items-center gap-1.5 bg-slate-50 border border-slate-200 px-2.5 py-1.5 rounded-lg text-slate-700">
+            <i data-lucide="globe" class="w-3.5 h-3.5 text-blue-600"></i>
+            <select class="bg-transparent font-semibold focus:outline-none cursor-pointer text-xs">
+              <option>English</option>
+              <option>অসমীয়া (Assamese)</option>
+              <option>हिन्दी (Hindi)</option>
+              <option>বাংলা (Bengali)</option>
+            </select>
+          </div>
+
+          <!-- User Profile -->
+          <div class="flex items-center gap-2 border-l border-slate-200 pl-3">
+            <div class="w-8 h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-xs shadow-sm">
+              RK
+            </div>
+            <div class="hidden sm:block text-left">
+              <div class="text-xs font-bold text-slate-800 leading-tight">Rohit Kalita</div>
+              <div class="text-[10px] text-emerald-600 font-medium">Verified Citizen</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TOP 4 ALERT CARDS ROW (Exact match with reference image) -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        
+        <!-- Card 1: Critical Flood Warning (Red Banner Card) -->
+        <div class="bg-red-600 text-white p-4 rounded-xl shadow-md flex flex-col justify-between relative overflow-hidden">
+          <div class="absolute -right-4 -bottom-4 opacity-15">
+            <i data-lucide="alert-triangle" class="w-24 h-24"></i>
+          </div>
+          <div class="relative z-10">
+            <div class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-red-100">
+              <i data-lucide="alert-circle" class="w-4 h-4"></i> Flood Warning
+            </div>
+            <div class="text-sm font-extrabold mt-1">Brahmaputra River Basin</div>
+            <div class="text-xs text-red-100 mt-1 font-medium">Avoid low-lying areas. Stay alert!</div>
+          </div>
+          <button onclick="openAlertDetails()" class="mt-3 py-1.5 px-3 bg-white text-red-600 rounded-lg text-xs font-bold hover:bg-red-50 transition shadow-sm w-fit z-10">
+            View Details
+          </button>
+        </div>
+
+        <!-- Card 2: Weather Update Card -->
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
+          <div>
+            <div class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Weather Update</div>
+            <div class="text-2xl font-black text-slate-900 mt-0.5">28°C</div>
+            <div class="text-xs font-semibold text-slate-700">Light Rain</div>
+            <div class="text-[11px] text-slate-400 mt-1">Humidity 82% | Wind 12 km/h</div>
+          </div>
+          <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-500 flex items-center justify-center text-2xl border border-blue-100">
+            🌧️
+          </div>
+        </div>
+
+        <!-- Card 3: Nearest Shelter Card -->
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
+          <div class="flex items-start justify-between">
+            <div>
+              <div class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Nearest Shelter</div>
+              <div class="text-sm font-bold text-slate-900 mt-1">Dispur High School</div>
+              <div class="text-xs text-emerald-600 font-semibold mt-0.5">2.4 km away</div>
+            </div>
+            <div class="w-9 h-9 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center">
+              <i data-lucide="home" class="w-5 h-5"></i>
+            </div>
+          </div>
+          <button onclick="locateNearestShelter()" class="mt-3 py-1.5 px-3 bg-slate-100 hover:bg-emerald-50 text-slate-700 hover:text-emerald-700 rounded-lg text-xs font-bold transition flex items-center gap-1.5 w-fit">
+            <i data-lucide="navigation-2" class="w-3.5 h-3.5 text-emerald-600"></i> View on Map
+          </button>
+        </div>
+
+        <!-- Card 4: Emergency Call 112 SOS Card (Red accent) -->
+        <div class="bg-red-600 text-white p-4 rounded-xl shadow-md flex items-center justify-between">
+          <div>
+            <div class="text-[11px] font-bold uppercase tracking-wider text-red-100">Emergency Call</div>
+            <div class="text-3xl font-black font-mono tracking-tight mt-0.5">112</div>
+            <div class="text-[11px] text-red-100 mt-1 font-medium">Instant police, fire & medical dispatch</div>
+          </div>
+          <button onclick="triggerEmergencySOS()" class="w-14 h-14 rounded-full bg-white text-red-600 font-black text-sm flex flex-col items-center justify-center shadow-lg hover:scale-105 active:scale-95 transition">
+            <span>SOS</span>
+            <span class="text-[8px] uppercase tracking-wider font-bold">Press</span>
+          </button>
+        </div>
+
+      </div>
+
+      <!-- MIDDLE SECTION: LIVE SAFETY MAP & QUICK ACTIONS -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-5" id="safety-map-container">
+        
+        <!-- Live Safety Map (col-span-9) -->
+        <div class="lg:col-span-9 bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col">
+          <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-100">
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+              <h2 class="text-sm font-bold text-slate-800">Live Safety Map</h2>
+            </div>
+
+            <!-- Legend Pills matching mockup -->
+            <div class="flex flex-wrap items-center gap-2 text-[11px] text-slate-600">
+              <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> Safe Zone</span>
+              <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-amber-400"></span> Caution Zone</span>
+              <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-red-500"></span> Danger Zone</span>
+              <span class="flex items-center gap-1"><span class="w-2 h-2 rounded bg-blue-600"></span> Shelter</span>
+              <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-blue-500"></span> Your Location</span>
+              
+              <button onclick="toggleMapLayers()" class="ml-2 px-2.5 py-1 bg-slate-100 hover:bg-slate-200 rounded text-xs font-semibold text-slate-700 flex items-center gap-1">
+                <i data-lucide="sliders-horizontal" class="w-3 h-3"></i> Filters
+              </button>
+            </div>
+          </div>
+
+          <!-- Leaflet Container -->
+          <div class="relative w-full h-[320px] rounded-lg overflow-hidden border border-slate-200 bg-slate-100">
+            <div id="citizen-map" class="w-full h-full z-10"></div>
+
+            <!-- Map legend overlay inside map -->
+            <div class="absolute bottom-3 left-3 z-[400] bg-white/95 backdrop-blur-sm p-2 rounded-lg border border-slate-200 shadow-md text-[10px] space-y-1 font-medium">
+              <div class="font-bold text-slate-800">Guwahati Sector 2 Status:</div>
+              <div class="text-emerald-700">✓ Nearest Safe Elevation: 2.1 km South</div>
+              <div class="text-amber-700">⚠ Low Road Inundated: GS Road near Ulubari</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Actions Column (col-span-3) -->
+        <div class="lg:col-span-3 bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
+          <div>
+            <h2 class="text-xs font-bold uppercase tracking-wider text-slate-700 pb-2 border-b border-slate-100 mb-3 flex items-center gap-1.5">
+              <i data-lucide="zap" class="w-4 h-4 text-emerald-600"></i>
+              Quick Actions
+            </h2>
+
+            <div class="space-y-2.5">
+              <!-- Action 1: Report Incident -->
+              <button onclick="openReportIncidentModal()" class="w-full p-2.5 rounded-lg border border-slate-200 hover:border-red-300 hover:bg-red-50/40 text-left transition flex items-center gap-3 group">
+                <div class="w-8 h-8 rounded-lg bg-red-100 text-red-600 flex items-center justify-center group-hover:scale-110 transition flex-shrink-0">
+                  <i data-lucide="alert-triangle" class="w-4 h-4"></i>
+                </div>
+                <div>
+                  <div class="text-xs font-bold text-slate-800 group-hover:text-red-700">Report Incident</div>
+                  <div class="text-[10px] text-slate-500">Waterlogging, tree fall, fire</div>
+                </div>
+              </button>
+
+              <!-- Action 2: Request Help -->
+              <button onclick="openRequestHelpModal()" class="w-full p-2.5 rounded-lg border border-slate-200 hover:border-amber-300 hover:bg-amber-50/40 text-left transition flex items-center gap-3 group">
+                <div class="w-8 h-8 rounded-lg bg-amber-100 text-amber-600 flex items-center justify-center group-hover:scale-110 transition flex-shrink-0">
+                  <i data-lucide="life-buoy" class="w-4 h-4"></i>
+                </div>
+                <div>
+                  <div class="text-xs font-bold text-slate-800 group-hover:text-amber-700">Request Help</div>
+                  <div class="text-[10px] text-slate-500">Trapped, medical need, boat</div>
+                </div>
+              </button>
+
+              <!-- Action 3: Check-In Safe -->
+              <button onclick="checkInSafeAction()" class="w-full p-2.5 rounded-lg border border-slate-200 hover:border-emerald-300 hover:bg-emerald-50/40 text-left transition flex items-center gap-3 group">
+                <div class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center group-hover:scale-110 transition flex-shrink-0">
+                  <i data-lucide="check-circle" class="w-4 h-4"></i>
+                </div>
+                <div>
+                  <div class="text-xs font-bold text-slate-800 group-hover:text-emerald-700">Check-In Safe</div>
+                  <div class="text-[10px] text-slate-500">Notify family and authorities</div>
+                </div>
+              </button>
+
+              <!-- Action 4: Upload Photo/Video -->
+              <button onclick="openUploadMediaModal()" class="w-full p-2.5 rounded-lg border border-slate-200 hover:border-blue-300 hover:bg-blue-50/40 text-left transition flex items-center gap-3 group">
+                <div class="w-8 h-8 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center group-hover:scale-110 transition flex-shrink-0">
+                  <i data-lucide="camera" class="w-4 h-4"></i>
+                </div>
+                <div>
+                  <div class="text-xs font-bold text-slate-800 group-hover:text-blue-700">Upload Photo/Video</div>
+                  <div class="text-[10px] text-slate-500">Ground situation geo-tagged</div>
+                </div>
+              </button>
+            </div>
+          </div>
+
+          <div class="p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] text-slate-500 mt-2">
+            <strong>Tip:</strong> Keep location enabled for 10x faster rescue dispatch.
+          </div>
+        </div>
+
+      </div>
+
+      <!-- LOWER GRID (4 distinct cards matching image) -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        
+        <!-- 1. Safety Tips -->
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between pb-2 border-b border-slate-100 mb-2.5">
+              <h3 class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                <i data-lucide="shield" class="w-4 h-4 text-emerald-600"></i> Safety Tips
+              </h3>
+              <button onclick="openCitizenModal('Safety Protocols', '1. Never walk or drive through moving water.\n2. Boil drinking water before consumption.\n3. Disconnect LPG cylinders if water enters home.\n4. Keep phone on power saver mode.')" class="text-[11px] text-emerald-600 font-semibold hover:underline">View All</button>
+            </div>
+            
+            <ul class="space-y-2 text-xs text-slate-600">
+              <li class="flex items-start gap-2">
+                <span class="text-emerald-500 font-bold">•</span>
+                <span>Avoid walking in flooded areas</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-emerald-500 font-bold">•</span>
+                <span>Switch off electrical appliances</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-emerald-500 font-bold">•</span>
+                <span>Keep emergency kit ready</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-emerald-500 font-bold">•</span>
+                <span>Stay tuned to official updates</span>
+              </li>
+            </ul>
+          </div>
+          <div class="text-[10px] text-slate-400 mt-2">Verified by NDRF Safety Directorate</div>
+        </div>
+
+        <!-- 2. Emergency Contacts -->
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between" id="emergency-contacts-section">
+          <div>
+            <div class="flex items-center justify-between pb-2 border-b border-slate-100 mb-2.5">
+              <h3 class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                <i data-lucide="phone-call" class="w-4 h-4 text-blue-600"></i> Emergency Contacts
+              </h3>
+              <span class="text-[10px] font-mono text-slate-400">Toll Free</span>
+            </div>
+
+            <div class="space-y-2 text-xs">
+              <a href="tel:100" class="flex items-center justify-between p-1.5 rounded-lg hover:bg-slate-50 transition">
+                <span class="font-semibold text-slate-700">Police</span>
+                <span class="font-mono font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded">100</span>
+              </a>
+              <a href="tel:108" class="flex items-center justify-between p-1.5 rounded-lg hover:bg-slate-50 transition">
+                <span class="font-semibold text-slate-700">Ambulance</span>
+                <span class="font-mono font-bold text-red-600 bg-red-50 px-2 py-0.5 rounded">108</span>
+              </a>
+              <a href="tel:101" class="flex items-center justify-between p-1.5 rounded-lg hover:bg-slate-50 transition">
+                <span class="font-semibold text-slate-700">Fire Service</span>
+                <span class="font-mono font-bold text-orange-600 bg-orange-50 px-2 py-0.5 rounded">101</span>
+              </a>
+              <a href="tel:112" class="flex items-center justify-between p-1.5 rounded-lg hover:bg-slate-50 transition">
+                <span class="font-semibold text-slate-700">Disaster Helpline</span>
+                <span class="font-mono font-bold text-purple-600 bg-purple-50 px-2 py-0.5 rounded">112</span>
+              </a>
+            </div>
+          </div>
+          <div class="text-[10px] text-slate-400 mt-1">Tap any number to dial immediately</div>
+        </div>
+
+        <!-- 3. My Reports -->
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between pb-2 border-b border-slate-100 mb-2.5">
+              <h3 class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                <i data-lucide="clipboard-list" class="w-4 h-4 text-purple-600"></i> My Reports
+              </h3>
+              <button onclick="openCitizenModal('My Incident Reports', 'Total Reports Submitted: 2\n\n1. INC-2025-0012: Flooded Street (In Progress - Assigned to Team Bravo)\n2. INC-2025-0011: Tree Fall (Resolved - Cleared by PWD)')" class="text-[11px] text-purple-600 font-semibold hover:underline">View All</button>
+            </div>
+
+            <div class="space-y-2.5 text-xs">
+              <div class="p-2 rounded-lg bg-slate-50 border border-slate-100 flex items-start justify-between">
+                <div>
+                  <div class="font-bold text-slate-800 text-[11px]">#INC-2025-0012</div>
+                  <div class="text-slate-500 text-[10px]">Flooded Street</div>
+                  <div class="text-[9px] text-slate-400">18 May 2025 | 08:20 AM</div>
+                </div>
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-700">In Progress</span>
+              </div>
+
+              <div class="p-2 rounded-lg bg-slate-50 border border-slate-100 flex items-start justify-between">
+                <div>
+                  <div class="font-bold text-slate-800 text-[11px]">#INC-2025-0011</div>
+                  <div class="text-slate-500 text-[10px]">Tree Fall</div>
+                  <div class="text-[9px] text-slate-400">17 May 2025 | 04:15 PM</div>
+                </div>
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-700">Resolved</span>
+              </div>
+            </div>
+          </div>
+          <div class="text-[10px] text-slate-400 mt-2">GPS Verification: Verified ✓</div>
+        </div>
+
+        <!-- 4. Daily Checklist -->
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between" id="checklist-section">
+          <div>
+            <div class="flex items-center justify-between pb-2 border-b border-slate-100 mb-2.5">
+              <h3 class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-600"></i> Daily Checklist
+              </h3>
+              <span id="checklist-counter" class="text-[10px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded">1/4 Done</span>
+            </div>
+
+            <div class="space-y-2 text-xs text-slate-700">
+              <label class="flex items-center gap-2 cursor-pointer p-1 rounded hover:bg-slate-50">
+                <input type="checkbox" checked onchange="updateChecklist()" class="rounded text-emerald-600 focus:ring-emerald-500 citizen-check">
+                <span class="font-medium">Stay Updated</span>
+              </label>
+              <label class="flex items-center gap-2 cursor-pointer p-1 rounded hover:bg-slate-50">
+                <input type="checkbox" onchange="updateChecklist()" class="rounded text-emerald-600 focus:ring-emerald-500 citizen-check">
+                <span class="font-medium">Check Emergency Kit</span>
+              </label>
+              <label class="flex items-center gap-2 cursor-pointer p-1 rounded hover:bg-slate-50">
+                <input type="checkbox" onchange="updateChecklist()" class="rounded text-emerald-600 focus:ring-emerald-500 citizen-check">
+                <span class="font-medium">Secure Documents</span>
+              </label>
+              <label class="flex items-center gap-2 cursor-pointer p-1 rounded hover:bg-slate-50">
+                <input type="checkbox" onchange="updateChecklist()" class="rounded text-emerald-600 focus:ring-emerald-500 citizen-check">
+                <span class="font-medium">Help Neighbors</span>
+              </label>
+            </div>
+          </div>
+          <div class="text-[10px] text-slate-400 mt-2">Saved automatically to device</div>
+        </div>
+
+      </div>
+
+      <!-- BOTTOM ROW: INNOVATIVE FEATURES (6 cards matching mockup) -->
+      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm space-y-3">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-100 text-emerald-800">INNOVATIVE FEATURES</span>
+            <span class="text-xs text-slate-500 font-medium">Citizen Safety & Smart Assistance Suite</span>
+          </div>
+          <span class="text-[11px] text-slate-400 hidden sm:inline">Tap any feature for live demo</span>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+          
+          <!-- Feature 1: AI Chatbot Assistant -->
+          <div onclick="openAiChatbotModal()" class="p-3 rounded-lg border border-slate-100 bg-slate-50/70 hover:bg-emerald-50/50 hover:border-emerald-200 cursor-pointer transition group">
+            <div class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center mb-2 group-hover:scale-110 transition">
+              <i data-lucide="bot" class="w-4 h-4"></i>
+            </div>
+            <div class="text-xs font-bold text-slate-800">AI Chatbot Assistant</div>
+            <div class="text-[11px] text-slate-500 mt-0.5 leading-snug">Get instant answers & safety guidance</div>
+          </div>
+
+          <!-- Feature 2: Voice Reporting -->
+          <div onclick="openVoiceReportModal()" class="p-3 rounded-lg border border-slate-100 bg-slate-50/70 hover:bg-emerald-50/50 hover:border-emerald-200 cursor-pointer transition group">
+            <div class="w-8 h-8 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center mb-2 group-hover:scale-110 transition">
+              <i data-lucide="mic" class="w-4 h-4"></i>
+            </div>
+            <div class="text-xs font-bold text-slate-800">Voice Reporting</div>
+            <div class="text-[11px] text-slate-500 mt-0.5 leading-snug">Report incidents using voice</div>
+          </div>
+
+          <!-- Feature 3: Crowdsourced Alerts -->
+          <div onclick="openCitizenModal('Crowdsourced Alerts', 'Community Alert Feed:\n• 10:12 AM: Water on Beltola Road receding.\n• 09:45 AM: Local youth cleared clogged drain at Block C.\n• 09:10 AM: Community kitchen open at Community Center.')" class="p-3 rounded-lg border border-slate-100 bg-slate-50/70 hover:bg-emerald-50/50 hover:border-emerald-200 cursor-pointer transition group">
+            <div class="w-8 h-8 rounded-lg bg-cyan-100 text-cyan-600 flex items-center justify-center mb-2 group-hover:scale-110 transition">
+              <i data-lucide="users" class="w-4 h-4"></i>
+            </div>
+            <div class="text-xs font-bold text-slate-800">Crowdsourced Alerts</div>
+            <div class="text-[11px] text-slate-500 mt-0.5 leading-snug">Real-time updates from citizens</div>
+          </div>
+
+          <!-- Feature 4: Family Safety Check -->
+          <div onclick="openFamilyCheckModal()" class="p-3 rounded-lg border border-slate-100 bg-slate-50/70 hover:bg-emerald-50/50 hover:border-emerald-200 cursor-pointer transition group">
+            <div class="w-8 h-8 rounded-lg bg-purple-100 text-purple-600 flex items-center justify-center mb-2 group-hover:scale-110 transition">
+              <i data-lucide="user-check" class="w-4 h-4"></i>
+            </div>
+            <div class="text-xs font-bold text-slate-800">Family Safety Check</div>
+            <div class="text-[11px] text-slate-500 mt-0.5 leading-snug">Check-in with family members</div>
+          </div>
+
+          <!-- Feature 5: Offline Mode -->
+          <div onclick="openCitizenModal('Offline Mode Storage', 'Offline Data Pack Cached: ✓\n• Emergency Contacts list available without internet.\n• Offline Topo Map of Guwahati Sector 1-4 stored locally.\n• First Aid and CPR audio handbook ready.')" class="p-3 rounded-lg border border-slate-100 bg-slate-50/70 hover:bg-emerald-50/50 hover:border-emerald-200 cursor-pointer transition group">
+            <div class="w-8 h-8 rounded-lg bg-amber-100 text-amber-600 flex items-center justify-center mb-2 group-hover:scale-110 transition">
+              <i data-lucide="wifi-off" class="w-4 h-4"></i>
+            </div>
+            <div class="text-xs font-bold text-slate-800">Offline Mode</div>
+            <div class="text-[11px] text-slate-500 mt-0.5 leading-snug">Access essential info offline</div>
+          </div>
+
+          <!-- Feature 6: Personalized Alerts -->
+          <div onclick="openCitizenModal('Personalized Risk Profile', 'Current Assessment for Your Location (Guwahati, Assam):\n• Flood Inundation Risk: High\n• Storm Water Drain Capacity: 90%\n• Proximity to River: 1.8 km\nRecommended Action: Evacuate ground floor valuables.')" class="p-3 rounded-lg border border-slate-100 bg-slate-50/70 hover:bg-emerald-50/50 hover:border-emerald-200 cursor-pointer transition group">
+            <div class="w-8 h-8 rounded-lg bg-pink-100 text-pink-600 flex items-center justify-center mb-2 group-hover:scale-110 transition">
+              <i data-lucide="bell-ring" class="w-4 h-4"></i>
+            </div>
+            <div class="text-xs font-bold text-slate-800">Personalized Alerts</div>
+            <div class="text-[11px] text-slate-500 mt-0.5 leading-snug">Alerts based on your location & risk</div>
+          </div>
+
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- INTERACTIVE MODAL -->
+  <div id="citizen-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[1000] hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-lg w-full border border-slate-200 shadow-2xl p-6 space-y-4 transform transition-all scale-95 opacity-0 duration-200" id="citizen-modal-container">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+        <h3 id="citizen-modal-title" class="text-base font-bold text-slate-900 flex items-center gap-2"></h3>
+        <button onclick="closeCitizenModal()" class="text-slate-400 hover:text-slate-600 p-1 rounded-lg">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <div id="citizen-modal-body" class="text-xs text-slate-600 space-y-3 leading-relaxed"></div>
+      <div class="flex justify-end gap-2 pt-2 border-t border-slate-100" id="citizen-modal-actions">
+        <button onclick="closeCitizenModal()" class="px-4 py-2 rounded-lg bg-slate-100 text-slate-700 text-xs font-bold hover:bg-slate-200 transition">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Initialize Lucide Icons
+    lucide.createIcons();
+
+    // Leaflet Citizen Safety Map
+    let citizenMap = L.map('citizen-map', {
+      zoomControl: true,
+      attributionControl: false
+    }).setView([26.15, 91.76], 12);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 18,
+    }).addTo(citizenMap);
+
+    // Safe Zone (Green Circle)
+    const safeZone = L.circle([26.12, 91.79], {
+      color: '#10b981',
+      fillColor: '#10b981',
+      fillOpacity: 0.3,
+      radius: 2000
+    }).addTo(citizenMap).bindPopup("<strong>Safe Elevation Zone</strong><br>Dispur Heights - No flooding reported.");
+
+    // Caution Zone (Yellow Circle)
+    const cautionZone = L.circle([26.14, 91.74], {
+      color: '#eab308',
+      fillColor: '#eab308',
+      fillOpacity: 0.3,
+      radius: 1800
+    }).addTo(citizenMap).bindPopup("<strong>Caution Zone</strong><br>Waterlogging on main roads. Slow traffic.");
+
+    // Danger Zone (Red Circle)
+    const dangerZone = L.circle([26.19, 91.75], {
+      color: '#ef4444',
+      fillColor: '#ef4444',
+      fillOpacity: 0.35,
+      radius: 2200
+    }).addTo(citizenMap).bindPopup("<strong>Danger Zone</strong><br>Brahmaputra Flood Plain. Water level 2.1m above road level.");
+
+    // Nearest Shelter Marker
+    const shelterIcon = L.divIcon({
+      className: 'custom-shelter-marker',
+      html: `<div style="background-color:#2563eb; width:22px; height:22px; border-radius:6px; border:2px solid white; box-shadow:0 3px 8px rgba(0,0,0,0.3); display:flex; align-items:center; justify-content:center; color:white; font-size:11px;">🏠</div>`,
+      iconSize: [22, 22],
+      iconAnchor: [11, 11]
+    });
+    const shelterMarker = L.marker([26.138, 91.790], { icon: shelterIcon }).addTo(citizenMap);
+    shelterMarker.bindPopup("<strong>Dispur High School Relief Shelter</strong><br>Capacity: 600 • 2.4 km away<br>Food, clean drinking water & doctors available.");
+
+    // Your Location Marker (Beacon)
+    const yourLocIcon = L.divIcon({
+      className: 'custom-user-marker',
+      html: `<div class="pulse-beacon" style="background-color:#2563eb; width:18px; height:18px; border-radius:50%; border:3px solid white; display:flex; align-items:center; justify-content:center; color:white; font-size:8px;">📍</div>`,
+      iconSize: [18, 18],
+      iconAnchor: [9, 9]
+    });
+    L.marker([26.142, 91.765], { icon: yourLocIcon }).addTo(citizenMap).bindPopup("<strong>Your Current Location</strong><br>Guwahati, Assam<br>Distance to Nearest Shelter: 2.4 km").openPopup();
+
+    function locateNearestShelter() {
+      citizenMap.flyTo([26.138, 91.790], 14, { duration: 1.5 });
+      shelterMarker.openPopup();
+    }
+
+    function scrollToSection(id) {
+      const el = document.getElementById(id);
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function toggleMapLayers() {
+      alert("Map Filter Toggled: Showing High/Med/Low water inundation polygons and active evacuation paths.");
+    }
+
+    // Modal helpers
+    const modal = document.getElementById('citizen-modal');
+    const modalContainer = document.getElementById('citizen-modal-container');
+    const modalTitle = document.getElementById('citizen-modal-title');
+    const modalBody = document.getElementById('citizen-modal-body');
+    const modalActions = document.getElementById('citizen-modal-actions');
+
+    function openModal() {
+      modal.classList.remove('hidden');
+      setTimeout(() => {
+        modalContainer.classList.remove('scale-95', 'opacity-0');
+        modalContainer.classList.add('scale-100', 'opacity-100');
+      }, 10);
+    }
+
+    function closeCitizenModal() {
+      modalContainer.classList.remove('scale-100', 'opacity-100');
+      modalContainer.classList.add('scale-95', 'opacity-0');
+      setTimeout(() => {
+        modal.classList.add('hidden');
+      }, 150);
+    }
+
+    function openCitizenModal(title, text) {
+      modalTitle.innerHTML = `<span class="text-emerald-600 font-black">🛡️</span> ${title}`;
+      modalBody.innerHTML = `<p class="whitespace-pre-line text-slate-700 font-medium">${text}</p>`;
+      modalActions.innerHTML = `<button onclick="closeCitizenModal()" class="px-4 py-2 rounded-lg bg-emerald-600 text-white text-xs font-bold hover:bg-emerald-700 transition">Understood</button>`;
+      openModal();
+    }
+
+    function openAlertDetails() {
+      modalTitle.innerHTML = `<span class="text-red-600 font-black">🚨 Alert:</span> Flood Warning Details`;
+      modalBody.innerHTML = `
+        <div class="space-y-3">
+          <div class="p-3 bg-red-50 border border-red-200 rounded-lg text-red-900 text-xs">
+            <strong>Region:</strong> Brahmaputra River Basin (Kamrup, Dhemaji, Morigaon)<br>
+            <strong>Severity:</strong> Level-3 RED WARNING<br>
+            <strong>Water Level:</strong> Breached danger mark by 2.1 meters.
+          </div>
+          <p class="text-slate-700">Citizens living in low lying areas within 2km of river banks are strongly advised to evacuate to higher grounds or designated relief centers.</p>
+          <div class="font-bold text-slate-800">Nearest Relief Center:</div>
+          <div class="p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-700">
+            <strong>Dispur High School</strong> (2.4 km South)<br>
+            <span class="text-emerald-700 font-semibold">Status: Open & Receiving Citizens</span>
+          </div>
+        </div>
+      `;
+      modalActions.innerHTML = `
+        <button onclick="closeCitizenModal()" class="px-3 py-1.5 rounded-lg bg-slate-100 text-slate-700 text-xs font-bold">Close</button>
+        <button onclick="closeCitizenModal(); locateNearestShelter();" class="px-4 py-1.5 rounded-lg bg-emerald-600 text-white text-xs font-bold hover:bg-emerald-700">Directions to Shelter</button>
+      `;
+      openModal();
+    }
+
+    function openReportIncidentModal() {
+      modalTitle.innerHTML = `<span class="text-amber-600 font-black">⚠️ Report Incident</span>`;
+      modalBody.innerHTML = `
+        <div class="space-y-3">
+          <div>
+            <label class="block text-slate-700 font-bold mb-1 text-[11px]">Incident Category</label>
+            <select class="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs font-medium focus:outline-emerald-600">
+              <option>Flooded Street / High Water</option>
+              <option>Fallen Tree / Road Blockage</option>
+              <option>Electrical Wire Down / Power Hazard</option>
+              <option>People Trapped / Medical Emergency</option>
+              <option>Landslide / Mudflow</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-slate-700 font-bold mb-1 text-[11px]">Location</label>
+            <input type="text" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs" value="Guwahati, GS Road near Ulubari Flyover">
+          </div>
+          <div>
+            <label class="block text-slate-700 font-bold mb-1 text-[11px]">Brief Description</label>
+            <textarea class="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs h-16" placeholder="Describe depth of water, number of stranded vehicles..."></textarea>
+          </div>
+          <div class="border-2 border-dashed border-slate-200 rounded-lg p-3 text-center text-slate-500 hover:border-emerald-400 cursor-pointer">
+            <i data-lucide="camera" class="w-5 h-5 mx-auto text-slate-400"></i>
+            <span class="text-[11px] block mt-1">Tap to attach ground photo (auto geotagged)</span>
+          </div>
+        </div>
+      `;
+      modalActions.innerHTML = `
+        <button onclick="closeCitizenModal()" class="px-3 py-1.5 rounded-lg bg-slate-100 text-slate-700 text-xs font-bold">Cancel</button>
+        <button onclick="submitIncidentReport()" class="px-4 py-1.5 rounded-lg bg-red-600 text-white text-xs font-bold hover:bg-red-700">Submit Incident</button>
+      `;
+      lucide.createIcons();
+      openModal();
+    }
+
+    function submitIncidentReport() {
+      alert("✅ Incident Report submitted successfully! Ticket ID #INC-2025-0013 assigned. Nearest rescue team notified.");
+      closeCitizenModal();
+    }
+
+    function openRequestHelpModal() {
+      modalTitle.innerHTML = `<span class="text-red-600 font-black">🆘 Request Rescue / Help</span>`;
+      modalBody.innerHTML = `
+        <div class="space-y-3">
+          <p class="text-slate-700">Are you or family members trapped or in need of medical emergency assistance?</p>
+          <div>
+            <label class="block text-slate-700 font-bold mb-1 text-[11px]">Number of People Requiring Rescue</label>
+            <input type="number" value="3" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs">
+          </div>
+          <div class="flex items-center gap-2">
+            <input type="checkbox" id="med-req" class="rounded text-red-600">
+            <label for="med-req" class="text-xs text-slate-700 font-semibold">Immediate medical / oxygen / stretcher required</label>
+          </div>
+          <div class="p-2.5 bg-red-50 border border-red-200 rounded-lg text-red-900 text-xs font-medium">
+            Your live GPS beacon will be transmitted to NDRF Boat Rescue Squad Alpha.
+          </div>
+        </div>
+      `;
+      modalActions.innerHTML = `
+        <button onclick="closeCitizenModal()" class="px-3 py-1.5 rounded-lg bg-slate-100 text-slate-700 text-xs font-bold">Cancel</button>
+        <button onclick="alert('🚨 Emergency Rescue Requisition dispatched to Field Control!'); closeCitizenModal();" class="px-4 py-1.5 rounded-lg bg-red-600 text-white text-xs font-bold hover:bg-red-700">Dispatch Rescue</button>
+      `;
+      openModal();
+    }
+
+    function triggerEmergencySOS() {
+      modalTitle.innerHTML = `<span class="text-red-600 font-black">🚨 112 SOS TRIGGERED</span>`;
+      modalBody.innerHTML = `
+        <div class="text-center py-3 space-y-2">
+          <div class="w-16 h-16 rounded-full bg-red-100 text-red-600 flex items-center justify-center mx-auto text-2xl animate-bounce">
+            🆘
+          </div>
+          <div class="text-base font-extrabold text-red-700">Connecting to National Disaster Helpline 112</div>
+          <p class="text-xs text-slate-600">Emergency coordinates [26.142° N, 91.765° E] broadcasted to State Police Control Room & Nearest Ambulance.</p>
+        </div>
+      `;
+      modalActions.innerHTML = `
+        <button onclick="closeCitizenModal()" class="w-full py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg text-xs font-bold">Acknowledge & Standby</button>
+      `;
+      openModal();
+    }
+
+    function checkInSafeAction() {
+      alert("✅ Checked-In Safe! Broadcast sent to your family circle and recorded in State Safety Registry.");
+    }
+
+    function openUploadMediaModal() {
+      modalTitle.innerHTML = `<span class="text-blue-600 font-black">📷 Upload Ground Photos/Videos</span>`;
+      modalBody.innerHTML = `
+        <div class="space-y-3">
+          <p class="text-xs text-slate-600">Provide field visual evidence to help emergency commanders assess damage extent.</p>
+          <div class="border-2 border-dashed border-blue-200 bg-blue-50/50 rounded-xl p-6 text-center text-blue-700 cursor-pointer">
+            <i data-lucide="upload-cloud" class="w-8 h-8 mx-auto mb-1"></i>
+            <div class="text-xs font-bold">Click to browse or drop photos here</div>
+            <div class="text-[10px] text-slate-400 mt-1">Supports JPG, MP4, PNG (Max 50MB)</div>
+          </div>
+        </div>
+      `;
+      modalActions.innerHTML = `
+        <button onclick="closeCitizenModal()" class="px-3 py-1.5 rounded-lg bg-slate-100 text-slate-700 text-xs font-bold">Cancel</button>
+        <button onclick="alert('Media uploaded and geotagged!'); closeCitizenModal();" class="px-4 py-1.5 rounded-lg bg-blue-600 text-white text-xs font-bold">Upload</button>
+      `;
+      lucide.createIcons();
+      openModal();
+    }
+
+    // AI Safety Chatbot Modal
+    function openAiChatbotModal() {
+      modalTitle.innerHTML = `<span class="text-emerald-600 font-black">🤖 AI Safety Assistant</span>`;
+      modalBody.innerHTML = `
+        <div class="space-y-3">
+          <div class="h-48 overflow-y-auto bg-slate-50 border border-slate-200 rounded-xl p-3 space-y-2 text-xs" id="chat-stream">
+            <div class="bg-emerald-100 text-emerald-900 p-2 rounded-lg max-w-[85%] font-medium">
+              Hello Rohit! I am your ResQNet AI Safety Assistant. How can I guide you regarding current flood conditions in Guwahati?
+            </div>
+          </div>
+          <div class="flex gap-2">
+            <input type="text" id="chat-input" placeholder="e.g. Is Dispur shelter open? How to purify flood water?" class="flex-1 px-3 py-2 border border-slate-300 rounded-lg text-xs focus:outline-emerald-600">
+            <button onclick="sendChatMessage()" class="px-3 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold">Send</button>
+          </div>
+        </div>
+      `;
+      modalActions.innerHTML = `<button onclick="closeCitizenModal()" class="px-4 py-1.5 rounded-lg bg-slate-100 text-slate-700 text-xs font-bold">Close Chat</button>`;
+      openModal();
+    }
+
+    function sendChatMessage() {
+      const input = document.getElementById('chat-input');
+      const stream = document.getElementById('chat-stream');
+      if (!input.value.trim()) return;
+      
+      const userText = input.value;
+      stream.innerHTML += `<div class="bg-blue-600 text-white p-2 rounded-lg max-w-[80%] ml-auto font-medium">${userText}</div>`;
+      input.value = '';
+      
+      setTimeout(() => {
+        let reply = "Yes! Dispur High School relief shelter is active and 2.4 km away. Medical teams and water purification tablets are available. Avoid GS road underpass due to 1.2m waterlogging.";
+        stream.innerHTML += `<div class="bg-emerald-100 text-emerald-900 p-2 rounded-lg max-w-[85%] font-medium">${reply}</div>`;
+        stream.scrollTop = stream.scrollHeight;
+      }, 600);
+    }
+
+    function openVoiceReportModal() {
+      modalTitle.innerHTML = `<span class="text-blue-600 font-black">🎙️ Voice Reporting</span>`;
+      modalBody.innerHTML = `
+        <div class="text-center py-4 space-y-3">
+          <div class="w-16 h-16 rounded-full bg-red-100 text-red-600 flex items-center justify-center mx-auto text-2xl animate-pulse cursor-pointer" onclick="this.classList.toggle('bg-red-500'); this.classList.toggle('text-white');">
+            🎤
+          </div>
+          <div class="text-xs font-bold text-slate-800">Tap microphone and describe what you see</div>
+          <p class="text-[11px] text-slate-500">Multilingual automatic speech-to-text will transcribe and extract your location coordinates.</p>
+        </div>
+      `;
+      modalActions.innerHTML = `<button onclick="closeCitizenModal()" class="w-full py-2 bg-slate-100 text-slate-700 rounded-lg text-xs font-bold">Done</button>`;
+      openModal();
+    }
+
+    function openFamilyCheckModal() {
+      modalTitle.innerHTML = `<span class="text-purple-600 font-black">👨‍👩‍👧 Family Safety Circle</span>`;
+      modalBody.innerHTML = `
+        <div class="space-y-2 text-xs">
+          <div class="p-2 bg-emerald-50 border border-emerald-100 rounded-lg flex items-center justify-between">
+            <div>
+              <div class="font-bold text-slate-800">Priya Kalita (Wife)</div>
+              <div class="text-[10px] text-slate-500">Location: Dispur Office</div>
+            </div>
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-700">Checked Safe ✓</span>
+          </div>
+
+          <div class="p-2 bg-amber-50 border border-amber-100 rounded-lg flex items-center justify-between">
+            <div>
+              <div class="font-bold text-slate-800">B. Kalita (Father)</div>
+              <div class="text-[10px] text-slate-500">Location: Zoo Road</div>
+            </div>
+            <button onclick="alert('Ping sent to Father');" class="px-2 py-1 rounded bg-amber-600 text-white text-[10px] font-bold">Send Check-in Ping</button>
+          </div>
+        </div>
+      `;
+      modalActions.innerHTML = `<button onclick="closeCitizenModal()" class="w-full py-2 bg-slate-100 text-slate-700 rounded-lg text-xs font-bold">Close</button>`;
+      openModal();
+    }
+
+    function updateChecklist() {
+      const boxes = document.querySelectorAll('.citizen-check');
+      let checked = 0;
+      boxes.forEach(b => { if (b.checked) checked++; });
+      document.getElementById('checklist-counter').textContent = `${checked}/${boxes.length} Done`;
+    }
+
+    function changeLocationPrompt() {
+      const loc = prompt("Enter your district or city in Assam/India:", "Guwahati, Assam");
+      if (loc) {
+        document.getElementById('citizen-current-loc').textContent = loc;
+      }
+    }
+  </script>
+</body>
+</html>

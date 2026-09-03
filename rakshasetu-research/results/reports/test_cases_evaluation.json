@@ -1,0 +1,39 @@
+{
+  "total_cases": 576,
+  "ground_truth_normal": 552,
+  "ground_truth_anomalies": 24,
+  "metrics": {
+    "accuracy": 0.9601,
+    "precision": 0.5111,
+    "recall": 0.9583,
+    "f1_score": 0.6667,
+    "specificity": 0.9601
+  },
+  "type_breakdown": {
+    "temp_spike": {
+      "count": 5,
+      "detected": 4,
+      "recall": 0.8
+    },
+    "pressure_drop": {
+      "count": 5,
+      "detected": 5,
+      "recall": 1.0
+    },
+    "flatline_humidity": {
+      "count": 8,
+      "detected": 8,
+      "recall": 1.0
+    },
+    "wind_burst": {
+      "count": 3,
+      "detected": 3,
+      "recall": 1.0
+    },
+    "battery_brownout": {
+      "count": 3,
+      "detected": 3,
+      "recall": 1.0
+    }
+  }
+}
