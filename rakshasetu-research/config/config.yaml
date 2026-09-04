@@ -18,10 +18,12 @@ paths:
   metadata_file: "data/processed/preprocessing_metadata.json"
   zscore_model_file: "models/zscore_baseline.json"
   edad_checkpoint: "models/edad_best.pt"
+  aurora_checkpoint: "models/aurora_best.pt"
   figures_dir: "results/figures"
   reports_dir: "results/reports"
   inspection_report: "results/reports/data_inspection.json"
   final_report: "results/reports/final_model_comparison.md"
+  aurora_report: "results/reports/aurora_forecast_report.md"
 
 schema:
   entity_column: "node_id"
@@ -76,13 +78,30 @@ edad_model:
   batch_size: 64
   learning_rate: 0.001
   weight_decay: 0.0001
-  epochs: 15
-  early_stopping_patience: 4
+  epochs: 50
+  early_stopping_patience: 5
+  min_delta: 0.001
   gradient_clip_val: 5.0
   contrastive_temperature: 0.1
   lambda_recon: 1.0
   lambda_contrastive: 0.5
   lambda_mi_penalty: 0.1     # squared-magnitude penalty: (mi**2).mean()
+
+aurora_model:
+  model_name: "Aurora Condition Forecasting Model (Seq2Seq BiGRU)"
+  input_window: 12           # 12 steps (2 hours at 10-minute cadence)
+  forecast_horizon: 6        # 6 steps (1 hour ahead: t+10, t+20, t+30, t+40, t+50, t+60 min)
+  stride: 1
+  input_dim: 8               # 8 environmental features
+  hidden_dim: 64
+  num_layers: 2
+  dropout: 0.1
+  batch_size: 64
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  epochs: 15
+  early_stopping_patience: 4
+  gradient_clip_val: 5.0
 
 evaluation:
   top_k_anomalies: 20
@@ -91,3 +110,4 @@ evaluation:
     spike_magnitude_std: 4.5
     drift_magnitude_std: 3.0
     injection_ratio: 0.03
+

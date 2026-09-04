@@ -1,0 +1,362 @@
+{
+  "benchmark_metadata": {
+    "dataset_file": "data/synthetic_test_cases_full.csv",
+    "total_test_cases": 5000,
+    "normal_windows": 2500,
+    "anomaly_windows": 2500,
+    "window_size_timesteps": 12,
+    "cadence_minutes": 10,
+    "window_duration_hours": 2.0,
+    "number_of_nodes": 20,
+    "environmental_features": [
+      "air_temperature_C",
+      "relative_humidity_pct",
+      "air_pressure_hPa",
+      "wind_speed_ms",
+      "wind_direction_deg",
+      "leaf_wetness_pct",
+      "soil_moisture_pct",
+      "solar_radiation_Wm2"
+    ]
+  },
+  "models": {
+    "zscore_baseline_2_5": {
+      "threshold": 2.5,
+      "roc_auc": 0.8701,
+      "pr_auc": 0.913,
+      "metrics": {
+        "accuracy": 0.7166,
+        "precision": 0.6716,
+        "recall": 0.8476,
+        "f1_score": 0.7494,
+        "specificity": 0.5856,
+        "true_positives": 2119,
+        "true_negatives": 1464,
+        "false_positives": 1036,
+        "false_negatives": 381,
+        "confusion_matrix": [
+          [
+            1464,
+            1036
+          ],
+          [
+            381,
+            2119
+          ]
+        ]
+      },
+      "breakdown_by_type": {
+        "spike": {
+          "total_cases": 625,
+          "detected": 625,
+          "detection_rate": 1.0
+        },
+        "dropout": {
+          "total_cases": 625,
+          "detected": 247,
+          "detection_rate": 0.3952
+        },
+        "drift": {
+          "total_cases": 625,
+          "detected": 622,
+          "detection_rate": 0.9952
+        },
+        "multi_spike": {
+          "total_cases": 625,
+          "detected": 625,
+          "detection_rate": 1.0
+        },
+        "none": {
+          "total_cases": 2500,
+          "detected": 1036,
+          "detection_rate": 0.4144
+        }
+      }
+    },
+    "zscore_baseline_optimal": {
+      "threshold": 3.2869,
+      "roc_auc": 0.8701,
+      "pr_auc": 0.913,
+      "metrics": {
+        "accuracy": 0.852,
+        "precision": 0.9513,
+        "recall": 0.742,
+        "f1_score": 0.8337,
+        "specificity": 0.962,
+        "true_positives": 1855,
+        "true_negatives": 2405,
+        "false_positives": 95,
+        "false_negatives": 645,
+        "confusion_matrix": [
+          [
+            2405,
+            95
+          ],
+          [
+            645,
+            1855
+          ]
+        ]
+      },
+      "breakdown_by_type": {
+        "spike": {
+          "total_cases": 625,
+          "detected": 613,
+          "detection_rate": 0.9808
+        },
+        "dropout": {
+          "total_cases": 625,
+          "detected": 29,
+          "detection_rate": 0.0464
+        },
+        "drift": {
+          "total_cases": 625,
+          "detected": 588,
+          "detection_rate": 0.9408
+        },
+        "multi_spike": {
+          "total_cases": 625,
+          "detected": 625,
+          "detection_rate": 1.0
+        },
+        "none": {
+          "total_cases": 2500,
+          "detected": 95,
+          "detection_rate": 0.038
+        }
+      }
+    },
+    "edad_deep_learning": {
+      "optimal_threshold": 0.6579,
+      "roc_auc": 0.8398,
+      "pr_auc": 0.8834,
+      "metrics": {
+        "accuracy": 0.7742,
+        "precision": 0.7933,
+        "recall": 0.7416,
+        "f1_score": 0.7666,
+        "specificity": 0.8068,
+        "true_positives": 1854,
+        "true_negatives": 2017,
+        "false_positives": 483,
+        "false_negatives": 646,
+        "confusion_matrix": [
+          [
+            2017,
+            483
+          ],
+          [
+            646,
+            1854
+          ]
+        ]
+      },
+      "breakdown_by_type": {
+        "spike": {
+          "total_cases": 625,
+          "detected": 585,
+          "detection_rate": 0.936
+        },
+        "dropout": {
+          "total_cases": 625,
+          "detected": 143,
+          "detection_rate": 0.2288
+        },
+        "drift": {
+          "total_cases": 625,
+          "detected": 504,
+          "detection_rate": 0.8064
+        },
+        "multi_spike": {
+          "total_cases": 625,
+          "detected": 622,
+          "detection_rate": 0.9952
+        },
+        "none": {
+          "total_cases": 2500,
+          "detected": 483,
+          "detection_rate": 0.1932
+        }
+      }
+    },
+    "unified_detector": {
+      "rule": "Z-Score > 2.85 OR Exact Zero Packet Dropout Telemetry",
+      "metrics": {
+        "accuracy": 0.918,
+        "precision": 0.8641,
+        "recall": 0.992,
+        "f1_score": 0.9236,
+        "specificity": 0.844,
+        "true_positives": 2480,
+        "true_negatives": 2110,
+        "false_positives": 390,
+        "false_negatives": 20,
+        "confusion_matrix": [
+          [
+            2110,
+            390
+          ],
+          [
+            20,
+            2480
+          ]
+        ]
+      },
+      "breakdown_by_type": {
+        "spike": {
+          "total_cases": 625,
+          "detected": 620,
+          "detection_rate": 0.992
+        },
+        "dropout": {
+          "total_cases": 625,
+          "detected": 625,
+          "detection_rate": 1.0
+        },
+        "drift": {
+          "total_cases": 625,
+          "detected": 610,
+          "detection_rate": 0.976
+        },
+        "multi_spike": {
+          "total_cases": 625,
+          "detected": 625,
+          "detection_rate": 1.0
+        },
+        "none": {
+          "total_cases": 2500,
+          "detected": 390,
+          "detection_rate": 0.156
+        }
+      },
+      "breakdown_by_node": {
+        "SB-001": {
+          "total_windows": 232,
+          "anomalies": 114,
+          "detected": 114,
+          "recall": 1.0
+        },
+        "SB-002": {
+          "total_windows": 267,
+          "anomalies": 144,
+          "detected": 142,
+          "recall": 0.9861
+        },
+        "SB-003": {
+          "total_windows": 246,
+          "anomalies": 113,
+          "detected": 110,
+          "recall": 0.9735
+        },
+        "SB-004": {
+          "total_windows": 261,
+          "anomalies": 138,
+          "detected": 138,
+          "recall": 1.0
+        },
+        "SB-005": {
+          "total_windows": 247,
+          "anomalies": 127,
+          "detected": 126,
+          "recall": 0.9921
+        },
+        "SB-006": {
+          "total_windows": 255,
+          "anomalies": 121,
+          "detected": 120,
+          "recall": 0.9917
+        },
+        "SB-007": {
+          "total_windows": 246,
+          "anomalies": 128,
+          "detected": 127,
+          "recall": 0.9922
+        },
+        "SB-008": {
+          "total_windows": 260,
+          "anomalies": 134,
+          "detected": 133,
+          "recall": 0.9925
+        },
+        "SB-009": {
+          "total_windows": 252,
+          "anomalies": 132,
+          "detected": 131,
+          "recall": 0.9924
+        },
+        "SB-010": {
+          "total_windows": 243,
+          "anomalies": 106,
+          "detected": 105,
+          "recall": 0.9906
+        },
+        "SB-011": {
+          "total_windows": 250,
+          "anomalies": 125,
+          "detected": 124,
+          "recall": 0.992
+        },
+        "SB-012": {
+          "total_windows": 251,
+          "anomalies": 130,
+          "detected": 130,
+          "recall": 1.0
+        },
+        "SB-013": {
+          "total_windows": 261,
+          "anomalies": 127,
+          "detected": 125,
+          "recall": 0.9843
+        },
+        "SB-014": {
+          "total_windows": 253,
+          "anomalies": 112,
+          "detected": 110,
+          "recall": 0.9821
+        },
+        "SB-015": {
+          "total_windows": 233,
+          "anomalies": 122,
+          "detected": 122,
+          "recall": 1.0
+        },
+        "SB-016": {
+          "total_windows": 237,
+          "anomalies": 136,
+          "detected": 135,
+          "recall": 0.9926
+        },
+        "SB-017": {
+          "total_windows": 260,
+          "anomalies": 126,
+          "detected": 124,
+          "recall": 0.9841
+        },
+        "SB-018": {
+          "total_windows": 243,
+          "anomalies": 115,
+          "detected": 114,
+          "recall": 0.9913
+        },
+        "SB-019": {
+          "total_windows": 246,
+          "anomalies": 125,
+          "detected": 125,
+          "recall": 1.0
+        },
+        "SB-020": {
+          "total_windows": 257,
+          "anomalies": 125,
+          "detected": 125,
+          "recall": 1.0
+        }
+      }
+    }
+  },
+  "generated_figures": [
+    "results/figures\\full_benchmark_roc_pr.png",
+    "results/figures\\full_benchmark_confusion_matrices.png",
+    "results/figures\\full_benchmark_anomaly_types.png",
+    "results/figures\\full_benchmark_score_distributions.png"
+  ]
+}

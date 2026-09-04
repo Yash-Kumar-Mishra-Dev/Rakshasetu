@@ -1,0 +1,51 @@
+{
+  "model_name": "Aurora Condition Forecasting Model (Seq2Seq BiGRU)",
+  "total_params": 203105,
+  "train_time_sec": 166.59,
+  "best_val_loss": 0.38088341148003285,
+  "epochs_run": 6,
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 0.39219822625026984,
+      "val_loss": 0.382432356995085,
+      "epoch_seconds": 25.79,
+      "lr": 0.001
+    },
+    {
+      "epoch": 2,
+      "train_loss": 0.3821773544392165,
+      "val_loss": 0.38088341148003285,
+      "epoch_seconds": 27.86,
+      "lr": 0.001
+    },
+    {
+      "epoch": 3,
+      "train_loss": 0.38063044909059124,
+      "val_loss": 0.38098176147626794,
+      "epoch_seconds": 28.11,
+      "lr": 0.001
+    },
+    {
+      "epoch": 4,
+      "train_loss": 0.379294108489857,
+      "val_loss": 0.3820012908914815,
+      "epoch_seconds": 27.4,
+      "lr": 0.001
+    },
+    {
+      "epoch": 5,
+      "train_loss": 0.3736029145965243,
+      "val_loss": 0.3882728651813839,
+      "epoch_seconds": 28.76,
+      "lr": 0.0005
+    },
+    {
+      "epoch": 6,
+      "train_loss": 0.358697482439525,
+      "val_loss": 0.40144318251506145,
+      "epoch_seconds": 28.64,
+      "lr": 0.0005
+    }
+  ]
+}

@@ -1,0 +1,191 @@
+{
+  "persistence": {
+    "overall_mae": 1.0835,
+    "overall_rmse": 1.3696,
+    "overall_r2": -0.8219,
+    "step_mae": [
+      0.9224,
+      1.0662,
+      1.141,
+      1.1556,
+      1.1282,
+      1.0878
+    ],
+    "step_rmse": [
+      1.2232,
+      1.3518,
+      1.4179,
+      1.4315,
+      1.4088,
+      1.3735
+    ],
+    "features": {
+      "air_temperature_C": {
+        "mae": 0.7161,
+        "rmse": 0.8753,
+        "r2": -0.5038
+      },
+      "relative_humidity_pct": {
+        "mae": 1.1712,
+        "rmse": 1.4339,
+        "r2": -1.053
+      },
+      "air_pressure_hPa": {
+        "mae": 1.1376,
+        "rmse": 1.4241,
+        "r2": -0.9953
+      },
+      "wind_speed_ms": {
+        "mae": 1.1451,
+        "rmse": 1.4235,
+        "r2": -0.999
+      },
+      "wind_direction_deg": {
+        "mae": 1.1614,
+        "rmse": 1.4222,
+        "r2": -1.0065
+      },
+      "leaf_wetness_pct": {
+        "mae": 1.1253,
+        "rmse": 1.423,
+        "r2": -1.033
+      },
+      "soil_moisture_pct": {
+        "mae": 1.1324,
+        "rmse": 1.4167,
+        "r2": -1.0097
+      },
+      "solar_radiation_Wm2": {
+        "mae": 1.0793,
+        "rmse": 1.4402,
+        "r2": -1.0655
+      }
+    }
+  },
+  "ridge": {
+    "overall_mae": 0.7645,
+    "overall_rmse": 0.9339,
+    "overall_r2": 0.1529,
+    "step_mae": [
+      0.6966,
+      0.7435,
+      0.7694,
+      0.7848,
+      0.7938,
+      0.799
+    ],
+    "step_rmse": [
+      0.88,
+      0.9183,
+      0.9381,
+      0.9491,
+      0.9558,
+      0.9595
+    ],
+    "features": {
+      "air_temperature_C": {
+        "mae": 0.4716,
+        "rmse": 0.5693,
+        "r2": 0.3639
+      },
+      "relative_humidity_pct": {
+        "mae": 0.7654,
+        "rmse": 0.9218,
+        "r2": 0.1515
+      },
+      "air_pressure_hPa": {
+        "mae": 0.8081,
+        "rmse": 1.0089,
+        "r2": -0.0015
+      },
+      "wind_speed_ms": {
+        "mae": 0.8238,
+        "rmse": 1.0083,
+        "r2": -0.003
+      },
+      "wind_direction_deg": {
+        "mae": 0.871,
+        "rmse": 1.0054,
+        "r2": -0.0028
+      },
+      "leaf_wetness_pct": {
+        "mae": 0.7961,
+        "rmse": 0.9581,
+        "r2": 0.0784
+      },
+      "soil_moisture_pct": {
+        "mae": 0.7997,
+        "rmse": 0.9996,
+        "r2": -0.0005
+      },
+      "solar_radiation_Wm2": {
+        "mae": 0.7805,
+        "rmse": 0.9169,
+        "r2": 0.1628
+      }
+    }
+  },
+  "aurora": {
+    "overall_mae": 0.7589,
+    "overall_rmse": 0.9359,
+    "overall_r2": 0.1493,
+    "step_mae": [
+      0.6828,
+      0.7382,
+      0.7675,
+      0.782,
+      0.7903,
+      0.7928
+    ],
+    "step_rmse": [
+      0.8748,
+      0.9174,
+      0.9416,
+      0.9519,
+      0.9624,
+      0.964
+    ],
+    "features": {
+      "air_temperature_C": {
+        "mae": 0.476,
+        "rmse": 0.5773,
+        "r2": 0.3459
+      },
+      "relative_humidity_pct": {
+        "mae": 0.7602,
+        "rmse": 0.9208,
+        "r2": 0.1533
+      },
+      "air_pressure_hPa": {
+        "mae": 0.8091,
+        "rmse": 1.0104,
+        "r2": -0.0044
+      },
+      "wind_speed_ms": {
+        "mae": 0.8235,
+        "rmse": 1.0096,
+        "r2": -0.0056
+      },
+      "wind_direction_deg": {
+        "mae": 0.8714,
+        "rmse": 1.0062,
+        "r2": -0.0045
+      },
+      "leaf_wetness_pct": {
+        "mae": 0.7794,
+        "rmse": 0.966,
+        "r2": 0.0631
+      },
+      "soil_moisture_pct": {
+        "mae": 0.7999,
+        "rmse": 0.9998,
+        "r2": -0.0008
+      },
+      "solar_radiation_Wm2": {
+        "mae": 0.7521,
+        "rmse": 0.9167,
+        "r2": 0.1631
+      }
+    }
+  }
+}
