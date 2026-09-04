@@ -152,4 +152,20 @@ def evaluate_test_cases(test_csv_path: str = "data/test_cases.csv",
     return results
 
 if __name__ == "__main__":
-    evaluate_test_cases()
+    import argparse
+    parser = argparse.ArgumentParser(description="RakshaSetu Test Cases Evaluation")
+    parser.add_argument("--mode", choices=["auto", "point", "full"], default="auto",
+                        help="Evaluation mode: 'full' (5,000 windows), 'point' (legacy point-in-time), or 'auto'")
+    parser.add_argument("--csv", type=str, default=None, help="Custom test CSV path")
+    args = parser.parse_args()
+
+    full_candidates = ["data/synthetic_test_cases_full.csv", "synthetic_test_cases_full 1.csv"]
+    has_full = any(os.path.exists(p) for p in full_candidates)
+
+    if args.mode == "full" or (args.mode == "auto" and (args.csv and "synthetic_test_cases_full" in args.csv or has_full)):
+        from evaluate_full_benchmark import run_full_benchmark
+        csv_p = args.csv if args.csv else (full_candidates[0] if os.path.exists(full_candidates[0]) else full_candidates[1])
+        run_full_benchmark(csv_path=csv_p)
+    else:
+        csv_p = args.csv if args.csv else "data/test_cases.csv"
+        evaluate_test_cases(test_csv_path=csv_p)

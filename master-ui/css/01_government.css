@@ -1,0 +1,66 @@
+/**
+ * RakshaSetu Panel 1: Government Command Center - 01_government.css
+ * Command & Control, GIS Leaflet overrides, Hazard zone badges & KPI styling
+ */
+
+/* GIS Map Leaflet Customization */
+.leaflet-popup-content-wrapper {
+  border-radius: 12px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2);
+  padding: 2px;
+  border: 1px solid #e2e8f0;
+}
+
+.leaflet-popup-content {
+  margin: 10px 14px;
+  line-height: 1.45;
+}
+
+.leaflet-container {
+  font-family: 'Inter', sans-serif !important;
+}
+
+.map-legend-badge {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.08);
+}
+
+/* Custom Alert Markers */
+.custom-div-icon {
+  background: transparent;
+  border: none;
+}
+
+.hazard-pulse-red {
+  box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+  animation: hazardPulse 1.5s infinite;
+}
+
+@keyframes hazardPulse {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+  70% { transform: scale(1.05); box-shadow: 0 0 0 12px rgba(239, 68, 68, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+}
+
+/* AI Diagnostics Table inside modal */
+#ai-demo-table-body table {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+#ai-demo-table-body th {
+  padding: 6px 8px;
+  font-weight: 700;
+  color: #64748b;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+#ai-demo-table-body td {
+  padding: 6px 8px;
+  vertical-align: middle;
+}

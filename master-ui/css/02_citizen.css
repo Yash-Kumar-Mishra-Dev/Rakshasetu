@@ -1,0 +1,44 @@
+/**
+ * RakshaSetu Panel 2: Citizen Safety Portal - 02_citizen.css
+ * Citizen emergency SOS beacon animations, evacuation cards, and safety badges
+ */
+
+/* One-Tap Emergency SOS Beacon Animation */
+.pulse-beacon {
+  box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.7);
+  animation: beaconPulse 1.6s infinite;
+}
+
+@keyframes beaconPulse {
+  0% {
+    transform: scale(0.96);
+    box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.75);
+  }
+  70% {
+    transform: scale(1.02);
+    box-shadow: 0 0 0 18px rgba(220, 38, 38, 0);
+  }
+  100% {
+    transform: scale(0.96);
+    box-shadow: 0 0 0 0 rgba(220, 38, 38, 0);
+  }
+}
+
+/* Evacuation Route Card */
+.evac-route-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border-left: 4px solid #16a34a;
+}
+
+.evac-route-card:hover {
+  transform: translateX(4px);
+  box-shadow: 0 4px 12px rgba(22, 163, 74, 0.15);
+}
+
+/* Safe Family Check-in Badge */
+.safe-badge {
+  background: #dcfce7;
+  color: #15803d;
+  font-weight: 700;
+  border: 1px solid #bbf7d0;
+}

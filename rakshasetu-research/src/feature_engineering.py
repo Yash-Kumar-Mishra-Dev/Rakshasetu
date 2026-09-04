@@ -88,3 +88,77 @@ def create_per_node_windows(df: pd.DataFrame,
         windows_arr = np.array(all_windows, dtype=np.float32)
 
     return windows_arr, all_meta
+
+
+class TimeSeriesForecastingDataset(Dataset):
+    """
+    PyTorch Dataset for multi-step time series forecasting.
+    Yields:
+      X: (input_window, num_features) past telemetry
+      Y: (horizon, num_features) future ground-truth conditions
+      idx: sample index
+    """
+    def __init__(self, X: np.ndarray, Y: np.ndarray, meta: list):
+        self.X = torch.tensor(X, dtype=torch.float32)
+        self.Y = torch.tensor(Y, dtype=torch.float32)
+        self.meta = meta
+
+    def __len__(self):
+        return len(self.X)
+
+    def __getitem__(self, idx):
+        return self.X[idx], self.Y[idx], idx
+
+
+def create_per_node_forecasting_windows(df: pd.DataFrame,
+                                        feature_cols: list,
+                                        input_window: int = 12,
+                                        horizon: int = 6,
+                                        stride: int = 1,
+                                        entity_col: str = "node_id",
+                                        time_col: str = "timestamp"):
+    """
+    Slices dataframe into past sequence (X) and future forecast target (Y) strictly per node.
+    Guarantees no window crosses node boundaries or leaks future steps.
+    
+    Returns:
+      X: np.ndarray of shape (N, input_window, num_features)
+      Y: np.ndarray of shape (N, horizon, num_features)
+      meta: list of metadata dicts
+    """
+    all_x = []
+    all_y = []
+    all_meta = []
+
+    for node_id, group in df.groupby(entity_col):
+        grp_sorted = group.sort_values(time_col).reset_index(drop=True)
+        feat_matrix = grp_sorted[feature_cols].values
+        times = grp_sorted[time_col].values
+        n_samples = len(grp_sorted)
+
+        total_req = input_window + horizon
+        if n_samples < total_req:
+            continue
+
+        for i in range(0, n_samples - total_req + 1, stride):
+            x_slice = feat_matrix[i : i + input_window]
+            y_slice = feat_matrix[i + input_window : i + total_req]
+            all_x.append(x_slice)
+            all_y.append(y_slice)
+            all_meta.append({
+                "node_id": node_id,
+                "input_start": str(times[i]),
+                "input_end": str(times[i + input_window - 1]),
+                "forecast_start": str(times[i + input_window]),
+                "forecast_end": str(times[i + total_req - 1])
+            })
+
+    if len(all_x) == 0:
+        X_arr = np.empty((0, input_window, len(feature_cols)), dtype=np.float32)
+        Y_arr = np.empty((0, horizon, len(feature_cols)), dtype=np.float32)
+    else:
+        X_arr = np.array(all_x, dtype=np.float32)
+        Y_arr = np.array(all_y, dtype=np.float32)
+
+    return X_arr, Y_arr, all_meta
+
